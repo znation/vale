@@ -56,3 +56,6 @@ Thumbs.db
 ~$*.xls*
 ~$*.ppt*
 /build/
+
+# Full-resolution AI renders (tools/asset_gen); the installed Graphics/*.png are what ships
+tools/asset_gen/masters/
