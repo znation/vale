@@ -5323,7 +5323,7 @@ festring game::GetDataDir()
 #ifdef MAC_APP
   return "../Resources/data/";
 #else
-  return DATADIR "/ivan/";
+  return DATADIR "/vale/";
 #endif
 #endif
 

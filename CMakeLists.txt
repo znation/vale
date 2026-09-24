@@ -13,7 +13,6 @@ set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
 add_definitions(-DIVAN_VERSION="${PROJECT_VERSION}" -DUSE_SDL)
 
 option(BUILD_MAC_APP "Build standalone application for MacOS" OFF)
-option(USE_HOME_FOR_STATE_DIR "Statedir will be /.vale/ in current user's homedir" OFF)
 option(WIZARD "Enable Wizard Mode" OFF)
 
 if(UNIX)
@@ -31,11 +30,6 @@ if(UNIX)
     message("\n*NOTICE*\n"
             "    Highscore files and Bone files are now stored at \"\$HOME/.vale\".\n"
             "    Your HOME directory is \"$ENV{HOME}\".\n")
-    if(IS_DIRECTORY "${CMAKE_INSTALL_FULL_LOCALSTATEDIR}/vale")
-      message(WARNING
-              "If you have game data in \"${CMAKE_INSTALL_FULL_LOCALSTATEDIR}/vale\","
-              " please move them to \"$ENV{HOME}/.vale\".")
-    endif()
   endif()
 
 elseif(WIN32)
