@@ -13,7 +13,6 @@ set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
 add_definitions(-DIVAN_VERSION="${PROJECT_VERSION}" -DUSE_SDL)
 
 option(BUILD_MAC_APP "Build standalone application for MacOS" OFF)
-option(USE_HOME_FOR_STATE_DIR "Statedir will be /.vale/ in current user's homedir" OFF)
 option(WIZARD "Enable Wizard Mode" OFF)
 
 if(UNIX)
