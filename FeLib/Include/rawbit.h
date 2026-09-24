@@ -26,6 +26,14 @@ class festring;
 
 typedef std::map<col16, std::pair<cachedfont*, cachedfont*>> fontcache;
 
+/*
+ * An 8-bit paletted image (sprite sheets, fonts, ...) addressed in layout pixels.
+ *
+ * Like bitmap, it stores GetDensity() x GetDensity() physical pixels per layout pixel:
+ * a sheet loads from Graphics/<D>x/ when that set exists and is otherwise rescaled on load
+ * (see graphics::ResolveDensityAsset). Every coordinate in the public interface is in
+ * layout pixels; Size is the physical size.
+ */
 class rawbitmap
 {
  public:
@@ -48,7 +56,9 @@ class rawbitmap
                    cpackcol16*, alpha = 255,
                    cpackalpha* = 0,
                    cuchar* = 0, cuchar* = 0, truth = true) const;
-  v2 GetSize() const { return Size; }
+  v2 GetSize() const { return v2(Size.X / Density, Size.Y / Density); }
+  v2 GetPhysicalSize() const { return Size; }
+  int GetDensity() const { return Density; }
 
   void AlterGradient(v2, v2, int, int, truth);
   void SwapColors(v2, v2, int, int);
@@ -58,19 +68,20 @@ class rawbitmap
   static truth IsMaterialColor(int Color) { return Color >= 192; }
   static int GetMaterialColorIndex(int Color) { return (Color - 192) >> 4; }
   int GetMaterialColorIndex(int X, int Y) const
-  { return (PaletteBuffer[Y][X] - 192) >> 4; }
+  { return (PaletteBuffer[Y * Density][X * Density] - 192) >> 4; }
   truth IsTransparent(v2) const;
   truth IsMaterialColor1(v2) const;
   v2 RandomizeSparklePos(cv2*, v2*, v2, v2, int, int) const;
   void CopyPaletteFrom(rawbitmap*);
-  void PutPixel(v2 Pos, paletteindex Color)
-  { PaletteBuffer[Pos.Y][Pos.X] = Color; }
+  void PutPixel(v2 Pos, paletteindex Color);
   paletteindex GetPixel(v2 Pos) const
-  { return PaletteBuffer[Pos.Y][Pos.X]; }
+  { return PaletteBuffer[Pos.Y * Density][Pos.X * Density]; }
   void Clear();
   void NormalBlit(rawbitmap*, v2, v2, v2, int = 0) const;
  protected:
+  void Rescale(int FromDensity);
   v2 Size;
+  int Density;
   uchar* Palette;
   paletteindex** PaletteBuffer;
   fontcache FontCache;

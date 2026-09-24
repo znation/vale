@@ -113,10 +113,11 @@ int Blue;\
 }
 
 bitmap::bitmap(cfestring& FileName)
-: FastFlag(0), AlphaMap(0), PriorityMap(0), RandMap(0)
+: Density(graphics::GetDensity()), FastFlag(0), AlphaMap(0), PriorityMap(0), RandMap(0)
 {
   rawbitmap Temp(FileName);
   Size = Temp.Size;
+  Density = Temp.Density;
   XSizeTimesYSize = Size.X * Size.Y;
   Alloc2D(Image, Size.Y, Size.X);
   packcol16* Buffer = Image[0];
@@ -134,8 +135,11 @@ bitmap::bitmap(cfestring& FileName)
 }
 
 bitmap::bitmap(cbitmap* Bitmap, int Flags, truth CopyAlpha)
-: bitmap(Bitmap->Size)
+: Size(Bitmap->Size), Density(Bitmap->Density), XSizeTimesYSize(Size.X * Size.Y),
+  FastFlag(0), AlphaMap(0), PriorityMap(0), RandMap(0)
 {
+  Alloc2D(Image, Size.Y, Size.X);
+
   if(CopyAlpha && Bitmap->AlphaMap)
   {
     Alloc2D(AlphaMap, Size.Y, Size.X);
@@ -150,16 +154,24 @@ bitmap::bitmap(cbitmap* Bitmap, int Flags, truth CopyAlpha)
   }
 }
 
-bitmap::bitmap(v2 Size)
-: Size(Size), XSizeTimesYSize(Size.X * Size.Y),
+bitmap::bitmap(v2 LayoutSize)
+: Size(LayoutSize * graphics::GetDensity()), Density(graphics::GetDensity()), XSizeTimesYSize(Size.X * Size.Y),
   FastFlag(0), AlphaMap(0), PriorityMap(0), RandMap(0)
 {
   Alloc2D(Image, Size.Y, Size.X);
 }
 
-bitmap::bitmap(v2 Size, col16 Color)
-: bitmap(Size)
+bitmap::bitmap(v2 LayoutSize, col16 Color)
+: bitmap(LayoutSize)
 {
+  ClearToColor(Color);
+}
+
+bitmap::bitmap(v2 LayoutSize, int Density, col16 Color)
+: Size(LayoutSize * Density), Density(Density), XSizeTimesYSize(Size.X * Size.Y),
+  FastFlag(0), AlphaMap(0), PriorityMap(0), RandMap(0)
+{
+  Alloc2D(Image, Size.Y, Size.X);
   ClearToColor(Color);
 }
 
@@ -171,16 +183,39 @@ bitmap::~bitmap()
   delete [] RandMap;
 }
 
+/* Save files store bitmaps at 1x (one sample per layout pixel), exactly as before densities
+   existed, so saves stay loadable whatever density the game runs at. */
+
+template <class type> static std::vector<type> SampleLayoutPixels(type** Map, v2 LayoutSize, int Density)
+{
+  std::vector<type> Samples;
+  Samples.reserve(LayoutSize.X * LayoutSize.Y);
+
+  for(int y = 0; y < LayoutSize.Y; ++y)
+    for(int x = 0; x < LayoutSize.X; ++x)
+      Samples.push_back(Map[y * Density][x * Density]);
+
+  return Samples;
+}
+
+template <class type> static void SpreadLayoutPixels(type** Map, const std::vector<type>& Samples, v2 LayoutSize, int Density)
+{
+  for(int y = 0; y < LayoutSize.Y * Density; ++y)
+    for(int x = 0; x < LayoutSize.X * Density; ++x)
+      Map[y][x] = Samples[(y / Density) * LayoutSize.X + x / Density];
+}
+
 void bitmap::Save(outputfile& SaveFile) const
 {
-  SaveFile.Write(reinterpret_cast<char*>(Image[0]),
-                 XSizeTimesYSize * sizeof(packcol16));
+  v2 LayoutSize = GetSize();
+  std::vector<packcol16> Pixels = SampleLayoutPixels(Image, LayoutSize, Density);
+  SaveFile.Write(reinterpret_cast<char*>(Pixels.data()), Pixels.size() * sizeof(packcol16));
 
   if(AlphaMap)
   {
     SaveFile.Put(true);
-    SaveFile.Write(reinterpret_cast<char*>(AlphaMap[0]),
-                   XSizeTimesYSize * sizeof(packalpha));
+    std::vector<packalpha> Alphas = SampleLayoutPixels(AlphaMap, LayoutSize, Density);
+    SaveFile.Write(reinterpret_cast<char*>(Alphas.data()), Alphas.size() * sizeof(packalpha));
   }
   else
     SaveFile.Put(false);
@@ -188,8 +223,8 @@ void bitmap::Save(outputfile& SaveFile) const
   if(PriorityMap)
   {
     SaveFile.Put(true);
-    SaveFile.Write(reinterpret_cast<char*>(PriorityMap[0]),
-                   XSizeTimesYSize * sizeof(packpriority));
+    std::vector<packpriority> Priorities = SampleLayoutPixels(PriorityMap, LayoutSize, Density);
+    SaveFile.Write(reinterpret_cast<char*>(Priorities.data()), Priorities.size() * sizeof(packpriority));
   }
   else
     SaveFile.Put(false);
@@ -199,21 +234,26 @@ void bitmap::Save(outputfile& SaveFile) const
 
 void bitmap::Load(inputfile& SaveFile)
 {
-  SaveFile.Read(reinterpret_cast<char*>(Image[0]),
-                XSizeTimesYSize * sizeof(packcol16));
+  v2 LayoutSize = GetSize();
+  long Count = LayoutSize.X * LayoutSize.Y;
+  std::vector<packcol16> Pixels(Count);
+  SaveFile.Read(reinterpret_cast<char*>(Pixels.data()), Count * sizeof(packcol16));
+  SpreadLayoutPixels(Image, Pixels, LayoutSize, Density);
 
   if(SaveFile.Get())
   {
     Alloc2D(AlphaMap, Size.Y, Size.X);
-    SaveFile.Read(reinterpret_cast<char*>(AlphaMap[0]),
-                  XSizeTimesYSize * sizeof(packalpha));
+    std::vector<packalpha> Alphas(Count);
+    SaveFile.Read(reinterpret_cast<char*>(Alphas.data()), Count * sizeof(packalpha));
+    SpreadLayoutPixels(AlphaMap, Alphas, LayoutSize, Density);
   }
 
   if(SaveFile.Get())
   {
     Alloc2D(PriorityMap, Size.Y, Size.X);
-    SaveFile.Read(reinterpret_cast<char*>(PriorityMap[0]),
-                  XSizeTimesYSize * sizeof(packpriority));
+    std::vector<packpriority> Priorities(Count);
+    SaveFile.Read(reinterpret_cast<char*>(Priorities.data()), Count * sizeof(packpriority));
+    SpreadLayoutPixels(PriorityMap, Priorities, LayoutSize, Density);
   }
 
   FastFlag = ReadType<uchar>(SaveFile);
@@ -244,7 +284,7 @@ void bitmap::Save(cfestring& FileName) const
   for(int y = Size.Y - 1; y >= 0; --y)
     for(int x = 0; x < Size.X; ++x)
     {
-      col16 Pixel = GetPixel(x, y);
+      col16 Pixel = Image[y][x];
       SaveFile << char(Pixel << 3)
                << char((Pixel >> 5) << 2)
                << char((Pixel >> 11) << 3);
@@ -260,6 +300,11 @@ void bitmap::Fill(v2 TopLeft, v2 FillSize, col16 Color)
 
 void bitmap::Fill(int X, int Y, int Width, int Height, col16 Color)
 {
+  X *= Density;
+  Y *= Density;
+  Width *= Density;
+  Height *= Density;
+
   /* We crop the area in order to prevent buffer overflow. Take care! */
 
   if(X >= Size.X || Y >= Size.Y || Width <= 0 || Height <= 0 || X <= -Width || Y <= -Height)
@@ -335,14 +380,51 @@ void bitmap::ReplaceColor(col16 findColor,col16 replaceWith)
 }
 
 void bitmap::CopyLineFrom(int iYDest, bitmap* bmpFrom, int iYFrom, int iSize, bool bFailSafe){
-  iSize*=sizeof(packcol16);
-  if(bFailSafe && iYDest>=Size.Y)return;
-  memcpy(&Image[iYDest][0], &bmpFrom->Image[iYFrom][0], iSize);
+  iSize*=Density*sizeof(packcol16);
+  for(int d=0;d<Density;++d){
+    int iY=iYDest*Density+d;
+    if(bFailSafe && iY>=Size.Y)return;
+    memcpy(&Image[iY][0], &bmpFrom->Image[iYFrom*Density+d][0], iSize);
+  }
+}
+
+void bitmap::ToPhysical(blitdata& B) const
+{
+  if(B.Bitmap->Density != Density)
+    ABORT("Blit from a %dx bitmap to a %dx one!", Density, B.Bitmap->Density);
+
+  if(Density != 1)
+  {
+    B.Src *= Density;
+    B.Dest *= Density;
+    B.Border *= Density;
+  }
+}
+
+void bitmap::PutBlock(int X, int Y, col16 Color)
+{
+  for(int y = Y * Density; y < (Y + 1) * Density; ++y)
+    for(int x = X * Density; x < (X + 1) * Density; ++x)
+      Image[y][x] = Color;
+}
+
+void bitmap::DrawThickPixel(int X, int Y, col16 Color)
+{
+  if(IsValidPos(X, Y))
+    PutBlock(X, Y, Color);
+}
+
+void bitmap::SetAlpha(int X, int Y, alpha Alpha)
+{
+  for(int y = Y * Density; y < (Y + 1) * Density; ++y)
+    for(int x = X * Density; x < (X + 1) * Density; ++x)
+      AlphaMap[y][x] = Alpha;
 }
 
 void bitmap::NormalBlit(cblitdata& BlitData) const
 {
   blitdata B = BlitData;
+  ToPhysical(B);
 
   if(!FastFlag)
   {
@@ -514,6 +596,8 @@ void bitmap::LuminanceBlit(cblitdata& BlitData) const
     return;
   }
 
+  ToPhysical(B);
+
   if(!FastFlag)
   {
     if(!B.Border.X || !B.Border.Y)
@@ -550,6 +634,7 @@ void bitmap::LuminanceBlit(cblitdata& BlitData) const
 void bitmap::NormalMaskedBlit(cblitdata& BlitData) const
 {
   blitdata B = BlitData;
+  ToPhysical(B);
 
   if(!FastFlag)
   {
@@ -734,6 +819,8 @@ void bitmap::LuminanceMaskedBlit(cblitdata& BlitData) const
     return;
   }
 
+  ToPhysical(B);
+
   if(!FastFlag)
   {
     if(!B.Border.X || !B.Border.Y)
@@ -775,10 +862,11 @@ void bitmap::SimpleAlphaBlit(bitmap* Bitmap, alpha Alpha, col16 MaskColor) const
 {
   if(Alpha == 255)
   {
+    v2 LayoutSize = GetSize();
     blitdata B = { Bitmap,
                    { 0, 0 },
                    { 0, 0 },
-                   { Size.X, Size.Y },
+                   { LayoutSize.X, LayoutSize.Y },
                    { 0 },
                    MaskColor,
                    0 };
@@ -819,6 +907,8 @@ void bitmap::AlphaMaskedBlit(cblitdata& BlitData) const
     NormalMaskedBlit(B);
     return;
   }
+
+  ToPhysical(B);
 
   if(!FastFlag)
   {
@@ -891,48 +981,42 @@ void bitmap::DrawLine(int OrigFromX, int OrigFromY, int OrigToX, int OrigToY, co
     cint Y2 = OrigToY + PointY[c1];
     cint DeltaX = abs(X2 - X1);
     cint DeltaY = abs(Y2 - Y1);
-    int x, c2;
-    int XChange, PtrXChange, PtrYChange;
-    int DoubleDeltaX, DoubleDeltaY, End;
+    cint StepX = X1 < X2 ? 1 : -1;
+    cint StepY = Y1 < Y2 ? 1 : -1;
+    int x = X1, y = Y1;
+    DrawThickPixel(x, y, Color);
 
     if(DeltaX >= DeltaY)
     {
-      x = X1;
-      c2 = DeltaX;
-      PtrXChange = XChange = X1 < X2 ? 1 : -1;
-      PtrYChange = Y1 < Y2 ? Size.X : -Size.X;
-      DoubleDeltaX = DeltaX << 1;
-      DoubleDeltaY = DeltaY << 1;
-      End = X2;
+      for(int c2 = DeltaX; x != X2;)
+      {
+        x += StepX;
+        c2 += DeltaY << 1;
+
+        if(c2 >= DeltaX << 1)
+        {
+          c2 -= DeltaX << 1;
+          y += StepY;
+        }
+
+        DrawThickPixel(x, y, Color);
+      }
     }
     else
     {
-      x = Y1;
-      c2 = DeltaY;
-      XChange = Y1 < Y2 ? 1 : -1;
-      PtrXChange = Y1 < Y2 ? Size.X : -Size.X;
-      PtrYChange = X1 < X2 ? 1 : -1;
-      DoubleDeltaX = DeltaY << 1;
-      DoubleDeltaY = DeltaX << 1;
-      End = Y2;
-    }
-
-    packcol16* Ptr = &Image[Y1][X1];
-    *Ptr = Color;
-
-    while(x != End)
-    {
-      x += XChange;
-      Ptr += PtrXChange;
-      c2 += DoubleDeltaY;
-
-      if(c2 >= DoubleDeltaX)
+      for(int c2 = DeltaY; y != Y2;)
       {
-        c2 -= DoubleDeltaX;
-        Ptr += PtrYChange;
-      }
+        y += StepY;
+        c2 += DeltaX << 1;
 
-      *Ptr = Color;
+        if(c2 >= DeltaY << 1)
+        {
+          c2 -= DeltaY << 1;
+          x += StepX;
+        }
+
+        DrawThickPixel(x, y, Color);
+      }
     }
   }
 }
@@ -941,6 +1025,7 @@ void bitmap::DrawVerticalLine(int OrigX, int OrigFromY, int OrigToY, col16 Color
 {
   static cint PointX[] = { 0, -1, 1 };
   cint Times = Wide ? 3 : 1;
+  v2 LayoutSize = GetSize();
 
   for(int c = 0; c < Times; ++c)
   {
@@ -957,15 +1042,12 @@ void bitmap::DrawVerticalLine(int OrigX, int OrigFromY, int OrigToY, col16 Color
       ++ToY;
     }
 
-    if(X < 0 || X >= Size.X || ToY < 0 || FromY >= Size.Y)
+    if(X < 0 || X >= LayoutSize.X || ToY < 0 || FromY >= LayoutSize.Y)
       continue;
 
     FromY = Max(FromY, 0);
-    ToY = Min(ToY, Size.Y-1);
-    packcol16* Ptr = &Image[FromY][X];
-
-    for(int y = FromY; y <= ToY; ++y, Ptr += Size.X)
-      *Ptr = Color;
+    ToY = Min(ToY, LayoutSize.Y - 1);
+    Fill(X, FromY, 1, ToY - FromY + 1, Color);
   }
 }
 
@@ -973,6 +1055,7 @@ void bitmap::DrawHorizontalLine(int OrigFromX, int OrigToX, int OrigY, col16 Col
 {
   static cint PointY[] = { 0, -1, 1 };
   cint Times = Wide ? 3 : 1;
+  v2 LayoutSize = GetSize();
 
   for(int c = 0; c < Times; ++c)
   {
@@ -989,15 +1072,12 @@ void bitmap::DrawHorizontalLine(int OrigFromX, int OrigToX, int OrigY, col16 Col
       ++ToX;
     }
 
-    if(Y < 0 || Y >= Size.Y || ToX < 0 || FromX >= Size.X)
+    if(Y < 0 || Y >= LayoutSize.Y || ToX < 0 || FromX >= LayoutSize.X)
       continue;
 
     FromX = Max(FromX, 0);
-    ToX = Min(ToX, Size.X-1);
-    packcol16* Ptr = &Image[Y][FromX];
-
-    for(int x = FromX; x <= ToX; ++x, ++Ptr)
-      *Ptr = Color;
+    ToX = Min(ToX, LayoutSize.X - 1);
+    Fill(FromX, Y, ToX - FromX + 1, 1, Color);
   }
 }
 
@@ -1093,11 +1173,22 @@ truth bitmap::Fade(long& AlphaSum, packalpha& AlphaAverage, int Amount)
   return Changes;
 }
 
+void bitmap::SetPhysicalOutlinePixel(int x, int y, alpha Alpha, priority Priority)
+{
+  AlphaMap[y][x] = Alpha;
+
+  if(PriorityMap)
+    PriorityMap[y][x] = Priority;
+}
+
 void bitmap::Outline(col16 Color, alpha Alpha, priority Priority)
 {
   if(!AlphaMap)
     CreateAlphaMap(255);
 
+  /* One pass adds a one-pixel ring; repeat it so the outline stays one layout pixel thick. */
+  for(int Pass = 0; Pass < Density; ++Pass)
+  {
   col16 LastColor, NextColor;
   int XMax = Size.X;
   int YMax = Size.Y - 1;
@@ -1114,8 +1205,7 @@ void bitmap::Outline(col16 Color, alpha Alpha, priority Priority)
       if((LastColor == TRANSPARENT_COLOR || !y) && NextColor != TRANSPARENT_COLOR)
       {
         *Buffer = Color;
-        SetAlpha(x, y, Alpha);
-        SafeSetPriority(x, y, Priority);
+        SetPhysicalOutlinePixel(x, y, Alpha, Priority);
       }
 
       Buffer += XMax;
@@ -1123,8 +1213,7 @@ void bitmap::Outline(col16 Color, alpha Alpha, priority Priority)
       if(LastColor != TRANSPARENT_COLOR && (NextColor == TRANSPARENT_COLOR || y == YMax - 1))
       {
         *Buffer = Color;
-        SetAlpha(x, y + 1, Alpha);
-        SafeSetPriority(x, y + 1, Priority);
+        SetPhysicalOutlinePixel(x, y + 1, Alpha, Priority);
       }
 
       LastColor = NextColor;
@@ -1146,8 +1235,7 @@ void bitmap::Outline(col16 Color, alpha Alpha, priority Priority)
       if((LastColor == TRANSPARENT_COLOR || !x) && NextColor != TRANSPARENT_COLOR)
       {
         *Buffer = Color;
-        SetAlpha(x, y, Alpha);
-        SafeSetPriority(x, y, Priority);
+        SetPhysicalOutlinePixel(x, y, Alpha, Priority);
       }
 
       ++Buffer;
@@ -1155,12 +1243,12 @@ void bitmap::Outline(col16 Color, alpha Alpha, priority Priority)
       if(LastColor != TRANSPARENT_COLOR && (NextColor == TRANSPARENT_COLOR || x == XMax - 1))
       {
         *Buffer = Color;
-        SetAlpha(x + 1, y, Alpha);
-        SafeSetPriority(x + 1, y, Priority);
+        SetPhysicalOutlinePixel(x + 1, y, Alpha, Priority);
       }
 
       LastColor = NextColor;
     }
+  }
   }
 }
 
@@ -1333,6 +1421,7 @@ SDL_Surface* bitmap::CopyToSurface(v2 v2TopLeft, v2 v2Size, col16 MaskColor, SDL
 void bitmap::StretchBlitXbrz(cblitdata& BlitDataTo, bool bAllowTransparency) const
 {
   blitdata Bto = BlitDataTo;
+  ToPhysical(Bto);
   
   if(
     !femath::Clip( //fixes blitdata if necessary
@@ -1352,8 +1441,8 @@ void bitmap::StretchBlitXbrz(cblitdata& BlitDataTo, bool bAllowTransparency) con
     ABORT("requested copy from rectangle pos=%d,%d size=%d,%d outside of limits=%d,%d",Bto.Src.X,Bto.Src.Y,Bto.Border.X,Bto.Border.Y,Size.X,Size.Y);
   }
 
-  if(Bto.Dest.X>=Bto.Bitmap->GetSize().X || Bto.Dest.Y>=Bto.Bitmap->GetSize().Y){
-    ABORT("invalid stretch destination %d,%d on target bitmap size %d,%d",Bto.Dest.X,Bto.Dest.Y,Bto.Bitmap->GetSize().X,Bto.Bitmap->GetSize().Y);
+  if(Bto.Dest.X>=Bto.Bitmap->Size.X || Bto.Dest.Y>=Bto.Bitmap->Size.Y){
+    ABORT("invalid stretch destination %d,%d on target bitmap size %d,%d",Bto.Dest.X,Bto.Dest.Y,Bto.Bitmap->Size.X,Bto.Bitmap->Size.Y);
   }
 
   static bool bXbrzLibCfgInitialized=false;
@@ -1368,15 +1457,15 @@ void bitmap::StretchBlitXbrz(cblitdata& BlitDataTo, bool bAllowTransparency) con
 
   bool bFreeImg=false;DBGLN;
 
-  DBG2(Bto.Bitmap,DBGAV2(Bto.Bitmap->GetSize()));
+  DBG2(Bto.Bitmap,DBGAV2(Bto.Bitmap->Size));
   SDL_Surface* imgCopy = CopyToSurface(Bto.Src, Bto.Border, Bto.MaskColor, SurfaceCache(Bto,false));DBGLN;
 
   Uint32 color32bit;DBGLN;
   unsigned char cr,cg,cb,ca;DBGLN;
   SDL_Surface* imgStretchedCopy=NULL;DBGLN;
   imgStretchedCopy=libxbrzscale::scale(SurfaceCache(Bto,true), imgCopy, Bto.Stretch);DBG3(imgStretchedCopy,DBGI(imgStretchedCopy->w),DBGI(imgStretchedCopy->h));
-//  if( ((Bto.Dest.X+imgStretchedCopy->w) >= Bto.Bitmap->GetSize().X) ||
-//      ((Bto.Dest.Y+imgStretchedCopy->h) >= Bto.Bitmap->GetSize().Y)    )ABORT("blit %d,%d + %d,%d outside dest bitmap %d,%d",Bto.Dest.X,Bto.Dest.Y,imgStretchedCopy->w,imgStretchedCopy->h,Bto.Bitmap->GetSize().X,Bto.Bitmap->GetSize().Y);
+//  if( ((Bto.Dest.X+imgStretchedCopy->w) >= Bto.Bitmap->Size.X) ||
+//      ((Bto.Dest.Y+imgStretchedCopy->h) >= Bto.Bitmap->Size.Y)    )ABORT("blit %d,%d + %d,%d outside dest bitmap %d,%d",Bto.Dest.X,Bto.Dest.Y,imgStretchedCopy->w,imgStretchedCopy->h,Bto.Bitmap->Size.X,Bto.Bitmap->Size.Y);
   // copy from surface the scaled image back to where it is expected TODO comment a more precise info...
   for(int x1 = 0; x1 < imgStretchedCopy->w; ++x1)
   {
@@ -1385,7 +1474,7 @@ void bitmap::StretchBlitXbrz(cblitdata& BlitDataTo, bool bAllowTransparency) con
       color32bit = libxbrzscale::SDL_GetPixel(imgStretchedCopy,x1,y1);//DBGLN;
       SDL_GetRGBA(color32bit,fmt,&cr,&cg,&cb,&ca);//DBGLN;
       if(!bAllowTransparency || ca==0xff){ //TODO ca==0xff may work better than ca!=0 the day xBRZScale blends from opaque to transparent with a half-transparent alpha value as result!?
-        if((Bto.Dest.X+x1)<Bto.Bitmap->GetSize().X && (Bto.Dest.Y+y1)<Bto.Bitmap->GetSize().Y){
+        if((Bto.Dest.X+x1)<Bto.Bitmap->Size.X && (Bto.Dest.Y+y1)<Bto.Bitmap->Size.Y){
           Bto.Bitmap->Image[Bto.Dest.Y+y1][Bto.Dest.X+x1] = MakeRGB16(cr,cg,cb);//DBGLN; //TODO does alpha make any sense here anyway?
         }
       }
@@ -1400,6 +1489,15 @@ void bitmap::StretchBlitXbrz(cblitdata& BlitDataTo, bool bAllowTransparency) con
 void bitmap::StretchBlit(cblitdata& BlitData) const
 {
   blitdata B = BlitData;
+
+  if(B.Stretch >= -1 && B.Stretch <= 1)
+  {
+    B.Flags = 0;
+    NormalMaskedBlit(B);
+    return;
+  }
+
+  ToPhysical(B);
 
   if(!FastFlag)
   {
@@ -1516,6 +1614,7 @@ void bitmap::AlphaLuminanceBlit(cblitdata& BlitData) const
   }
 
   blitdata B = BlitData;
+  ToPhysical(B);
 
   if(!FastFlag)
   {
@@ -1666,6 +1765,7 @@ void bitmap::CreateLightning(ulong Seed, col16 Color)
 {
   femath::SaveSeed();
   femath::SetSeed(Seed);
+  v2 LayoutSize = GetSize();
   v2 StartPos;
   v2 Direction(0, 0);
 
@@ -1682,11 +1782,11 @@ void bitmap::CreateLightning(ulong Seed, col16 Color)
         }
         else
         {
-          StartPos.X = Size.X - 1;
+          StartPos.X = LayoutSize.X - 1;
           Direction.X = -1;
         }
 
-        StartPos.Y = RAND() % Size.Y;
+        StartPos.Y = RAND() % LayoutSize.Y;
       }
       else
       {
@@ -1697,11 +1797,11 @@ void bitmap::CreateLightning(ulong Seed, col16 Color)
         }
         else
         {
-          StartPos.Y = Size.Y - 1;
+          StartPos.Y = LayoutSize.Y - 1;
           Direction.Y = -1;
         }
 
-        StartPos.X = RAND() % Size.X;
+        StartPos.X = RAND() % LayoutSize.X;
       }
     }
     while(GetPixel(StartPos) != TRANSPARENT_COLOR);
@@ -1733,6 +1833,7 @@ bitmap* pixelvectorcontroller::CurrentSprite;
 truth bitmap::CreateLightning(v2 StartPos, v2 Direction, int MaxLength, col16 Color)
 {
   pixelvectorcontroller::CurrentSprite = this;
+  v2 LayoutSize = GetSize();
   std::vector<v2>& PixelVector = pixelvectorcontroller::PixelVector;
   PixelVector.clear();
   v2 LastMove(0, 0);
@@ -1748,8 +1849,8 @@ truth bitmap::CreateLightning(v2 StartPos, v2 Direction, int MaxLength, col16 Co
     if(Direction.Y < 0 || (!Direction.Y && RAND() & 1))
       Move.Y = -Move.Y;
 
-    LimitRef(Move.X, -StartPos.X, Size.X - StartPos.X - 1);
-    LimitRef(Move.Y, -StartPos.Y, Size.X - StartPos.Y - 1);
+    LimitRef(Move.X, -StartPos.X, LayoutSize.X - StartPos.X - 1);
+    LimitRef(Move.Y, -StartPos.Y, LayoutSize.X - StartPos.Y - 1);
 
     if(Counter < 10 && ((!Move.Y && !LastMove.Y)
                         || (Move.Y && LastMove.Y && (Move.X << 10) / Move.Y == (LastMove.X << 10) / LastMove.Y)))
@@ -1778,8 +1879,8 @@ truth bitmap::CreateLightning(v2 StartPos, v2 Direction, int MaxLength, col16 Co
     StartPos += Move;
     LastMove = Move;
 
-    if((Direction.X && (!StartPos.X || StartPos.X == Size.X - 1))
-       || (Direction.Y && (!StartPos.Y || StartPos.Y == Size.X - 1)))
+    if((Direction.X && (!StartPos.X || StartPos.X == LayoutSize.X - 1))
+       || (Direction.Y && (!StartPos.Y || StartPos.Y == LayoutSize.X - 1)))
     {
       PixelVector.clear();
       return false;
@@ -1976,20 +2077,22 @@ void bitmap::FillAlpha(alpha Alpha)
 
 void bitmap::PowerPutPixel(int X, int Y, col16 Color, alpha Alpha, priority Priority)
 {
-  if(X >= 0 && Y >= 0 && X < Size.X && Y < Size.Y)
+  if(IsValidPos(X, Y))
   {
-    Image[Y][X] = Color;
-
-    if(AlphaMap)
-      AlphaMap[Y][X] = Alpha;
-    else if(Alpha != 255)
-    {
+    if(!AlphaMap && Alpha != 255)
       CreateAlphaMap(255);
-      AlphaMap[Y][X] = Alpha;
-    }
 
-    if(PriorityMap)
-      PriorityMap[Y][X] = Priority;
+    for(int y = Y * Density; y < (Y + 1) * Density; ++y)
+      for(int x = X * Density; x < (X + 1) * Density; ++x)
+      {
+        Image[y][x] = Color;
+
+        if(AlphaMap)
+          AlphaMap[y][x] = Alpha;
+
+        if(PriorityMap)
+          PriorityMap[y][x] = Priority;
+      }
   }
 }
 
@@ -2002,6 +2105,7 @@ void bitmap::MaskedPriorityBlit(cblitdata& BlitData) const
   }
 
   blitdata B = BlitData;
+  ToPhysical(B);
 
   if(!FastFlag)
   {
@@ -2065,6 +2169,7 @@ void bitmap::AlphaPriorityBlit(cblitdata& BlitData) const
   }
 
   blitdata B = BlitData;
+  ToPhysical(B);
 
   if(!FastFlag)
   {
@@ -2188,7 +2293,7 @@ v2 bitmap::RandomizePixel() const
       ++c;
 
   c = (c - MapSize) >> 1;
-  return v2(c % Size.X, c / Size.X);
+  return v2(c % Size.X / Density, c / Size.X / Density);
 }
 
 void bitmap::CalculateRandMap()
@@ -2202,20 +2307,24 @@ void bitmap::CalculateRandMap()
     UpdateRandMap(c, AlphaMap[0][c]);
 }
 
-void bitmap::AlphaPutPixel(int x, int y, col16 SrcCol, col24 Luminance, alpha Alpha)
+void bitmap::AlphaPutPixel(int X, int Y, col16 SrcCol, col24 Luminance, alpha Alpha)
 {
-  int DestCol = Image[y][x];
   int NewRedLuminance = (Luminance >> 7 & 0x1F800) - 0x10000;
   int NewGreenLuminance = (Luminance >> 4 & 0xFE0) - 0x800;
   int NewBlueLuminance = (Luminance >> 2 & 0x3F) - 0x20;
-  NEW_LUMINATE_RED();
-  NEW_APPLY_ALPHA_RED();
-  NEW_LUMINATE_GREEN();
-  NEW_APPLY_ALPHA_GREEN();
-  NEW_LUMINATE_BLUE();
-  NEW_APPLY_ALPHA_BLUE();
-  Image[y][x] = Red|Green|Blue;
 
+  for(int y = Y * Density; y < (Y + 1) * Density; ++y)
+    for(int x = X * Density; x < (X + 1) * Density; ++x)
+    {
+      int DestCol = Image[y][x];
+      NEW_LUMINATE_RED();
+      NEW_APPLY_ALPHA_RED();
+      NEW_LUMINATE_GREEN();
+      NEW_APPLY_ALPHA_GREEN();
+      NEW_LUMINATE_BLUE();
+      NEW_APPLY_ALPHA_BLUE();
+      Image[y][x] = Red|Green|Blue;
+    }
 }
 
 alpha bitmap::CalculateAlphaAverage() const
@@ -2241,18 +2350,43 @@ alpha bitmap::CalculateAlphaAverage() const
   return Alphas ? AlphaSum / Alphas : 0;
 }
 
-cachedfont::cachedfont(v2 Size) : bitmap(Size)
+cachedfont::cachedfont(v2 LayoutSize) : bitmap(LayoutSize)
 {
   Alloc2D(MaskMap, Size.Y, Size.X);
 }
 
-cachedfont::cachedfont(v2 Size, col16 Color) : bitmap(Size, Color)
+cachedfont::cachedfont(v2 LayoutSize, col16 Color) : bitmap(LayoutSize, Color)
 {
   Alloc2D(MaskMap, Size.Y, Size.X);
 }
 
 void cachedfont::PrintCharacter(cblitdata B) const
 {
+  if(Density != 1)
+  {
+    /* The 1x fast path below is hard-wired to 8-pixel glyphs; mask the scaled glyph pixel by pixel. */
+    blitdata P = B;
+    ToPhysical(P);
+
+    if(P.Dest.X < 0 || P.Dest.Y < 0 || P.Dest.X + P.Border.X > P.Bitmap->Size.X || P.Dest.Y + P.Border.Y > P.Bitmap->Size.Y)
+    {
+      NormalMaskedBlit(B);
+      return;
+    }
+
+    for(int y = 0; y < P.Border.Y; ++y)
+    {
+      cpackcol16* FontPtr = &Image[P.Src.Y + y][P.Src.X];
+      cpackcol16* MaskPtr = &MaskMap[P.Src.Y + y][P.Src.X];
+      packcol16* DestPtr = &P.Bitmap->Image[P.Dest.Y + y][P.Dest.X];
+
+      for(int x = 0; x < P.Border.X; ++x)
+        DestPtr[x] = (DestPtr[x] & MaskPtr[x]) | FontPtr[x];
+    }
+
+    return;
+  }
+
   if(B.Dest.X < 0 || B.Dest.Y < 0 || B.Dest.X + 10 >= B.Bitmap->Size.X || B.Dest.Y + 9 >= B.Bitmap->Size.Y)
   {
     NormalMaskedBlit(B);
@@ -2298,17 +2432,18 @@ cint WaveDelta[] = { 1, 2, 2, 2, 1, 0, -1, -2, -2, -2, -1 };
 void bitmap::Wobble(int Frame, int SpeedShift, truth Horizontally)
 {
   int WavePos = (Frame << SpeedShift >> 1) - 14;
+  v2 LayoutSize = GetSize();
 
   if(Horizontally)
   {
     for(int c = 0; c < 11; ++c)
-      if(WavePos + c >= 0 && WavePos + c < Size.Y)
+      if(WavePos + c >= 0 && WavePos + c < LayoutSize.Y)
         MoveLineHorizontally(WavePos + c, WaveDelta[c]);
   }
   else
   {
     for(int c = 0; c < 11; ++c)
-      if(WavePos + c >= 0 && WavePos + c < Size.X)
+      if(WavePos + c >= 0 && WavePos + c < LayoutSize.X)
         MoveLineVertically(WavePos + c, WaveDelta[c]);
   }
 }
@@ -2316,18 +2451,19 @@ void bitmap::Wobble(int Frame, int SpeedShift, truth Horizontally)
 void bitmap::MoveLineVertically(int X, int Delta)
 {
   int y;
+  v2 LayoutSize = GetSize();
 
   if(Delta < 0)
   {
-    for(y = 0; y < Size.Y + Delta; ++y)
+    for(y = 0; y < LayoutSize.Y + Delta; ++y)
       PowerPutPixel(X, y, GetPixel(X, y - Delta), AlphaMap ? GetAlpha(X, y - Delta) : 255, AVERAGE_PRIORITY);
 
     for(int y = -1; y >= Delta; --y)
-      PowerPutPixel(X, Size.Y + y, TRANSPARENT_COLOR, 255, AVERAGE_PRIORITY);
+      PowerPutPixel(X, LayoutSize.Y + y, TRANSPARENT_COLOR, 255, AVERAGE_PRIORITY);
   }
   else if(Delta > 0)
   {
-    for(y = Size.Y - 1; y >= Delta; --y)
+    for(y = LayoutSize.Y - 1; y >= Delta; --y)
       PowerPutPixel(X, y, GetPixel(X, y - Delta), AlphaMap ? GetAlpha(X, y - Delta) : 255, AVERAGE_PRIORITY);
 
     for(y = 0; y < Delta; ++y)
@@ -2338,18 +2474,19 @@ void bitmap::MoveLineVertically(int X, int Delta)
 void bitmap::MoveLineHorizontally(int Y, int Delta)
 {
   int x;
+  v2 LayoutSize = GetSize();
 
   if(Delta < 0)
   {
-    for(x = 0; x < Size.X + Delta; ++x)
+    for(x = 0; x < LayoutSize.X + Delta; ++x)
       PowerPutPixel(x, Y, GetPixel(x - Delta, Y), AlphaMap ? GetAlpha(x - Delta, Y) : 255, AVERAGE_PRIORITY);
 
     for(x = -1; x >= Delta; --x)
-      PowerPutPixel(Size.X + x, Y, TRANSPARENT_COLOR, 255, AVERAGE_PRIORITY);
+      PowerPutPixel(LayoutSize.X + x, Y, TRANSPARENT_COLOR, 255, AVERAGE_PRIORITY);
   }
   else if(Delta > 0)
   {
-    for(x = Size.X - 1; x >= Delta; --x)
+    for(x = LayoutSize.X - 1; x >= Delta; --x)
       PowerPutPixel(x, Y, GetPixel(x - Delta, Y), AlphaMap ? GetAlpha(x - Delta, Y) : 255, AVERAGE_PRIORITY);
 
     for(x = 0; x < Delta; ++x)
@@ -2360,7 +2497,7 @@ void bitmap::MoveLineHorizontally(int Y, int Delta)
 void bitmap::InterLace()
 {
   for(int y = 0; y < Size.Y; ++y)
-    if(!(y % 3))
+    if(!(y / Density % 3))
       for(int x = 0; x < Size.X; ++x)
         if(Image[y][x] != 0)
           Image[y][x] = 1;

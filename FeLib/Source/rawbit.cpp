@@ -18,13 +18,17 @@
 #include "allocate.h"
 #include "rawbit.h"
 #include "bitmap.h"
+#include "graphics.h"
 #include "save.h"
 #include "femath.h"
+#include "error.h"
 
-void rawbitmap::MaskedBlit(bitmap* Bitmap, packcol16* Color) const { MaskedBlit(Bitmap, ZERO_V2, ZERO_V2, Size, Color); }
+void rawbitmap::MaskedBlit(bitmap* Bitmap, packcol16* Color) const { MaskedBlit(Bitmap, ZERO_V2, ZERO_V2, GetSize(), Color); }
 
-rawbitmap::rawbitmap(cfestring& FileName)
+rawbitmap::rawbitmap(cfestring& RequestedName) : Density(graphics::GetDensity())
 {
+  int FileDensity;
+  festring FileName = graphics::ResolveDensityAsset(RequestedName, FileDensity);
   std::shared_ptr<FILE> File(fopen(FileName.CStr(), "rb"), fclose);
 
   if(!File)
@@ -80,10 +84,67 @@ rawbitmap::rawbitmap(cfestring& FileName)
     *Buffer = 255 - *Buffer;
 
   png_destroy_read_struct(&PNGStruct, &PNGInfo, nullptr);
+
+  if(FileDensity != Density)
+    Rescale(FileDensity);
 }
 
-rawbitmap::rawbitmap(v2 Size) : Size(Size)
+/* Convert PaletteBuffer from FromDensity to Density. Upscaling repeats each pixel; downscaling
+   keeps the most common index of each block. Indices are rescaled, never colours, so material
+   pixels keep their channel and brightness. */
+void rawbitmap::Rescale(int FromDensity)
 {
+  if(Size.X % FromDensity || Size.Y % FromDensity)
+    ABORT("Graphics file of %dx%d pixels is not a whole number of %dx pixels!", Size.X, Size.Y, FromDensity);
+
+  v2 Layout(Size.X / FromDensity, Size.Y / FromDensity);
+  v2 NewSize = Layout * Density;
+  paletteindex** NewBuffer;
+  Alloc2D(NewBuffer, NewSize.Y, NewSize.X);
+
+  if(Density > FromDensity)
+  {
+    cint Factor = Density / FromDensity;
+
+    for(int y = 0; y < NewSize.Y; ++y)
+      for(int x = 0; x < NewSize.X; ++x)
+        NewBuffer[y][x] = PaletteBuffer[y / Factor][x / Factor];
+  }
+  else
+  {
+    cint Factor = FromDensity / Density;
+
+    for(int y = 0; y < NewSize.Y; ++y)
+      for(int x = 0; x < NewSize.X; ++x)
+      {
+        int Best = PaletteBuffer[y * Factor][x * Factor], BestCount = 0;
+
+        for(int c1 = 0; c1 < Factor * Factor; ++c1)
+        {
+          int Candidate = PaletteBuffer[y * Factor + c1 / Factor][x * Factor + c1 % Factor], Count = 0;
+
+          for(int c2 = 0; c2 < Factor * Factor; ++c2)
+            Count += PaletteBuffer[y * Factor + c2 / Factor][x * Factor + c2 % Factor] == Candidate;
+
+          if(Count > BestCount)
+          {
+            Best = Candidate;
+            BestCount = Count;
+          }
+        }
+
+        NewBuffer[y][x] = Best;
+      }
+  }
+
+  delete [] PaletteBuffer;
+  PaletteBuffer = NewBuffer;
+  Size = NewSize;
+}
+
+rawbitmap::rawbitmap(v2 LayoutSize) : Density(graphics::GetDensity())
+{
+  Size = LayoutSize * Density;
   Palette = new uchar[768];
   Alloc2D(PaletteBuffer, Size.Y, Size.X);
 }
@@ -139,13 +200,20 @@ void rawbitmap::Save(cfestring& FileName)
 
 void rawbitmap::MaskedBlit(bitmap* Bitmap, v2 Src, v2 Dest, v2 Border, packcol16* Color) const
 {
+  if(Bitmap->GetDensity() != Density)
+    ABORT("Masked blit between a %dx sheet and a %dx bitmap!", Density, Bitmap->GetDensity());
+
+  Src *= Density;
+  Dest *= Density;
+  Border *= Density;
+
   if(!femath::Clip(Src.X, Src.Y, Dest.X, Dest.Y, Border.X, Border.Y,
-                   Size.X, Size.Y, Bitmap->GetSize().X, Bitmap->GetSize().Y))
+                   Size.X, Size.Y, Bitmap->GetPhysicalSize().X, Bitmap->GetPhysicalSize().Y))
     return;
 
   paletteindex* Buffer = &PaletteBuffer[Src.Y][Src.X];
   packcol16* DestBuffer = &Bitmap->GetImage()[Dest.Y][Dest.X];
-  int BitmapXSize = Bitmap->GetSize().X;
+  int BitmapXSize = Bitmap->GetPhysicalSize().X;
   uchar* Palette = this->Palette; // eliminate the efficiency cost of dereferencing
 
   for(int y = 0; y < Border.Y; ++y)
@@ -192,7 +260,7 @@ void rawbitmap::MaskedBlit(bitmap* Bitmap, v2 Src, v2 Dest, v2 Border, packcol16
 
 cachedfont* rawbitmap::Colorize(cpackcol16* Color, alpha BaseAlpha, cpackalpha* Alpha) const
 {
-  cachedfont* Bitmap = new cachedfont(Size);
+  cachedfont* Bitmap = new cachedfont(GetSize());
   paletteindex* Buffer = PaletteBuffer[0];
   packcol16* DestBuffer = Bitmap->GetImage()[0];
   uchar* Palette = this->Palette; // eliminate the efficiency cost of dereferencing
@@ -211,7 +279,7 @@ cachedfont* rawbitmap::Colorize(cpackcol16* Color, alpha BaseAlpha, cpackalpha* 
     UseAlpha = false;
   }
 
-  int BitmapXSize = Bitmap->GetSize().X;
+  int BitmapXSize = Bitmap->GetPhysicalSize().X;
 
   for(int y = 0; y < Size.Y; ++y)
   {
@@ -273,6 +341,13 @@ bitmap* rawbitmap::Colorize(v2 Pos, v2 Border, v2 Move, cpackcol16* Color, alpha
   bitmap* Bitmap = new bitmap(Border);
   v2 TargetPos(0, 0);
 
+  if(Bitmap->GetDensity() != Density)
+    ABORT("Colorizing a %dx sheet into a %dx bitmap!", Density, Bitmap->GetDensity());
+
+  Pos *= Density;
+  Border *= Density;
+  Move *= Density;
+
   if(Move.X || Move.Y)
   {
     Bitmap->ClearToColor(TRANSPARENT_COLOR);
@@ -302,7 +377,7 @@ bitmap* rawbitmap::Colorize(v2 Pos, v2 Border, v2 Move, cpackcol16* Color, alpha
 
   paletteindex* Buffer = &PaletteBuffer[Pos.Y][Pos.X];
   packcol16* DestBuffer = &Bitmap->GetImage()[TargetPos.Y][TargetPos.X];
-  int BitmapXSize = Bitmap->GetSize().X;
+  int BitmapXSize = Bitmap->GetPhysicalSize().X;
   uchar* Palette = this->Palette; // eliminate the efficiency cost of dereferencing
   packalpha* AlphaMap;
   truth UseAlpha;
@@ -502,6 +577,8 @@ void rawbitmap::PrintfUnshaded(bitmap* Bitmap, v2 Pos, packcol16 Color, cchar* F
 
 void rawbitmap::AlterGradient(v2 Pos, v2 Border, int MColor, int Amount, truth Clip)
 {
+  Pos *= Density;
+  Border *= Density;
   int ColorMin = 192 + (MColor << 4);
   int ColorMax = 207 + (MColor << 4);
 
@@ -560,6 +637,9 @@ void rawbitmap::AlterGradient(v2 Pos, v2 Border, int MColor, int Amount, truth C
 
 void rawbitmap::SwapColors(v2 Pos, v2 Border, int Color1, int Color2)
 {
+  Pos *= Density;
+  Border *= Density;
+
   if(Color1 > 3 || Color2 > 3)
     ABORT("Illegal col swap!");
 
@@ -575,10 +655,14 @@ void rawbitmap::SwapColors(v2 Pos, v2 Border, int Color1, int Color2)
     }
 }
 
-/* TempBuffer must be an array of Border.X * Border.Y paletteindices */
+/* TempBuffer must be an array of Border.X * Border.Y * GetDensity()^2 paletteindices */
 
 void rawbitmap::Roll(v2 Pos, v2 Border, v2 Move, paletteindex* TempBuffer)
 {
+  Pos *= Density;
+  Border *= Density;
+  Move *= Density;
+
   int x, y;
 
   for(x = Pos.X; x < Pos.X + Border.X; ++x)
@@ -612,14 +696,15 @@ void rawbitmap::CreateFontCache(packcol16 Color)
     return;
 
   packcol16 ShadeColor = MakeShadeColor(Color);
-  cachedfont* Font = new cachedfont(Size, TRANSPARENT_COLOR);
-  MaskedBlit(Font, ZERO_V2, v2(1, 1), v2(Size.X - 1, Size.Y - 1), &ShadeColor);
+  v2 LayoutSize = GetSize();
+  cachedfont* Font = new cachedfont(LayoutSize, TRANSPARENT_COLOR);
+  MaskedBlit(Font, ZERO_V2, v2(1, 1), v2(LayoutSize.X - 1, LayoutSize.Y - 1), &ShadeColor);
   cachedfont* UnshadedFont = Colorize(&Color);
 
   blitdata B = { Font,
                  { 0, 0 },
                  { 0, 0 },
-                 { Size.X, Size.Y },
+                 { LayoutSize.X, LayoutSize.Y },
                  { 0 },
                  TRANSPARENT_COLOR,
                  0 };
@@ -654,7 +739,7 @@ v2 rawbitmap::RandomizeSparklePos(cv2* ValidityArray, v2* PossibleBuffer, v2 Pos
   for(int c = 0; c < ValidityArraySize; ++c)
   {
     v2 V = ValidityArray[c] + Pos;
-    int Entry = PaletteBuffer[V.Y][V.X];
+    int Entry = PaletteBuffer[V.Y * Density][V.X * Density];
 
     if(IsMaterialColor(Entry) && 1 << GetMaterialColorIndex(Entry) & SparkleFlags)
     {
@@ -699,13 +784,20 @@ v2 rawbitmap::RandomizeSparklePos(cv2* ValidityArray, v2* PossibleBuffer, v2 Pos
 
 truth rawbitmap::IsTransparent(v2 Pos) const
 {
-  return PaletteBuffer[Pos.Y][Pos.X] == TRANSPARENT_PALETTE_INDEX;
+  return PaletteBuffer[Pos.Y * Density][Pos.X * Density] == TRANSPARENT_PALETTE_INDEX;
 }
 
 truth rawbitmap::IsMaterialColor1(v2 Pos) const
 {
-  int P = PaletteBuffer[Pos.Y][Pos.X];
+  int P = PaletteBuffer[Pos.Y * Density][Pos.X * Density];
   return P >= 192 && P < 208;
+}
+
+void rawbitmap::PutPixel(v2 Pos, paletteindex Color)
+{
+  for(int y = Pos.Y * Density; y < (Pos.Y + 1) * Density; ++y)
+    for(int x = Pos.X * Density; x < (Pos.X + 1) * Density; ++x)
+      PaletteBuffer[y][x] = Color;
 }
 
 void rawbitmap::CopyPaletteFrom(rawbitmap* Bitmap)
@@ -720,6 +812,12 @@ void rawbitmap::Clear()
 
 void rawbitmap::NormalBlit(rawbitmap* Bitmap, v2 Src, v2 Dest, v2 Border, int Flags) const
 {
+  if(Bitmap->Density != Density)
+    ABORT("Blit between %dx and %dx paletted bitmaps!", Density, Bitmap->Density);
+
+  Src *= Density;
+  Dest *= Density;
+  Border *= Density;
   paletteindex** SrcBuffer = PaletteBuffer;
   paletteindex** DestBuffer = Bitmap->PaletteBuffer;
 

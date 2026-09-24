@@ -20,6 +20,7 @@
 #endif
 
 #include "v2.h"
+#include "festring.h"
 
 #define DOUBLE_BUFFER graphics::GetDoubleBuffer()
 #define RES graphics::GetRes()
@@ -39,11 +40,19 @@ class graphics
   static void DeInit();
   static void SetAllowMouseInFullScreen(bool b);
   static int GetScale(){return Scale;}
+  /* Physical pixels per layout pixel (1, 2 or 4). The game lays everything out on the
+     classic 800x600-style grid with 16-unit tiles; bitmaps store Density x Density
+     physical pixels per layout pixel, so tiles are 16 * Density pixels on screen. */
+  static int GetDensity() { return Density; }
+  static festring ResolveDensityAsset(cfestring& FileName, int& FileDensity);
 
 #ifdef USE_SDL
   static void SetScale(int);
   static void SwitchMode();
   static void SetMode(cchar*, cchar*, v2, int, int, truth);
+ private:
+  static int ChooseDensity(v2, int);
+ public:
 #endif
 
 #ifdef __DJGPP__
@@ -163,6 +172,7 @@ class graphics
   static truth bSpecialListItemAltPos;
   static v2 Res;
   static int Scale;
+  static int Density;
   static int ColorDepth;
   static rawbitmap* DefaultFont;
 };

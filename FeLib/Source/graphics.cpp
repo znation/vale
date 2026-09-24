@@ -101,6 +101,10 @@ bitmap* graphics::DoubleBuffer=NULL;
 bitmap* graphics::StretchedBuffer=NULL; //this is actually a 3rd buffer...
 v2 graphics::Res;
 int graphics::Scale;
+int graphics::Density = 1;
+
+/* Pixel densities the art ships in: Graphics/ (1x), Graphics/2x/ and Graphics/4x/. */
+static cint SupportedDensities[] = { 1, 2, 4 };
 int graphics::ColorDepth;
 rawbitmap* graphics::DefaultFont = 0;
 
@@ -162,6 +166,45 @@ void graphics::DeInit()
 }
 
 #ifdef USE_SDL
+
+/* The window is Res * Scale points; on a HiDPI display each point is several physical pixels.
+   Render at the smallest supported density that covers the window's real pixels, so the
+   compositor never has to upscale the game, and cap it at the densest art we ship.
+   VALE_DENSITY=1|2|4 overrides this (useful headless, where there is no display to measure). */
+int graphics::ChooseDensity(v2 NewRes, int NewScale)
+{
+  if(cchar* Forced = getenv("VALE_DENSITY"))
+  {
+    int D = atoi(Forced);
+
+    for(int Supported : SupportedDensities)
+      if(D == Supported)
+        return D;
+  }
+
+  int PixelsX = NewRes.X * NewScale, PixelsY = NewRes.Y * NewScale;
+#if SDL_MAJOR_VERSION == 2
+  SDL_GetRendererOutputSize(Renderer, &PixelsX, &PixelsY);
+  int PointsX, PointsY;
+  SDL_GetWindowSize(Window, &PointsX, &PointsY);
+
+  /* The window is created at Res and resized by SetScale later, so measure the
+     points-to-pixels ratio now and apply it to the scaled size. */
+  if(PointsX > 0 && PointsY > 0)
+  {
+    PixelsX = PixelsX * NewRes.X * NewScale / PointsX;
+    PixelsY = PixelsY * NewRes.Y * NewScale / PointsY;
+  }
+#endif
+
+  double Needed = Max(double(PixelsX) / NewRes.X, double(PixelsY) / NewRes.Y);
+
+  for(int Supported : SupportedDensities)
+    if(Supported >= Needed - 0.01)
+      return Supported;
+
+  return SupportedDensities[sizeof(SupportedDensities) / sizeof(*SupportedDensities) - 1];
+}
 
 bool bAllowMouseInFullScreen=false;
 void graphics::SetAllowMouseInFullScreen(bool b)
@@ -226,7 +269,9 @@ void graphics::SetMode(cchar* Title, cchar* IconName,
   if(!Renderer)
     ABORT("Couldn't set renderer mode.");
 
-  SDL_RenderSetLogicalSize(Renderer, NewRes.X, NewRes.Y);
+  Density = ChooseDensity(NewRes, NewScale);
+  v2 PhysicalRes = NewRes * Density;
+  SDL_RenderSetLogicalSize(Renderer, PhysicalRes.X, PhysicalRes.Y);
 
   switch(ScalingQuality){
   case 1: SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear"); break;
@@ -236,7 +281,7 @@ void graphics::SetMode(cchar* Title, cchar* IconName,
   Texture = SDL_CreateTexture(Renderer,
                               SDL_PIXELFORMAT_RGB565,
                               SDL_TEXTUREACCESS_STREAMING,
-                              NewRes.X, NewRes.Y);
+                              PhysicalRes.X, PhysicalRes.Y);
 #endif
 
   globalwindowhandler::Init();
@@ -691,19 +736,27 @@ void graphics::BlitDBToScreen()
 
   SDL_UpdateRect(Screen, 0, 0, Res.X, Res.Y);
 #else
-  packcol16* SrcPtr = PrepareBuffer()->GetImage()[0];
+  bitmap* Buffer = PrepareBuffer();
+  packcol16* SrcPtr = Buffer->GetImage()[0];
+  v2 PhysicalRes = Buffer->GetPhysicalSize();
+  cint RowBytes = PhysicalRes.X * sizeof(packcol16);
   void* DestPtr;
   int Pitch;
 
   if (SDL_LockTexture(Texture, NULL, &DestPtr, &Pitch) == 0)
   {
-    memcpy(DestPtr, SrcPtr, Res.Y * Pitch);
+    if(Pitch == RowBytes)
+      memcpy(DestPtr, SrcPtr, PhysicalRes.Y * RowBytes);
+    else
+      for(int y = 0; y < PhysicalRes.Y; ++y)
+        memcpy(static_cast<char*>(DestPtr) + y * Pitch, SrcPtr + y * PhysicalRes.X, RowBytes);
+
     SDL_UnlockTexture(Texture);
   }
   else
   {
     // Try to use the slower SDL_UpdateTexture() as a fallback if SDL_LockTexture() fails.
-    SDL_UpdateTexture(Texture, NULL, SrcPtr, Res.X * sizeof(packcol16));
+    SDL_UpdateTexture(Texture, NULL, SrcPtr, RowBytes);
   }
 
   SDL_RenderClear(Renderer);
@@ -727,7 +780,7 @@ void graphics::SetScale(int NewScale)
   WindowPos += (OldSize - NewSize) / 2;
   SDL_SetWindowPosition(Window, WindowPos.X, WindowPos.Y);
   SDL_SetWindowSize(Window, Res.X * NewScale, Res.Y * NewScale);
-  SDL_RenderSetScale(Renderer, NewScale, NewScale);
+  /* The renderer's logical size (Res * Density) makes SDL fit the frame to the window. */
 #endif
 }
 
@@ -775,6 +828,56 @@ void graphics::SwitchMode()
 }
 
 #endif
+
+/* "Graphics/Item.png" -> the best available "Graphics/<D>x/Item.png": the current density if
+   present, otherwise the next denser set (downscaled on load), otherwise the next coarser one
+   (upscaled on load), falling back to the classic 16-pixel art. */
+festring graphics::ResolveDensityAsset(cfestring& FileName, int& FileDensity)
+{
+  festring::sizetype Slash = FileName.FindLast('/');
+  festring Dir, Name;
+
+  if(Slash == festring::NPos)
+    Name = FileName;
+  else
+  {
+    Dir = FileName;
+    Dir.Resize(Slash + 1);
+    Name = FileName;
+    Name.Erase(0, Slash + 1);
+  }
+
+  std::vector<int> Order;
+  Order.push_back(Density);
+
+  for(int D : SupportedDensities)
+    if(D > Density)
+      Order.push_back(D);
+
+  for(int c = sizeof(SupportedDensities) / sizeof(*SupportedDensities) - 1; c >= 0; --c)
+    if(SupportedDensities[c] < Density)
+      Order.push_back(SupportedDensities[c]);
+
+  for(int D : Order)
+  {
+    festring Candidate = Dir;
+
+    if(D != 1)
+      Candidate << D << "x/";
+
+    Candidate << Name;
+
+    if(FILE* File = fopen(Candidate.CStr(), "rb"))
+    {
+      fclose(File);
+      FileDensity = D;
+      return Candidate;
+    }
+  }
+
+  FileDensity = 1;
+  return FileName;
+}
 
 void graphics::LoadDefaultFont(cfestring& FileName)
 {

@@ -15,6 +15,8 @@
 #include <ratio>
 #include <chrono>
 #include <cmath>
+#include <sstream>
+#include <string>
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
@@ -383,6 +385,63 @@ void ShowFPS(){ //TODO still flickers sometimes cuz of silhouette?
   }
 }
 
+/* Developer aid for checking rendering without a display, e.g.
+ *   SDL_VIDEODRIVER=offscreen VALE_AUTOPLAY="shot:/tmp/menu.bmp enter T e s t enter shot:/tmp/game.bmp quit"
+ * Each token is handed to GetKey() as if typed ("enter", "esc", "space", "up", "down", "left",
+ * "right" or a single character); "shot:PATH" saves the displayed frame as a BMP and "quit" exits.
+ * Does nothing unless VALE_AUTOPLAY is set. */
+static int NextAutoplayKey()
+{
+  static std::vector<std::string> Tokens;
+  static size_t Next = 0;
+  static bool Loaded = false;
+
+  if(!Loaded)
+  {
+    Loaded = true;
+
+    if(cchar* Script = getenv("VALE_AUTOPLAY"))
+    {
+      std::istringstream Stream(Script);
+
+      for(std::string Token; Stream >> Token;)
+        Tokens.push_back(Token);
+    }
+  }
+
+  while(Next < Tokens.size())
+  {
+    const std::string& Token = Tokens[Next++];
+
+    if(Token.compare(0, 5, "shot:") == 0)
+    {
+      graphics::BlitDBToScreen();
+      graphics::PrepareBuffer()->Save(festring(Token.substr(5).c_str())); // what is on screen, zoom included
+      continue;
+    }
+
+    if(Token == "quit")
+      exit(0);
+
+    static const std::pair<cchar*, int> Named[] =
+    {
+      { "enter", KEY_ENTER }, { "esc", KEY_ESC }, { "space", KEY_SPACE }, { "up", KEY_UP },
+      { "down", KEY_DOWN }, { "left", KEY_LEFT }, { "right", KEY_RIGHT }
+    };
+
+    for(const std::pair<cchar*, int>& Name : Named)
+      if(Token == Name.first)
+        return Name.second;
+
+    if(Token.size() == 1)
+      return Token[0];
+
+    ABORT("Unknown VALE_AUTOPLAY token \"%s\"", Token.c_str());
+  }
+
+  return 0;
+}
+
 int globalwindowhandler::GetKey(truth EmptyBuffer)
 {
   SDL_Event Event;
@@ -396,6 +455,10 @@ int globalwindowhandler::GetKey(truth EmptyBuffer)
   keyTimeoutRequestedAt=clock();
   int iDelayMS=iDefaultDelayMS;
   for(;;){
+    if(KeyBuffer.empty())
+      if(int Key = NextAutoplayKey())
+        return Key;
+
     CheckKeyTimeout();
 
     // Phase 1: Process gamepad input each frame
@@ -1134,8 +1197,9 @@ void globalwindowhandler::ProcessMessage(SDL_Event* Event)
    case SDL_MOUSEBUTTONUP:
      if(Event->button.button==1 && Event->button.clicks>0){
        mc.btn = 1;
-       mc.pos.X=Event->button.x;
-       mc.pos.Y=Event->button.y;
+       // The renderer's logical size is in physical pixels; convert back to layout pixels.
+       mc.pos.X=Event->button.x / graphics::GetDensity();
+       mc.pos.Y=Event->button.y / graphics::GetDensity();
      }
      break;
 

@@ -358,7 +358,7 @@ numberoption ivanconfig::WorldSeedConfig("WorldSeedConfig",
 cycleoption ivanconfig::GraphicsScale(    "GraphicsScale",
                                           "Select window scaling factor",
                                           "",
-                                          1, 2,
+                                          2, 2,
                                           &GraphicsScaleDisplayer,
                                           &GraphicsScaleChangeInterface,
                                           &GraphicsScaleChanger);

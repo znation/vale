@@ -50,7 +50,7 @@ uchar igraph::RollBuffer[256];
 int** igraph::BodyBitmapValidityMap;
 std::vector<bitmap*> igraph::vMenu;
 bitmap* igraph::SilhouetteCache[HUMANOID_BODYPARTS][CONDITION_COLORS][SILHOUETTE_TYPES];
-rawbitmap* igraph::ColorizeBuffer[2] = { new rawbitmap(TILE_V2), new rawbitmap(TILE_V2) };
+rawbitmap* igraph::ColorizeBuffer[2]; // created in Init(), once the pixel density is known
 bitmap* igraph::Cursor[CURSOR_TYPES];
 bitmap* igraph::BigCursor[CURSOR_TYPES];
 col16 igraph::CursorColor[CURSOR_TYPES] = { MakeRGB16(40, 40, 40),
@@ -117,8 +117,11 @@ void igraph::Init()
       Graphic[c]->ActivateFastFlag();
     }
 
-    ColorizeBuffer[0]->CopyPaletteFrom(RawGraphic[0]);
-    ColorizeBuffer[1]->CopyPaletteFrom(RawGraphic[0]);
+    for(c = 0; c < 2; ++c)
+    {
+      ColorizeBuffer[c] = new rawbitmap(TILE_V2);
+      ColorizeBuffer[c]->CopyPaletteFrom(RawGraphic[0]);
+    }
     TileBuffer = new bitmap(TILE_V2);
     TileBuffer->ActivateFastFlag();
     TileBuffer->InitPriorityMap(0);
