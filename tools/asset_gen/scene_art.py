@@ -9,8 +9,9 @@ generated with Qwen-Image-2.1 within qwen_image.py's VRAM limits.
   * Wraithstalker.png / Shadowpaw.png: shown while entering those Gloomy Caves levels, with
     the busy text displaced to one side, so the subject sits on the other side over black.
 
-Every image is rendered at 800x608 (the nearest size the model accepts), cropped to 800x600
-and quantized to the 256-colour indexed PNG the engine requires. Renders are fp16 (see
+Every image is rendered at 800x608 (the nearest size the model accepts), cropped to 800x600,
+resized for each pixel density the engine supports (Graphics/, Graphics/2x/, Graphics/4x/) and
+quantized to the 256-colour indexed PNG the engine requires. Renders are fp16 (see
 qwen_image.run_jobs). Masters (the raw renders) are
 kept under tools/asset_gen/masters/ (git-ignored) so post-processing can be redone without
 regenerating; an existing Logo master is reused unless Logo is named with --only.
@@ -132,10 +133,10 @@ def to_indexed(img, colors=256):
     return q
 
 
-def compose_menu(background, logo):
+def compose_menu(background, logo, density=1):
     bg = background
     if logo is not None:
-        x0, y0, x1, y1 = LOGO_BOX
+        x0, y0, x1, y1 = (v * density for v in LOGO_BOX)
         mark = logo.convert("RGBA")
         bbox = mark.getchannel("A").point(lambda a: 255 if a > 24 else 0).getbbox()
         if bbox:
@@ -146,10 +147,15 @@ def compose_menu(background, logo):
         # A soft dark halo keeps the title readable over any background.
         halo = Image.new("L", bg.size, 0)
         halo.paste(mark.getchannel("A"), pos)
-        halo = halo.filter(ImageFilter.GaussianBlur(10)).point(lambda a: min(255, int(a * 1.6)))
+        halo = halo.filter(ImageFilter.GaussianBlur(10 * density)).point(lambda a: min(255, int(a * 1.6)))
         bg = Image.composite(Image.new("RGB", bg.size, (0, 0, 0)), bg, halo.point(lambda a: a * 3 // 4))
         bg.paste(mark, pos, mark)
     return bg
+
+
+# The engine loads Graphics/<D>x/<name> at pixel density D (see graphics::ResolveDensityAsset);
+# without one it would repeat each pixel of the 800x600 image D times.
+DENSITIES = (1, 2, 4)
 
 
 def install(names):
@@ -163,14 +169,19 @@ def install(names):
             print(f"skip {name}: no master at {master}")
             continue
         img = Image.open(master).convert("RGB")
-        if img.size != SCREEN:
-            top = (img.height - SCREEN[1]) // 2
-            img = img.crop((0, top, SCREEN[0], top + SCREEN[1])) if img.width == SCREEN[0] else img.resize(SCREEN, Image.LANCZOS)
-        if name.startswith("Menu"):
-            img = compose_menu(img, logo)
-        out = GRAPHICS / f"{name}.png"
-        to_indexed(img).save(out)
-        print(f"installed {out.relative_to(REPO)}")
+        scale = img.width / SCREEN[0]
+        crop_h = round(SCREEN[1] * scale)
+        top = (img.height - crop_h) // 2
+        img = img.crop((0, top, img.width, top + crop_h))
+        for density in DENSITIES:
+            size = (SCREEN[0] * density, SCREEN[1] * density)
+            frame = img.resize(size, Image.LANCZOS) if img.size != size else img
+            if name.startswith("Menu"):
+                frame = compose_menu(frame, logo, density)
+            out = GRAPHICS / (f"{density}x/" if density > 1 else "") / f"{name}.png"
+            out.parent.mkdir(parents=True, exist_ok=True)
+            to_indexed(frame).save(out)
+            print(f"installed {out.relative_to(REPO)}")
 
 
 def main():

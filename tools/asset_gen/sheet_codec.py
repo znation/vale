@@ -104,3 +104,29 @@ def preview(sheet, region=None, scale=1, background=(20, 20, 28)):
     img = Image.new("RGB", (rgba.shape[1], rgba.shape[0]), background)
     img.paste(Image.fromarray(rgba, "RGBA"), mask=Image.fromarray(rgba[..., 3]))
     return img.resize((img.width * scale, img.height * scale), Image.NEAREST)
+
+
+def scale2x(pixels):
+    """
+    EPX / Scale2x on a 2D index array: each pixel becomes 2x2, copying an edge neighbour into a
+    corner where two neighbours agree, which rounds off diagonals while keeping hard pixel-art
+    edges. It only compares indices for equality, so material channels and transparency survive.
+    """
+    p = np.pad(pixels, 1, mode="edge")
+    P = p[1:-1, 1:-1]
+    A, B, C, D = p[:-2, 1:-1], p[1:-1, 2:], p[1:-1, :-2], p[2:, 1:-1]  # up, right, left, down
+    out = np.empty((pixels.shape[0] * 2, pixels.shape[1] * 2), dtype=pixels.dtype)
+    out[0::2, 0::2] = np.where((C == A) & (C != D) & (A != B), A, P)
+    out[0::2, 1::2] = np.where((A == B) & (A != C) & (B != D), B, P)
+    out[1::2, 0::2] = np.where((D == C) & (D != B) & (C != A), C, P)
+    out[1::2, 1::2] = np.where((B == D) & (B != A) & (D != C), D, P)
+    return out
+
+
+def upscale_sheet(sheet, factor):
+    """The sheet at `factor` (2 or 4) times the pixel density, via repeated Scale2x."""
+    pixels = sheet.pixels
+    while factor > 1:
+        pixels = scale2x(pixels)
+        factor //= 2
+    return Sheet(sheet.path, pixels, sheet.palette)

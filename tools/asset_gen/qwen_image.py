@@ -336,6 +336,13 @@ def run_jobs(jobs, steps=30, log=_log, precision="bf16"):
     )
     pipe.set_progress_bar_config(disable=True)
 
+    if compute_dtype != dtype:
+        # Condition images are VAE-encoded in the latents' dtype; the VAE stays bf16.
+        encode_vae_image = pipe._encode_vae_image
+        pipe._encode_vae_image = lambda image, generator: encode_vae_image(image.to(dtype), generator).to(
+            compute_dtype
+        )
+
     for i, (job, (emb, mask, pad)) in enumerate(zip(jobs, encoded)):
         t0 = time.time()
         fp16_stats.update(max=0.0, nonfinite=0)

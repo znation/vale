@@ -1,0 +1,4784 @@
+{
+ "Char:0,16,16,16": {
+  "names": [
+   "carnivorous plant"
+  ],
+  "uses": [
+   "creature"
+  ]
+ },
+ "Char:112,0,16,16": {
+  "names": [
+   "large hedgehog"
+  ],
+  "uses": [
+   "creature"
+  ]
+ },
+ "Char:128,0,16,16": {
+  "names": [
+   "big skunk"
+  ],
+  "uses": [
+   "creature"
+  ]
+ },
+ "Char:128,128,32,32": {
+  "names": [
+   "massive magical mushroom"
+  ],
+  "uses": [
+   "creature"
+  ]
+ },
+ "Char:128,32,16,16": {
+  "names": [
+   "magical mushroom"
+  ],
+  "uses": [
+   "creature"
+  ]
+ },
+ "Char:128,64,32,32": {
+  "names": [
+   "mother carnivorous plant"
+  ],
+  "uses": [
+   "creature"
+  ]
+ },
+ "Char:144,0,16,16": {
+  "names": [
+   "young female carnivorous mutant bunny",
+   "young male carnivorous mutant bunny"
+  ],
+  "uses": [
+   "creature"
+  ]
+ },
+ "Char:16,0,16,16": {
+  "names": [
+   "chameleon"
+  ],
+  "uses": [
+   "creature"
+  ]
+ },
+ "Char:16,16,16,16": {
+  "names": [
+   "buffalo"
+  ],
+  "uses": [
+   "creature"
+  ]
+ },
+ "Char:160,0,16,16": {
+  "names": [
+   "adult female carnivorous mutant bunny",
+   "adult male carnivorous mutant bunny",
+   "bunny"
+  ],
+  "uses": [
+   "creature"
+  ]
+ },
+ "Char:160,64,32,32": {
+  "names": [
+   "Master Dark Frog"
+  ],
+  "uses": [
+   "creature"
+  ]
+ },
+ "Char:176,0,16,16": {
+  "names": [
+   "conical",
+   "smouldering"
+  ],
+  "uses": [
+   "creature"
+  ]
+ },
+ "Char:176,16,16,16": {
+  "names": [
+   "two-headed moose"
+  ],
+  "uses": [
+   "creature"
+  ]
+ },
+ "Char:192,0,16,16": {
+  "names": [
+   "bloated",
+   "flat"
+  ],
+  "uses": [
+   "creature"
+  ]
+ },
+ "Char:192,16,16,16": {
+  "names": [
+   "panda bear"
+  ],
+  "uses": [
+   "creature"
+  ]
+ },
+ "Char:192,64,32,32": {
+  "names": [
+   "behemoth spider"
+  ],
+  "uses": [
+   "creature"
+  ]
+ },
+ "Char:208,0,16,16": {
+  "names": [
+   "hattifattener"
+  ],
+  "uses": [
+   "creature"
+  ]
+ },
+ "Char:208,16,16,16": {
+  "names": [
+   "giant mushroom"
+  ],
+  "uses": [
+   "creature"
+  ]
+ },
+ "Char:208,32,16,16": {
+  "names": [
+   "mind worm boil",
+   "mind worm hatchling"
+  ],
+  "uses": [
+   "creature"
+  ]
+ },
+ "Char:224,0,16,16": {
+  "names": [
+   "dire wolf",
+   "wolf"
+  ],
+  "uses": [
+   "creature"
+  ]
+ },
+ "Char:224,16,16,16": {
+  "names": [
+   "invisible slayer",
+   "invisible stalker"
+  ],
+  "uses": [
+   "creature"
+  ]
+ },
+ "Char:240,16,16,16": {
+  "names": [
+   "puppy"
+  ],
+  "uses": [
+   "creature"
+  ]
+ },
+ "Char:256,0,16,16": {
+  "names": [
+   "aranea spider",
+   "giant gold spider",
+   "giant spider",
+   "phase spider",
+   "spider"
+  ],
+  "uses": [
+   "creature"
+  ]
+ },
+ "Char:288,0,16,16": {
+  "names": [
+   "mutant ass"
+  ],
+  "uses": [
+   "creature"
+  ]
+ },
+ "Char:288,32,32,32": {
+  "names": [
+   "gigantic carnivorous mutant bunny"
+  ],
+  "uses": [
+   "creature"
+  ]
+ },
+ "Char:304,0,16,16": {
+  "names": [
+   "jackal"
+  ],
+  "uses": [
+   "creature"
+  ]
+ },
+ "Char:304,16,16,16": {
+  "names": [
+   "large spider"
+  ],
+  "uses": [
+   "creature"
+  ]
+ },
+ "Char:32,0,16,16": {
+  "names": [
+   "floating eye"
+  ],
+  "uses": [
+   "creature"
+  ]
+ },
+ "Char:320,0,16,16": {
+  "names": [
+   "dolphin",
+   "female dolphin in season",
+   "male dolphin"
+  ],
+  "uses": [
+   "creature"
+  ]
+ },
+ "Char:336,0,16,16": {
+  "names": [
+   "bear",
+   "black bear",
+   "cave bear",
+   "grizzly bear",
+   "mutant bear",
+   "polar bear"
+  ],
+  "uses": [
+   "creature"
+  ]
+ },
+ "Char:336,16,16,16": {
+  "names": [
+   "giant magpie"
+  ],
+  "uses": [
+   "creature"
+  ]
+ },
+ "Char:368,0,16,16": {
+  "names": [
+   "cerulean snake",
+   "garnet snake",
+   "snake",
+   "viridian snake"
+  ],
+  "uses": [
+   "creature"
+  ]
+ },
+ "Char:400,0,16,16": {
+  "names": [
+   "skeleton puppy"
+  ],
+  "uses": [
+   "creature"
+  ]
+ },
+ "Char:464,16,16,16": {
+  "names": [
+   "bat"
+  ],
+  "uses": [
+   "creature"
+  ]
+ },
+ "Char:48,0,16,16": {
+  "names": [
+   "pure mass of Bill's will"
+  ],
+  "uses": [
+   "creature"
+  ]
+ },
+ "Char:496,0,16,16": {
+  "names": [
+   "large cat"
+  ],
+  "uses": [
+   "creature"
+  ]
+ },
+ "Char:512,0,16,16": {
+  "names": [
+   "large rat"
+  ],
+  "uses": [
+   "creature"
+  ]
+ },
+ "Char:528,0,16,16": {
+  "names": [
+   "baby mammoth"
+  ],
+  "uses": [
+   "creature"
+  ]
+ },
+ "Char:544,0,16,16": {
+  "names": [
+   "black unicorn",
+   "gray unicorn",
+   "unicorn",
+   "white unicorn"
+  ],
+  "uses": [
+   "creature"
+  ]
+ },
+ "Char:576,0,16,16": {
+  "names": [
+   "lion"
+  ],
+  "uses": [
+   "creature"
+  ]
+ },
+ "Char:64,0,16,16": {
+  "names": [
+   "giant dark frog",
+   "giant light frog"
+  ],
+  "uses": [
+   "creature"
+  ]
+ },
+ "Char:64,16,16,16": {
+  "names": [
+   "levitating ostrich"
+  ],
+  "uses": [
+   "creature"
+  ]
+ },
+ "Char:64,32,16,16": {
+  "names": [
+   "eddy in the space-time continuum"
+  ],
+  "uses": [
+   "creature"
+  ]
+ },
+ "Char:80,0,16,16": {
+  "names": [
+   "dark frog",
+   "light frog"
+  ],
+  "uses": [
+   "creature"
+  ]
+ },
+ "Char:80,16,16,16": {
+  "names": [
+   "giant carnivorous plant"
+  ],
+  "uses": [
+   "creature"
+  ]
+ },
+ "Char:96,0,16,16": {
+  "names": [
+   "greater dark frog",
+   "greater light frog",
+   "mystic dark",
+   "mystic light"
+  ],
+  "uses": [
+   "creature"
+  ]
+ },
+ "Char:96,16,16,16": {
+  "names": [
+   "greater carnivorous plant"
+  ],
+  "uses": [
+   "creature"
+  ]
+ },
+ "GLTerra:0,0,16,16": {
+  "names": [
+   "floor"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "GLTerra:16,16,16,16": {
+  "names": [
+   "ground"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "GLTerra:32,0,16,16": {
+  "names": [
+   "floor"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "GLTerra:32,16,16,16": {
+  "names": [
+   "ostrich landing site"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "GLTerra:32,32,16,16": {
+  "names": [
+   "ground"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "Humanoid:0,0,16,16": {
+  "names": [
+   "Lord Regent of Aslona",
+   "communist",
+   "crazed farmer",
+   "eunuch farmer",
+   "farmer",
+   "high priest of the Great Frog",
+   "imperialist",
+   "librarian",
+   "rebel",
+   "tailor"
+  ],
+  "uses": [
+   "legs"
+  ]
+ },
+ "Humanoid:0,112,16,16": {
+  "names": [
+   "Archpriest Cordatus' wife",
+   "Archpriest Cordatus' wife number 2",
+   "Archpriest Cordatus' wife number 3",
+   "Archpriest Cordatus' wife number 4",
+   "Archpriest Cordatus' wife number 5",
+   "Archpriest Cordatus' wife number 6",
+   "re-educated Archpriest Cordatus' wife",
+   "seamstress"
+  ],
+  "uses": [
+   "legs"
+  ]
+ },
+ "Humanoid:0,128,16,16": {
+  "names": [
+   "court jester",
+   "housewife",
+   "maid",
+   "rebel"
+  ],
+  "uses": [
+   "legs"
+  ]
+ },
+ "Humanoid:0,144,16,16": {
+  "names": [
+   "elder priestess of Silva",
+   "female",
+   "female prisoner",
+   "female servant",
+   "female slave",
+   "priestess of Infuscor",
+   "priestess of Silva"
+  ],
+  "uses": [
+   "legs"
+  ]
+ },
+ "Humanoid:0,16,16,16": {
+  "names": [
+   "shopkeeper"
+  ],
+  "uses": [
+   "legs"
+  ]
+ },
+ "Humanoid:0,160,16,16": {
+  "names": [
+   "zombie",
+   "zombie of Khaz-zadm",
+   "zombie prisoner"
+  ],
+  "uses": [
+   "legs"
+  ]
+ },
+ "Humanoid:0,176,16,16": {
+  "names": [
+   "werewolf"
+  ],
+  "uses": [
+   "legs"
+  ]
+ },
+ "Humanoid:0,192,16,16": {
+  "names": [
+   "werewolf",
+   "werewolf druidess of Silva"
+  ],
+  "uses": [
+   "legs"
+  ]
+ },
+ "Humanoid:0,208,16,16": {
+  "names": [
+   "kamikaze dwarf"
+  ],
+  "uses": [
+   "legs"
+  ]
+ },
+ "Humanoid:0,224,16,16": {
+  "names": [
+   "orc general",
+   "orc marshal",
+   "orc officer",
+   "orcish representative"
+  ],
+  "uses": [
+   "legs"
+  ]
+ },
+ "Humanoid:0,240,16,16": {
+  "names": [
+   "orc",
+   "orc slaughterer",
+   "orc squad leader",
+   "rebel leader"
+  ],
+  "uses": [
+   "legs"
+  ]
+ },
+ "Humanoid:0,256,16,16": {
+  "names": [
+   "acidous blood golem",
+   "blood golem",
+   "bone golem",
+   "golem",
+   "human nail golem",
+   "human skin golem",
+   "mustard gas golem",
+   "mysterious red gas golem",
+   "petrified darkness golem",
+   "raw vapourized magic golem",
+   "sleeping gas golem",
+   "spider silk golem",
+   "warp gas golem",
+   "wraith bone golem"
+  ],
+  "uses": [
+   "legs"
+  ]
+ },
+ "Humanoid:0,288,16,16": {
+  "names": [
+   "crop tender",
+   "village elder"
+  ],
+  "uses": [
+   "legs"
+  ]
+ },
+ "Humanoid:0,32,16,16": {
+  "names": [
+   "imperialist",
+   "of Seges",
+   "quartermaster",
+   "shopkeeper"
+  ],
+  "uses": [
+   "legs"
+  ]
+ },
+ "Humanoid:0,416,16,16": {
+  "names": [
+   "ghost",
+   "human"
+  ],
+  "uses": [
+   "legs"
+  ]
+ },
+ "Humanoid:0,432,16,16": {
+  "names": [
+   "chain mail"
+  ],
+  "uses": [
+   "leg armour, worn"
+  ]
+ },
+ "Humanoid:0,48,16,16": {
+  "names": [
+   "black marketeer",
+   "dark knight",
+   "elite dark knight",
+   "elite dark knightess",
+   "grave keeper",
+   "imperialist",
+   "punisher",
+   "rookie dark knight",
+   "rookie dark knightess",
+   "vampire",
+   "veteran dark knight"
+  ],
+  "uses": [
+   "legs"
+  ]
+ },
+ "Humanoid:0,64,16,16": {
+  "names": [
+   "castle guard",
+   "elite guard",
+   "emissary of Aslona",
+   "eunuch guard",
+   "guard",
+   "honor guard",
+   "master tomb guard",
+   "patrol guard",
+   "peddler",
+   "rebel guard",
+   "rookie guard",
+   "royal guard",
+   "shining knight of Legifer",
+   "tomb guard",
+   "trainee guard",
+   "veteran guard"
+  ],
+  "uses": [
+   "legs"
+  ]
+ },
+ "Humanoid:0,80,16,16": {
+  "names": [
+   "skeleton",
+   "skeleton warlord",
+   "skeleton warrior"
+  ],
+  "uses": [
+   "legs"
+  ]
+ },
+ "Humanoid:0,96,16,16": {
+  "names": [
+   "cossack",
+   "dark knight",
+   "ghost of Khaz-Zadm",
+   "hunter",
+   "imprisoned hunter",
+   "rebel lieutenant",
+   "smith"
+  ],
+  "uses": [
+   "legs"
+  ]
+ },
+ "Humanoid:112,0,16,16": {
+  "names": [
+   "Archpriest Cordatus' wife number 3",
+   "elder priestess of Silva",
+   "priestess of Infuscor",
+   "priestess of Silva",
+   "re-educated Archpriest Cordatus' wife"
+  ],
+  "uses": [
+   "head"
+  ]
+ },
+ "Humanoid:112,112,16,16": {
+  "names": [
+   "zombie",
+   "zombie prisoner"
+  ],
+  "uses": [
+   "head"
+  ]
+ },
+ "Humanoid:112,128,16,16": {
+  "names": [
+   "apprentice necromancer",
+   "imprisoned necromancer",
+   "master necromancer",
+   "necromancer"
+  ],
+  "uses": [
+   "head"
+  ]
+ },
+ "Humanoid:112,129,16,16": {
+  "names": [
+   "mask",
+   "war mask"
+  ],
+  "uses": [
+   "helmet, worn"
+  ]
+ },
+ "Humanoid:112,144,16,16": {
+  "names": [
+   "werewolf",
+   "werewolf druidess of Silva"
+  ],
+  "uses": [
+   "head"
+  ]
+ },
+ "Humanoid:112,16,16,16": {
+  "names": [
+   "Archpriest Cordatus' wife number 2"
+  ],
+  "uses": [
+   "head"
+  ]
+ },
+ "Humanoid:112,160,16,16": {
+  "names": [
+   "bum",
+   "kamikaze dwarf",
+   "smith",
+   "zombie of Khaz-zadm"
+  ],
+  "uses": [
+   "head"
+  ]
+ },
+ "Humanoid:112,176,16,16": {
+  "names": [
+   "orc general",
+   "orc marshal",
+   "orc officer",
+   "orc squad leader",
+   "orcish representative"
+  ],
+  "uses": [
+   "head"
+  ]
+ },
+ "Humanoid:112,192,16,16": {
+  "names": [
+   "orc",
+   "orc slaughterer"
+  ],
+  "uses": [
+   "head"
+  ]
+ },
+ "Humanoid:112,208,16,16": {
+  "names": [
+   "kobold",
+   "kobold assassin",
+   "kobold hunter",
+   "kobold master assassin",
+   "kobold patriarch",
+   "kobold warrior"
+  ],
+  "uses": [
+   "head"
+  ]
+ },
+ "Humanoid:112,224,16,16": {
+  "names": [
+   "cossack",
+   "rebel lieutenant"
+  ],
+  "uses": [
+   "head"
+  ]
+ },
+ "Humanoid:112,240,16,16": {
+  "names": [
+   "black marketeer",
+   "mistress",
+   "mistress queen",
+   "mistress torturing chief",
+   "mistress warlady",
+   "mistress whip champion"
+  ],
+  "uses": [
+   "head"
+  ]
+ },
+ "Humanoid:112,256,16,16": {
+  "names": [
+   "angel",
+   "fallen archangel of Mortifer"
+  ],
+  "uses": [
+   "head"
+  ]
+ },
+ "Humanoid:112,288,16,16": {
+  "names": [
+   "goblin prince"
+  ],
+  "uses": [
+   "head"
+  ]
+ },
+ "Humanoid:112,304,16,16": {
+  "names": [
+   "dark archmage",
+   "dark battlemage",
+   "elder dark mage",
+   "royal wizard of Aslona"
+  ],
+  "uses": [
+   "head"
+  ]
+ },
+ "Humanoid:112,32,16,16": {
+  "names": [
+   "Archpriest Cordatus' wife number 4"
+  ],
+  "uses": [
+   "head"
+  ]
+ },
+ "Humanoid:112,335,16,16": {
+  "names": [
+   "boy"
+  ],
+  "uses": [
+   "head"
+  ]
+ },
+ "Humanoid:112,352,16,16": {
+  "names": [
+   "child tourist"
+  ],
+  "uses": [
+   "head"
+  ]
+ },
+ "Humanoid:112,368,16,16": {
+  "names": [
+   "ary-siren",
+   "eli-siren",
+   "erd-siren",
+   "jin-siren",
+   "kos-siren",
+   "pra-siren",
+   "siren",
+   "unn-siren",
+   "ygg-siren",
+   "zar-siren"
+  ],
+  "uses": [
+   "head"
+  ]
+ },
+ "Humanoid:112,400,16,16": {
+  "names": [
+   "elven ambassador of the Dark Forest"
+  ],
+  "uses": [
+   "head"
+  ]
+ },
+ "Humanoid:112,416,16,16": {
+  "names": [
+   "helmet",
+   "helmet of brilliance",
+   "helmet of piercing perception",
+   "helmet of telepathy",
+   "helmet of understanding"
+  ],
+  "uses": [
+   "helmet, worn"
+  ]
+ },
+ "Humanoid:112,432,16,16": {
+  "names": [
+   "Gorovits family gas mask"
+  ],
+  "uses": [
+   "helmet, worn"
+  ]
+ },
+ "Humanoid:112,48,16,16": {
+  "names": [
+   "Archpriest Cordatus' wife number 5",
+   "female tourist"
+  ],
+  "uses": [
+   "head"
+  ]
+ },
+ "Humanoid:112,480,16,16": {
+  "names": [
+   "smith"
+  ],
+  "uses": [
+   "head"
+  ]
+ },
+ "Humanoid:112,496,16,16": {
+  "names": [
+   "helmet"
+  ],
+  "uses": [
+   "helmet, worn"
+  ]
+ },
+ "Humanoid:112,512,16,16": {
+  "names": [
+   "gas-ghoul"
+  ],
+  "uses": [
+   "head"
+  ]
+ },
+ "Humanoid:112,64,16,16": {
+  "names": [
+   "Archpriest Cordatus' wife number 6",
+   "seamstress"
+  ],
+  "uses": [
+   "head"
+  ]
+ },
+ "Humanoid:112,80,16,16": {
+  "names": [
+   "court jester",
+   "female",
+   "female prisoner",
+   "female servant",
+   "female slave"
+  ],
+  "uses": [
+   "head"
+  ]
+ },
+ "Humanoid:112,96,16,16": {
+  "names": [
+   "gibberling"
+  ],
+  "uses": [
+   "head"
+  ]
+ },
+ "Humanoid:128,32,16,16": {
+  "names": [
+   "acid shield",
+   "blessed shield of the Phoenix",
+   "sacred shield named Aegis",
+   "shield",
+   "shield of electricity resistance",
+   "shield of fire resistance",
+   "shield of magic resistance"
+  ],
+  "uses": [
+   "held in hand"
+  ]
+ },
+ "Humanoid:128,48,16,16": {
+  "names": [
+   "acid shield",
+   "frying pan",
+   "shield"
+  ],
+  "uses": [
+   "held in hand"
+  ]
+ },
+ "Humanoid:16,112,16,16": {
+  "names": [
+   "kobold",
+   "kobold assassin",
+   "kobold hunter",
+   "kobold master assassin",
+   "kobold patriarch",
+   "kobold warrior"
+  ],
+  "uses": [
+   "legs"
+  ]
+ },
+ "Humanoid:16,128,16,16": {
+  "names": [
+   "gibberling"
+  ],
+  "uses": [
+   "legs"
+  ]
+ },
+ "Humanoid:16,144,16,16": {
+  "names": [
+   "blood daemon king"
+  ],
+  "uses": [
+   "legs"
+  ]
+ },
+ "Humanoid:16,16,16,16": {
+  "names": [
+   "boy",
+   "child tourist",
+   "girl",
+   "heir to the throne of Aslona"
+  ],
+  "uses": [
+   "legs"
+  ]
+ },
+ "Humanoid:16,160,16,16": {
+  "names": [
+   "apprentice necromancer",
+   "cultist",
+   "dark archmage",
+   "dark battlemage",
+   "elder dark mage",
+   "imprisoned necromancer",
+   "master necromancer",
+   "necromancer",
+   "royal wizard of Aslona"
+  ],
+  "uses": [
+   "legs"
+  ]
+ },
+ "Humanoid:16,176,16,16": {
+  "names": [
+   "sumo wrestler"
+  ],
+  "uses": [
+   "legs"
+  ]
+ },
+ "Humanoid:16,192,16,16": {
+  "names": [
+   "female tourist"
+  ],
+  "uses": [
+   "legs"
+  ]
+ },
+ "Humanoid:16,208,16,16": {
+  "names": [
+   "crop tender encourager"
+  ],
+  "uses": [
+   "legs"
+  ]
+ },
+ "Humanoid:16,224,16,16": {
+  "names": [
+   "male tourist"
+  ],
+  "uses": [
+   "legs"
+  ]
+ },
+ "Humanoid:16,240,16,16": {
+  "names": [
+   "ary-siren",
+   "eli-siren",
+   "elven ambassador of the Dark Forest",
+   "erd-siren",
+   "jin-siren",
+   "kos-siren",
+   "pra-siren",
+   "siren",
+   "unn-siren",
+   "ygg-siren",
+   "zar-siren"
+  ],
+  "uses": [
+   "legs"
+  ]
+ },
+ "Humanoid:16,256,16,16": {
+  "names": [
+   "bum"
+  ],
+  "uses": [
+   "legs"
+  ]
+ },
+ "Humanoid:16,32,16,16": {
+  "names": [
+   "mistress",
+   "mistress queen",
+   "mistress torturing chief",
+   "mistress warlady",
+   "mistress whip champion"
+  ],
+  "uses": [
+   "legs"
+  ]
+ },
+ "Humanoid:16,416,16,16": {
+  "names": [
+   "Shirt of the Golden Eagle",
+   "filthy tunic of martyr Bessica",
+   "ommel bristler armor",
+   "plate mail",
+   "shirt with a Decimus Harvest Co. ad"
+  ],
+  "uses": [
+   "leg armour, worn"
+  ]
+ },
+ "Humanoid:16,432,16,16": {
+  "names": [
+   "boot",
+   "boot of agility",
+   "boot of displacement",
+   "boot of kicking",
+   "boot of strength"
+  ],
+  "uses": [
+   "boots, worn"
+  ]
+ },
+ "Humanoid:16,464,16,16": {
+  "names": [
+   "armor of great health"
+  ],
+  "uses": [
+   "leg armour, worn"
+  ]
+ },
+ "Humanoid:16,48,16,16": {
+  "names": [
+   "wraithstalker",
+   "wraithstalker girl"
+  ],
+  "uses": [
+   "legs"
+  ]
+ },
+ "Humanoid:16,512,16,16": {
+  "names": [
+   "boot"
+  ],
+  "uses": [
+   "boots, worn"
+  ]
+ },
+ "Humanoid:16,64,16,16": {
+  "names": [
+   "goblin",
+   "goblin berserker",
+   "goblin butcher",
+   "goblin king",
+   "goblin prince",
+   "goblin warlock"
+  ],
+  "uses": [
+   "legs"
+  ]
+ },
+ "Humanoid:16,80,16,16": {
+  "names": [
+   "imp"
+  ],
+  "uses": [
+   "legs"
+  ]
+ },
+ "Humanoid:160,112,16,16": {
+  "names": [
+   "amulet",
+   "amulet of ESP",
+   "amulet of dimensional protection",
+   "amulet of disease immunity",
+   "amulet of elemental protection",
+   "amulet of fasting",
+   "amulet of life saving",
+   "amulet of magic breath",
+   "amulet of phasing",
+   "amulet of speed",
+   "beast claw",
+   "lump",
+   "mango peel"
+  ],
+  "uses": [
+   "held in hand"
+  ]
+ },
+ "Humanoid:160,128,16,16": {
+  "names": [
+   "Avatar of Valpuris",
+   "Gorovits family gas mask",
+   "bear trap",
+   "boot",
+   "boot of agility",
+   "boot of displacement",
+   "boot of kicking",
+   "boot of strength",
+   "broken bottle",
+   "broken vial",
+   "chastity belt",
+   "dwarven gas trap",
+   "full helmet",
+   "gauntlet",
+   "gauntlet of dexterity",
+   "gauntlet of strength",
+   "groin",
+   "head",
+   "helmet",
+   "helmet of attractivity",
+   "helmet of brilliance",
+   "helmet of essence plethora",
+   "helmet of indomitable will",
+   "helmet of piercing perception",
+   "helmet of telepathy",
+   "helmet of teleportation",
+   "helmet of understanding",
+   "land mine",
+   "mask",
+   "oil lamp",
+   "pile of 50 million roubles",
+   "puppy skull",
+   "radiant helmet of Macula",
+   "skull",
+   "skull of Khaz-Zadm the Lich-King",
+   "stethoscope",
+   "war mask"
+  ],
+  "uses": [
+   "held in hand"
+  ]
+ },
+ "Humanoid:160,144,16,16": {
+  "names": [
+   "armor of great health",
+   "backpack",
+   "chain mail",
+   "chest",
+   "cloak",
+   "cloak of acid resistance",
+   "cloak of electricity resistance",
+   "cloak of fire resistance",
+   "cloak of flying",
+   "cloak of invisibility",
+   "cloak of protection",
+   "cloak of quickness",
+   "corpse",
+   "filthy tunic of martyr Bessica",
+   "heart of Malgorath",
+   "large chest",
+   "mantle of Al-Khan",
+   "ommel bristler armor",
+   "plate mail",
+   "shadow veil",
+   "small chest",
+   "small strong-box",
+   "thaumic bomb",
+   "torso",
+   "vampire's cowl",
+   "werewolf fur cloak"
+  ],
+  "uses": [
+   "held in hand"
+  ]
+ },
+ "Humanoid:160,16,16,16": {
+  "names": [
+   "bastard sword",
+   "flaming sword",
+   "holy broad sword named Valpuris' Justifier",
+   "long sword",
+   "lost ruby flaming sword of Khaz-Zadm",
+   "rune sword",
+   "two-handed sword",
+   "weeping blade"
+  ],
+  "uses": [
+   "held in hand"
+  ]
+ },
+ "Humanoid:160,160,16,16": {
+  "names": [
+   "lantern"
+  ],
+  "uses": [
+   "held in hand"
+  ]
+ },
+ "Humanoid:160,176,16,16": {
+  "names": [
+   "axe",
+   "axe of sharpness",
+   "blasphemous great axe named Eptyron",
+   "chilling axe",
+   "dark axe"
+  ],
+  "uses": [
+   "held in hand"
+  ]
+ },
+ "Humanoid:160,192,16,16": {
+  "names": [
+   "ancient mace named Neerc Se-ulb",
+   "mace",
+   "mace named Turox"
+  ],
+  "uses": [
+   "held in hand"
+  ]
+ },
+ "Humanoid:160,208,16,16": {
+  "names": [
+   "palm branch",
+   "seedling of the Holy Mango World-tree"
+  ],
+  "uses": [
+   "held in hand"
+  ]
+ },
+ "Humanoid:160,224,16,16": {
+  "names": [
+   "chameleon whip",
+   "girdle",
+   "girdle of carrying",
+   "girdle of giant strength",
+   "girdle of levitation",
+   "girdle of protection",
+   "girdle of regeneration",
+   "runed whip",
+   "thief's girdle",
+   "whip"
+  ],
+  "uses": [
+   "held in hand"
+  ]
+ },
+ "Humanoid:160,256,16,16": {
+  "names": [
+   "halberd",
+   "unholy halberd named Mjolak"
+  ],
+  "uses": [
+   "held in hand"
+  ]
+ },
+ "Humanoid:160,272,16,16": {
+  "names": [
+   "battle axe"
+  ],
+  "uses": [
+   "held in hand"
+  ]
+ },
+ "Humanoid:160,288,16,16": {
+  "names": [
+   "dagger",
+   "dagger of venom",
+   "notched throwing knife named Pica"
+  ],
+  "uses": [
+   "held in hand"
+  ]
+ },
+ "Humanoid:160,304,16,16": {
+  "names": [
+   "quarterstaff",
+   "royal staff named Y'yter Durr",
+   "staff",
+   "staff of wondrous smells"
+  ],
+  "uses": [
+   "held in hand"
+  ]
+ },
+ "Humanoid:160,32,16,16": {
+  "names": [
+   "cleaver",
+   "short sword",
+   "short sword named Saal'thul"
+  ],
+  "uses": [
+   "held in hand"
+  ]
+ },
+ "Humanoid:160,320,16,16": {
+  "names": [
+   "holy of Oily Orpiv",
+   "mango",
+   "sausage"
+  ],
+  "uses": [
+   "held in hand"
+  ]
+ },
+ "Humanoid:160,336,16,16": {
+  "names": [
+   "bone",
+   "bone of Ullr"
+  ],
+  "uses": [
+   "held in hand"
+  ]
+ },
+ "Humanoid:160,352,16,16": {
+  "names": [
+   "carrot",
+   "horn",
+   "horn of bravery",
+   "horn of confusion",
+   "horn of fear",
+   "horn of healing",
+   "horn of plenty",
+   "loaf",
+   "rolling pin",
+   "stick",
+   "wand",
+   "wand of acid rain",
+   "wand of alchemy",
+   "wand of cloning",
+   "wand of door creation",
+   "wand of fireballs",
+   "wand of haste",
+   "wand of invisibility",
+   "wand of lightning",
+   "wand of mirroring",
+   "wand of necromancy",
+   "wand of polymorph",
+   "wand of resurrection",
+   "wand of slow",
+   "wand of soften material",
+   "wand of striking",
+   "wand of teleportation",
+   "wand of webbing"
+  ],
+  "uses": [
+   "held in hand"
+  ]
+ },
+ "Humanoid:160,368,16,16": {
+  "names": [
+   "heart-shaped key",
+   "hexagonal key",
+   "ingot",
+   "key",
+   "kiwi",
+   "mutated symbiotic worm-ring",
+   "nut",
+   "octagonal key",
+   "ring",
+   "ring of acid resistance",
+   "ring of bravery",
+   "ring of detection",
+   "ring of electricity resistance",
+   "ring of fire resistance",
+   "ring of infravision",
+   "ring of invisibility",
+   "ring of light",
+   "ring of ludicrous speed",
+   "ring of magic resistance",
+   "ring of poison resistance",
+   "ring of polymorph",
+   "ring of polymorph control",
+   "ring of searching",
+   "ring of teleport control",
+   "ring of teleportation",
+   "ring of unchanging",
+   "round key",
+   "sol stone",
+   "square key",
+   "stone",
+   "triangular key",
+   "whistle"
+  ],
+  "uses": [
+   "held in hand"
+  ]
+ },
+ "Humanoid:160,48,16,16": {
+  "names": [
+   "scythe of oxidation",
+   "scythe of terror"
+  ],
+  "uses": [
+   "held in hand"
+  ]
+ },
+ "Humanoid:160,64,16,16": {
+  "names": [
+   "pick-axe"
+  ],
+  "uses": [
+   "held in hand"
+  ]
+ },
+ "Humanoid:160,96,16,16": {
+  "names": [
+   "runed spear named Vermis",
+   "spear",
+   "taiaha"
+  ],
+  "uses": [
+   "held in hand"
+  ]
+ },
+ "Humanoid:176,112,16,16": {
+  "names": [
+   "Gorovits family scimitar",
+   "grand stollen knife of Oakhaven",
+   "katana",
+   "noble katana named E-numa sa-am",
+   "two-handed scimitar",
+   "wicked katana named Asa'marum"
+  ],
+  "uses": [
+   "held in hand"
+  ]
+ },
+ "Humanoid:176,144,16,16": {
+  "names": [
+   "Morgo's magnificent manual of materials",
+   "bottle",
+   "can",
+   "cauldron",
+   "celestial monograph of Solicitus",
+   "dead fish",
+   "fish skeleton",
+   "grandfather clock",
+   "holy book",
+   "large and mysterious saga of the pantheon",
+   "mango",
+   "pineapple",
+   "potted cactus",
+   "potted plant",
+   "scroll",
+   "timepiece",
+   "vial"
+  ],
+  "uses": [
+   "held in hand"
+  ]
+ },
+ "Humanoid:176,16,16,16": {
+  "names": [
+   "Gorovits family hammer",
+   "hammer",
+   "thunder hammer"
+  ],
+  "uses": [
+   "held in hand"
+  ]
+ },
+ "Humanoid:176,160,16,16": {
+  "names": [
+   "lantern"
+  ],
+  "uses": [
+   "held in hand"
+  ]
+ },
+ "Humanoid:176,176,16,16": {
+  "names": [
+   "axe of sharpness",
+   "blasphemous great axe named Eptyron",
+   "chilling axe",
+   "dark axe"
+  ],
+  "uses": [
+   "held in hand"
+  ]
+ },
+ "Humanoid:176,192,16,16": {
+  "names": [
+   "mace named Turox"
+  ],
+  "uses": [
+   "held in hand"
+  ]
+ },
+ "Humanoid:176,208,16,16": {
+  "names": [
+   "chameleon whip",
+   "short sword named Saal'thul",
+   "weeping blade",
+   "whip",
+   "whip of thievery"
+  ],
+  "uses": [
+   "held in hand"
+  ]
+ },
+ "Humanoid:176,224,16,16": {
+  "names": [
+   "thunder hammer"
+  ],
+  "uses": [
+   "held in hand"
+  ]
+ },
+ "Humanoid:176,240,16,16": {
+  "names": [
+   "banshee sickle"
+  ],
+  "uses": [
+   "held in hand"
+  ]
+ },
+ "Humanoid:176,256,16,16": {
+  "names": [
+   "unholy halberd named Mjolak"
+  ],
+  "uses": [
+   "held in hand"
+  ]
+ },
+ "Humanoid:176,288,16,16": {
+  "names": [
+   "dagger of venom",
+   "notched throwing knife named Pica"
+  ],
+  "uses": [
+   "held in hand"
+  ]
+ },
+ "Humanoid:176,304,16,16": {
+  "names": [
+   "staff",
+   "staff of wondrous smells"
+  ],
+  "uses": [
+   "held in hand"
+  ]
+ },
+ "Humanoid:176,32,16,16": {
+  "names": [
+   "Gorovits family sickle",
+   "banshee sickle",
+   "sickle"
+  ],
+  "uses": [
+   "held in hand"
+  ]
+ },
+ "Humanoid:176,320,16,16": {
+  "names": [
+   "mango",
+   "war hammer"
+  ],
+  "uses": [
+   "held in hand"
+  ]
+ },
+ "Humanoid:176,352,16,16": {
+  "names": [
+   "lyre of charm"
+  ],
+  "uses": [
+   "held in hand"
+  ]
+ },
+ "Humanoid:176,384,16,16": {
+  "names": [
+   "first-born",
+   "first-born daughter",
+   "first-born son",
+   "head"
+  ],
+  "uses": [
+   "held in hand",
+   "helmet, worn"
+  ]
+ },
+ "Humanoid:176,48,16,16": {
+  "names": [
+   "scythe",
+   "scythe of oxidation",
+   "scythe of terror"
+  ],
+  "uses": [
+   "held in hand"
+  ]
+ },
+ "Humanoid:176,64,16,16": {
+  "names": [
+   "pick-axe"
+  ],
+  "uses": [
+   "held in hand"
+  ]
+ },
+ "Humanoid:176,80,16,16": {
+  "names": [
+   "flaming sword"
+  ],
+  "uses": [
+   "held in hand"
+  ]
+ },
+ "Humanoid:176,96,16,16": {
+  "names": [
+   "runed spear named Vermis",
+   "taiaha"
+  ],
+  "uses": [
+   "held in hand"
+  ]
+ },
+ "Humanoid:32,0,16,16": {
+  "names": [
+   "crop tender",
+   "crop tender encourager",
+   "village elder"
+  ],
+  "uses": [
+   "torso"
+  ]
+ },
+ "Humanoid:32,112,16,16": {
+  "names": [
+   "goblin",
+   "goblin berserker",
+   "goblin butcher",
+   "goblin warlock"
+  ],
+  "uses": [
+   "torso"
+  ]
+ },
+ "Humanoid:32,128,16,16": {
+  "names": [
+   "castle guard",
+   "elite guard",
+   "emissary of Aslona",
+   "eunuch guard",
+   "guard",
+   "honor guard",
+   "master tomb guard",
+   "patrol guard",
+   "peddler",
+   "rebel guard",
+   "rookie guard",
+   "royal guard",
+   "shining knight of Legifer",
+   "tomb guard",
+   "trainee guard",
+   "veteran guard"
+  ],
+  "uses": [
+   "torso"
+  ]
+ },
+ "Humanoid:32,144,16,16": {
+  "names": [
+   "Lord Regent of Aslona",
+   "communist"
+  ],
+  "uses": [
+   "torso"
+  ]
+ },
+ "Humanoid:32,16,16,16": {
+  "names": [
+   "black marketeer",
+   "crazed farmer",
+   "dark knight",
+   "elite dark knight",
+   "elite dark knightess",
+   "eunuch farmer",
+   "farmer",
+   "grave keeper",
+   "imperialist",
+   "of Seges",
+   "rebel",
+   "rookie dark knight",
+   "rookie dark knightess",
+   "veteran dark knight"
+  ],
+  "uses": [
+   "torso"
+  ]
+ },
+ "Humanoid:32,160,16,16": {
+  "names": [
+   "Archpriest Cordatus' wife",
+   "Archpriest Cordatus' wife number 2",
+   "Archpriest Cordatus' wife number 3",
+   "Archpriest Cordatus' wife number 4",
+   "Archpriest Cordatus' wife number 5",
+   "Archpriest Cordatus' wife number 6",
+   "court jester",
+   "housewife",
+   "maid",
+   "re-educated Archpriest Cordatus' wife",
+   "rebel",
+   "seamstress"
+  ],
+  "uses": [
+   "torso"
+  ]
+ },
+ "Humanoid:32,192,16,16": {
+  "names": [
+   "hunter",
+   "imprisoned hunter"
+  ],
+  "uses": [
+   "torso"
+  ]
+ },
+ "Humanoid:32,208,16,16": {
+  "names": [
+   "elder priestess of Silva",
+   "female",
+   "female prisoner",
+   "female servant",
+   "female slave",
+   "priestess of Infuscor",
+   "priestess of Silva"
+  ],
+  "uses": [
+   "torso"
+  ]
+ },
+ "Humanoid:32,224,16,16": {
+  "names": [
+   "zombie",
+   "zombie of Khaz-zadm",
+   "zombie prisoner"
+  ],
+  "uses": [
+   "torso"
+  ]
+ },
+ "Humanoid:32,256,16,16": {
+  "names": [
+   "acidous blood golem",
+   "blood golem",
+   "bone golem",
+   "golem",
+   "human nail golem",
+   "human skin golem",
+   "mustard gas golem",
+   "mysterious red gas golem",
+   "petrified darkness golem",
+   "raw vapourized magic golem",
+   "sleeping gas golem",
+   "spider silk golem",
+   "warp gas golem",
+   "wraith bone golem"
+  ],
+  "uses": [
+   "torso"
+  ]
+ },
+ "Humanoid:32,272,16,16": {
+  "names": [
+   "genie"
+  ],
+  "uses": [
+   "torso"
+  ]
+ },
+ "Humanoid:32,288,16,16": {
+  "names": [
+   "bum"
+  ],
+  "uses": [
+   "torso"
+  ]
+ },
+ "Humanoid:32,304,16,16": {
+  "names": [
+   "vampire"
+  ],
+  "uses": [
+   "torso"
+  ]
+ },
+ "Humanoid:32,32,16,16": {
+  "names": [
+   "shopkeeper"
+  ],
+  "uses": [
+   "torso"
+  ]
+ },
+ "Humanoid:32,352,16,16": {
+  "names": [
+   "sumo wrestler"
+  ],
+  "uses": [
+   "torso"
+  ]
+ },
+ "Humanoid:32,368,16,16": {
+  "names": [
+   "male tourist"
+  ],
+  "uses": [
+   "torso"
+  ]
+ },
+ "Humanoid:32,384,16,16": {
+  "names": [
+   "boy",
+   "child tourist",
+   "girl",
+   "heir to the throne of Aslona"
+  ],
+  "uses": [
+   "torso"
+  ]
+ },
+ "Humanoid:32,416,16,16": {
+  "names": [
+   "Shirt of the Golden Eagle",
+   "ghost",
+   "human",
+   "plate mail"
+  ],
+  "uses": [
+   "body armour, worn on the torso",
+   "torso"
+  ]
+ },
+ "Humanoid:32,432,16,16": {
+  "names": [
+   "chain mail"
+  ],
+  "uses": [
+   "body armour, worn on the torso"
+  ]
+ },
+ "Humanoid:32,448,16,16": {
+  "names": [
+   "shirt with a Decimus Harvest Co. ad"
+  ],
+  "uses": [
+   "body armour, worn on the torso"
+  ]
+ },
+ "Humanoid:32,48,16,16": {
+  "names": [
+   "wraithstalker",
+   "wraithstalker girl"
+  ],
+  "uses": [
+   "torso"
+  ]
+ },
+ "Humanoid:32,544,16,16": {
+  "names": [
+   "filthy tunic of martyr Bessica"
+  ],
+  "uses": [
+   "body armour, worn on the torso"
+  ]
+ },
+ "Humanoid:32,80,16,16": {
+  "names": [
+   "high priest of the Great Frog",
+   "librarian"
+  ],
+  "uses": [
+   "torso"
+  ]
+ },
+ "Humanoid:32,96,16,16": {
+  "names": [
+   "skeleton",
+   "skeleton warlord",
+   "skeleton warrior"
+  ],
+  "uses": [
+   "torso"
+  ]
+ },
+ "Humanoid:48,0,16,16": {
+  "names": [
+   "orc",
+   "rebel leader",
+   "werewolf",
+   "werewolf druidess of Silva"
+  ],
+  "uses": [
+   "torso"
+  ]
+ },
+ "Humanoid:48,112,16,16": {
+  "names": [
+   "imp"
+  ],
+  "uses": [
+   "torso"
+  ]
+ },
+ "Humanoid:48,144,16,16": {
+  "names": [
+   "gibberling"
+  ],
+  "uses": [
+   "torso"
+  ]
+ },
+ "Humanoid:48,16,16,16": {
+  "names": [
+   "kamikaze dwarf"
+  ],
+  "uses": [
+   "torso"
+  ]
+ },
+ "Humanoid:48,160,16,16": {
+  "names": [
+   "blood daemon king"
+  ],
+  "uses": [
+   "torso"
+  ]
+ },
+ "Humanoid:48,176,16,16": {
+  "names": [
+   "kobold",
+   "kobold assassin",
+   "kobold hunter",
+   "kobold master assassin",
+   "kobold patriarch",
+   "kobold warrior"
+  ],
+  "uses": [
+   "torso"
+  ]
+ },
+ "Humanoid:48,192,16,16": {
+  "names": [
+   "shopkeeper",
+   "smith"
+  ],
+  "uses": [
+   "torso"
+  ]
+ },
+ "Humanoid:48,208,16,16": {
+  "names": [
+   "goblin king",
+   "goblin prince"
+  ],
+  "uses": [
+   "torso"
+  ]
+ },
+ "Humanoid:48,224,16,16": {
+  "names": [
+   "dark archmage",
+   "dark battlemage",
+   "elder dark mage",
+   "royal wizard of Aslona"
+  ],
+  "uses": [
+   "torso"
+  ]
+ },
+ "Humanoid:48,240,16,16": {
+  "names": [
+   "imperialist"
+  ],
+  "uses": [
+   "torso"
+  ]
+ },
+ "Humanoid:48,256,16,16": {
+  "names": [
+   "angel",
+   "fallen archangel of Mortifer"
+  ],
+  "uses": [
+   "torso"
+  ]
+ },
+ "Humanoid:48,288,16,16": {
+  "names": [
+   "ary-siren",
+   "eli-siren",
+   "elven ambassador of the Dark Forest",
+   "erd-siren",
+   "jin-siren",
+   "kos-siren",
+   "pra-siren",
+   "siren",
+   "unn-siren",
+   "ygg-siren",
+   "zar-siren"
+  ],
+  "uses": [
+   "torso"
+  ]
+ },
+ "Humanoid:48,32,16,16": {
+  "names": [
+   "orc general",
+   "orc marshal",
+   "orc officer",
+   "orcish representative"
+  ],
+  "uses": [
+   "torso"
+  ]
+ },
+ "Humanoid:48,352,16,16": {
+  "names": [
+   "apprentice necromancer",
+   "cultist",
+   "imprisoned necromancer",
+   "master necromancer",
+   "necromancer"
+  ],
+  "uses": [
+   "torso"
+  ]
+ },
+ "Humanoid:48,368,16,16": {
+  "names": [
+   "female tourist",
+   "ommel bristler armor"
+  ],
+  "uses": [
+   "body armour, worn on the torso",
+   "torso"
+  ]
+ },
+ "Humanoid:48,416,16,16": {
+  "names": [
+   "cloak",
+   "cloak of acid resistance",
+   "cloak of electricity resistance",
+   "cloak of fire resistance",
+   "cloak of flying",
+   "cloak of invisibility",
+   "cloak of protection",
+   "cloak of quickness",
+   "mantle of Al-Khan",
+   "shadow veil",
+   "vampire's cowl",
+   "werewolf fur cloak"
+  ],
+  "uses": [
+   "cloak, worn"
+  ]
+ },
+ "Humanoid:48,432,16,16": {
+  "names": [
+   "chastity belt",
+   "girdle",
+   "girdle of carrying",
+   "girdle of giant strength",
+   "girdle of levitation",
+   "girdle of protection",
+   "girdle of regeneration",
+   "thief's girdle"
+  ],
+  "uses": [
+   "belt, worn"
+  ]
+ },
+ "Humanoid:48,48,16,16": {
+  "names": [
+   "imperialist",
+   "orc slaughterer",
+   "orc squad leader",
+   "punisher",
+   "tailor"
+  ],
+  "uses": [
+   "torso"
+  ]
+ },
+ "Humanoid:48,496,16,16": {
+  "names": [
+   "cloak"
+  ],
+  "uses": [
+   "cloak, worn"
+  ]
+ },
+ "Humanoid:48,512,16,16": {
+  "names": [
+   "girdle"
+  ],
+  "uses": [
+   "belt, worn"
+  ]
+ },
+ "Humanoid:48,80,16,16": {
+  "names": [
+   "cossack",
+   "dark knight",
+   "ghost of Khaz-Zadm",
+   "quartermaster",
+   "rebel lieutenant"
+  ],
+  "uses": [
+   "torso"
+  ]
+ },
+ "Humanoid:48,96,16,16": {
+  "names": [
+   "mistress",
+   "mistress queen",
+   "mistress torturing chief",
+   "mistress warlady",
+   "mistress whip champion"
+  ],
+  "uses": [
+   "torso"
+  ]
+ },
+ "Humanoid:64,0,16,16": {
+  "names": [
+   "crop tender encourager",
+   "shopkeeper",
+   "village elder",
+   "werewolf"
+  ],
+  "uses": [
+   "arms"
+  ]
+ },
+ "Humanoid:64,112,16,16": {
+  "names": [
+   "communist"
+  ],
+  "uses": [
+   "arms"
+  ]
+ },
+ "Humanoid:64,128,16,16": {
+  "names": [
+   "hunter",
+   "imprisoned hunter"
+  ],
+  "uses": [
+   "arms"
+  ]
+ },
+ "Humanoid:64,144,16,16": {
+  "names": [
+   "goblin",
+   "goblin berserker",
+   "goblin butcher",
+   "goblin king",
+   "goblin prince",
+   "goblin warlock"
+  ],
+  "uses": [
+   "arms"
+  ]
+ },
+ "Humanoid:64,16,16,16": {
+  "names": [
+   "cossack",
+   "high priest of the Great Frog",
+   "imperialist",
+   "librarian",
+   "of Seges",
+   "quartermaster",
+   "rebel lieutenant",
+   "shopkeeper",
+   "tailor"
+  ],
+  "uses": [
+   "arms"
+  ]
+ },
+ "Humanoid:64,160,16,16": {
+  "names": [
+   "Archpriest Cordatus' wife",
+   "Archpriest Cordatus' wife number 2",
+   "Archpriest Cordatus' wife number 3",
+   "Archpriest Cordatus' wife number 4",
+   "Archpriest Cordatus' wife number 5",
+   "Archpriest Cordatus' wife number 6",
+   "court jester",
+   "female tourist",
+   "housewife",
+   "maid",
+   "re-educated Archpriest Cordatus' wife",
+   "rebel",
+   "seamstress"
+  ],
+  "uses": [
+   "arms"
+  ]
+ },
+ "Humanoid:64,176,16,16": {
+  "names": [
+   "kobold",
+   "kobold assassin",
+   "kobold hunter",
+   "kobold master assassin",
+   "kobold patriarch",
+   "kobold warrior"
+  ],
+  "uses": [
+   "arms"
+  ]
+ },
+ "Humanoid:64,208,16,16": {
+  "names": [
+   "elder priestess of Silva",
+   "female",
+   "female prisoner",
+   "female servant",
+   "female slave",
+   "priestess of Infuscor",
+   "priestess of Silva",
+   "werewolf druidess of Silva"
+  ],
+  "uses": [
+   "arms"
+  ]
+ },
+ "Humanoid:64,224,16,16": {
+  "names": [
+   "zombie",
+   "zombie of Khaz-zadm",
+   "zombie prisoner"
+  ],
+  "uses": [
+   "arms"
+  ]
+ },
+ "Humanoid:64,240,16,16": {
+  "names": [
+   "werewolf"
+  ],
+  "uses": [
+   "arms"
+  ]
+ },
+ "Humanoid:64,256,16,16": {
+  "names": [
+   "acidous blood golem",
+   "blood golem",
+   "bone golem",
+   "golem",
+   "human nail golem",
+   "human skin golem",
+   "mustard gas golem",
+   "mysterious red gas golem",
+   "petrified darkness golem",
+   "punisher",
+   "raw vapourized magic golem",
+   "sleeping gas golem",
+   "spider silk golem",
+   "warp gas golem",
+   "wraith bone golem"
+  ],
+  "uses": [
+   "arms"
+  ]
+ },
+ "Humanoid:64,272,16,16": {
+  "names": [
+   "genie"
+  ],
+  "uses": [
+   "arms"
+  ]
+ },
+ "Humanoid:64,32,16,16": {
+  "names": [
+   "imp"
+  ],
+  "uses": [
+   "arms"
+  ]
+ },
+ "Humanoid:64,336,16,16": {
+  "names": [
+   "sumo wrestler"
+  ],
+  "uses": [
+   "arms"
+  ]
+ },
+ "Humanoid:64,432,16,16": {
+  "names": [
+   "chain mail"
+  ],
+  "uses": [
+   "arm armour, worn"
+  ]
+ },
+ "Humanoid:64,464,16,16": {
+  "names": [
+   "chain mail"
+  ],
+  "uses": [
+   "arm armour, worn by a muscular arm"
+  ]
+ },
+ "Humanoid:64,48,16,16": {
+  "names": [
+   "wraithstalker",
+   "wraithstalker girl"
+  ],
+  "uses": [
+   "arms"
+  ]
+ },
+ "Humanoid:64,64,16,16": {
+  "names": [
+   "crop tender",
+   "smith"
+  ],
+  "uses": [
+   "arms"
+  ]
+ },
+ "Humanoid:64,80,16,16": {
+  "names": [
+   "castle guard",
+   "elite guard",
+   "emissary of Aslona",
+   "eunuch guard",
+   "guard",
+   "honor guard",
+   "master tomb guard",
+   "patrol guard",
+   "peddler",
+   "rebel guard",
+   "rookie guard",
+   "royal guard",
+   "shining knight of Legifer",
+   "tomb guard",
+   "trainee guard",
+   "veteran guard"
+  ],
+  "uses": [
+   "arms"
+  ]
+ },
+ "Humanoid:64,96,16,16": {
+  "names": [
+   "skeleton",
+   "skeleton warlord",
+   "skeleton warrior"
+  ],
+  "uses": [
+   "arms"
+  ]
+ },
+ "Humanoid:80,0,16,16": {
+  "names": [
+   "kamikaze dwarf"
+  ],
+  "uses": [
+   "arms"
+  ]
+ },
+ "Humanoid:80,112,16,16": {
+  "names": [
+   "imperialist"
+  ],
+  "uses": [
+   "arms"
+  ]
+ },
+ "Humanoid:80,144,16,16": {
+  "names": [
+   "gibberling"
+  ],
+  "uses": [
+   "arms"
+  ]
+ },
+ "Humanoid:80,16,16,16": {
+  "names": [
+   "orc general",
+   "orc marshal",
+   "orc officer",
+   "orcish representative"
+  ],
+  "uses": [
+   "arms"
+  ]
+ },
+ "Humanoid:80,160,16,16": {
+  "names": [
+   "blood daemon king"
+  ],
+  "uses": [
+   "arms"
+  ]
+ },
+ "Humanoid:80,176,16,16": {
+  "names": [
+   "Lord Regent of Aslona",
+   "black marketeer",
+   "dark knight",
+   "elite dark knight",
+   "elite dark knightess",
+   "ghost of Khaz-Zadm",
+   "grave keeper",
+   "rookie dark knight",
+   "rookie dark knightess",
+   "vampire",
+   "veteran dark knight"
+  ],
+  "uses": [
+   "arms"
+  ]
+ },
+ "Humanoid:80,192,16,16": {
+  "names": [
+   "bum"
+  ],
+  "uses": [
+   "arms"
+  ]
+ },
+ "Humanoid:80,240,16,16": {
+  "names": [
+   "ary-siren",
+   "eli-siren",
+   "elven ambassador of the Dark Forest",
+   "erd-siren",
+   "jin-siren",
+   "kos-siren",
+   "pra-siren",
+   "siren",
+   "unn-siren",
+   "ygg-siren",
+   "zar-siren"
+  ],
+  "uses": [
+   "arms"
+  ]
+ },
+ "Humanoid:80,256,16,16": {
+  "names": [
+   "angel",
+   "fallen archangel of Mortifer"
+  ],
+  "uses": [
+   "arms"
+  ]
+ },
+ "Humanoid:80,290,16,16": {
+  "names": [
+   "backpack"
+  ],
+  "uses": [
+   "cloak, worn"
+  ]
+ },
+ "Humanoid:80,32,16,16": {
+  "names": [
+   "orc",
+   "orc slaughterer",
+   "orc squad leader",
+   "rebel leader"
+  ],
+  "uses": [
+   "arms"
+  ]
+ },
+ "Humanoid:80,352,16,16": {
+  "names": [
+   "boy",
+   "child tourist",
+   "girl",
+   "heir to the throne of Aslona"
+  ],
+  "uses": [
+   "arms"
+  ]
+ },
+ "Humanoid:80,416,16,16": {
+  "names": [
+   "Shirt of the Golden Eagle",
+   "filthy tunic of martyr Bessica",
+   "ommel bristler armor",
+   "plate mail",
+   "shirt with a Decimus Harvest Co. ad"
+  ],
+  "uses": [
+   "arm armour, worn"
+  ]
+ },
+ "Humanoid:80,432,16,16": {
+  "names": [
+   "gauntlet",
+   "gauntlet of dexterity",
+   "gauntlet of strength"
+  ],
+  "uses": [
+   "gauntlets, worn"
+  ]
+ },
+ "Humanoid:80,448,16,16": {
+  "names": [
+   "Shirt of the Golden Eagle",
+   "filthy tunic of martyr Bessica",
+   "ommel bristler armor",
+   "plate mail",
+   "shirt with a Decimus Harvest Co. ad"
+  ],
+  "uses": [
+   "arm armour, worn by a muscular arm"
+  ]
+ },
+ "Humanoid:80,464,16,16": {
+  "names": [
+   "armor of great health"
+  ],
+  "uses": [
+   "arm armour, worn"
+  ]
+ },
+ "Humanoid:80,48,16,16": {
+  "names": [
+   "male tourist"
+  ],
+  "uses": [
+   "arms"
+  ]
+ },
+ "Humanoid:80,480,16,16": {
+  "names": [
+   "armor of great health"
+  ],
+  "uses": [
+   "arm armour, worn by a muscular arm"
+  ]
+ },
+ "Humanoid:80,512,16,16": {
+  "names": [
+   "gauntlet"
+  ],
+  "uses": [
+   "gauntlets, worn"
+  ]
+ },
+ "Humanoid:80,64,16,16": {
+  "names": [
+   "dark archmage",
+   "dark battlemage",
+   "elder dark mage",
+   "royal wizard of Aslona"
+  ],
+  "uses": [
+   "arms"
+  ]
+ },
+ "Humanoid:80,80,16,16": {
+  "names": [
+   "mistress",
+   "mistress queen",
+   "mistress torturing chief",
+   "mistress warlady",
+   "mistress whip champion"
+  ],
+  "uses": [
+   "arms"
+  ]
+ },
+ "Humanoid:80,96,16,16": {
+  "names": [
+   "apprentice necromancer",
+   "imprisoned necromancer",
+   "master necromancer",
+   "necromancer"
+  ],
+  "uses": [
+   "arms"
+  ]
+ },
+ "Humanoid:96,0,16,16": {
+  "names": [
+   "crop tender",
+   "quartermaster",
+   "tailor",
+   "werewolf"
+  ],
+  "uses": [
+   "head"
+  ]
+ },
+ "Humanoid:96,112,16,16": {
+  "names": [
+   "castle guard",
+   "dark knight",
+   "elite guard",
+   "eunuch guard",
+   "ghost of Khaz-Zadm",
+   "guard",
+   "honor guard",
+   "master tomb guard",
+   "patrol guard",
+   "peddler",
+   "rebel guard",
+   "rebel leader",
+   "rookie guard",
+   "royal guard",
+   "shining knight of Legifer",
+   "tomb guard",
+   "trainee guard",
+   "veteran guard"
+  ],
+  "uses": [
+   "head"
+  ]
+ },
+ "Humanoid:96,128,16,16": {
+  "names": [
+   "of Seges"
+  ],
+  "uses": [
+   "head"
+  ]
+ },
+ "Humanoid:96,144,16,16": {
+  "names": [
+   "high priest of the Great Frog"
+  ],
+  "uses": [
+   "head"
+  ]
+ },
+ "Humanoid:96,16,16,16": {
+  "names": [
+   "imp"
+  ],
+  "uses": [
+   "head"
+  ]
+ },
+ "Humanoid:96,176,16,16": {
+  "names": [
+   "communist"
+  ],
+  "uses": [
+   "head"
+  ]
+ },
+ "Humanoid:96,192,16,16": {
+  "names": [
+   "hunter",
+   "imprisoned hunter"
+  ],
+  "uses": [
+   "head"
+  ]
+ },
+ "Humanoid:96,208,16,16": {
+  "names": [
+   "imperialist"
+  ],
+  "uses": [
+   "head"
+  ]
+ },
+ "Humanoid:96,224,16,16": {
+  "names": [
+   "librarian",
+   "village elder"
+  ],
+  "uses": [
+   "head"
+  ]
+ },
+ "Humanoid:96,240,16,16": {
+  "names": [
+   "crop tender encourager",
+   "dark knight",
+   "elite dark knight",
+   "elite dark knightess",
+   "grave keeper",
+   "rookie dark knight",
+   "rookie dark knightess",
+   "veteran dark knight"
+  ],
+  "uses": [
+   "head"
+  ]
+ },
+ "Humanoid:96,256,16,16": {
+  "names": [
+   "acidous blood golem",
+   "blood golem",
+   "bone golem",
+   "golem",
+   "human nail golem",
+   "human skin golem",
+   "mustard gas golem",
+   "mysterious red gas golem",
+   "petrified darkness golem",
+   "raw vapourized magic golem",
+   "sleeping gas golem",
+   "spider silk golem",
+   "warp gas golem",
+   "wraith bone golem"
+  ],
+  "uses": [
+   "head"
+  ]
+ },
+ "Humanoid:96,272,16,16": {
+  "names": [
+   "genie"
+  ],
+  "uses": [
+   "head"
+  ]
+ },
+ "Humanoid:96,288,16,16": {
+  "names": [
+   "goblin king"
+  ],
+  "uses": [
+   "head"
+  ]
+ },
+ "Humanoid:96,32,16,16": {
+  "names": [
+   "blood daemon king"
+  ],
+  "uses": [
+   "head"
+  ]
+ },
+ "Humanoid:96,320,16,16": {
+  "names": [
+   "wraithstalker",
+   "wraithstalker girl"
+  ],
+  "uses": [
+   "head"
+  ]
+ },
+ "Humanoid:96,335,16,16": {
+  "names": [
+   "girl"
+  ],
+  "uses": [
+   "head"
+  ]
+ },
+ "Humanoid:96,336,16,16": {
+  "names": [
+   "sumo wrestler"
+  ],
+  "uses": [
+   "head"
+  ]
+ },
+ "Humanoid:96,352,16,16": {
+  "names": [
+   "punisher"
+  ],
+  "uses": [
+   "head"
+  ]
+ },
+ "Humanoid:96,368,16,16": {
+  "names": [
+   "Lord Regent of Aslona",
+   "emissary of Aslona"
+  ],
+  "uses": [
+   "head"
+  ]
+ },
+ "Humanoid:96,415,16,16": {
+  "names": [
+   "heir to the throne of Aslona"
+  ],
+  "uses": [
+   "head"
+  ]
+ },
+ "Humanoid:96,432,16,16": {
+  "names": [
+   "full helmet",
+   "helmet of attractivity",
+   "helmet of essence plethora",
+   "helmet of indomitable will",
+   "helmet of teleportation",
+   "radiant helmet of Macula"
+  ],
+  "uses": [
+   "helmet, worn"
+  ]
+ },
+ "Humanoid:96,48,16,16": {
+  "names": [
+   "goblin",
+   "goblin berserker",
+   "goblin butcher",
+   "goblin warlock"
+  ],
+  "uses": [
+   "head"
+  ]
+ },
+ "Humanoid:96,512,16,16": {
+  "names": [
+   "helmet"
+  ],
+  "uses": [
+   "helmet, worn"
+  ]
+ },
+ "Humanoid:96,528,16,16": {
+  "names": [
+   "vampire"
+  ],
+  "uses": [
+   "head"
+  ]
+ },
+ "Humanoid:96,64,16,16": {
+  "names": [
+   "imperialist",
+   "male tourist",
+   "shopkeeper"
+  ],
+  "uses": [
+   "head"
+  ]
+ },
+ "Humanoid:96,80,16,16": {
+  "names": [
+   "imperialist"
+  ],
+  "uses": [
+   "head"
+  ]
+ },
+ "Humanoid:96,96,16,16": {
+  "names": [
+   "skeleton",
+   "skeleton warlord",
+   "skeleton warrior"
+  ],
+  "uses": [
+   "head"
+  ]
+ },
+ "Humanoid:96,97,16,16": {
+  "names": [
+   "puppy skull",
+   "skull"
+  ],
+  "uses": [
+   "helmet, worn"
+  ]
+ },
+ "Item:0,0,16,16": {
+  "names": [
+   "two-handed sword"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:0,112,16,16": {
+  "names": [
+   "mango"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:0,128,16,16": {
+  "names": [
+   "mango peel"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:0,144,16,16": {
+  "names": [
+   "Morgo's magnificent manual of materials"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:0,16,16,16": {
+  "names": [
+   "Gorovits family scimitar",
+   "grand stollen knife of Oakhaven",
+   "two-handed scimitar"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:0,160,16,16": {
+  "names": [
+   "bottle"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:0,224,16,16": {
+  "names": [
+   "mango"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:0,240,16,16": {
+  "names": [
+   "palm branch"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:0,256,16,16": {
+  "names": [
+   "lantern"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:0,272,16,16": {
+  "names": [
+   "loaf"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:0,288,16,16": {
+  "names": [
+   "wand",
+   "wand of acid rain",
+   "wand of alchemy",
+   "wand of cloning",
+   "wand of door creation",
+   "wand of fireballs",
+   "wand of haste",
+   "wand of invisibility",
+   "wand of lightning",
+   "wand of mirroring",
+   "wand of necromancy",
+   "wand of polymorph",
+   "wand of resurrection",
+   "wand of slow",
+   "wand of soften material",
+   "wand of striking",
+   "wand of teleportation",
+   "wand of webbing"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:0,304,16,16": {
+  "names": [
+   "lantern"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:0,32,16,16": {
+  "names": [
+   "ancient mace named Neerc Se-ulb",
+   "mace",
+   "mace named Turox"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:0,320,16,16": {
+  "names": [
+   "Avatar of Valpuris"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:0,336,16,16": {
+  "names": [
+   "pile of 50 million roubles"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:0,368,16,16": {
+  "names": [
+   "pineapple"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:0,384,16,16": {
+  "names": [
+   "kiwi"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:0,400,16,16": {
+  "names": [
+   "boot",
+   "boot of agility",
+   "boot of displacement",
+   "boot of kicking",
+   "boot of strength"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:0,416,16,16": {
+  "names": [
+   "whistle"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:0,48,16,16": {
+  "names": [
+   "sol stone",
+   "stone"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:0,64,16,16": {
+  "names": [
+   "holy broad sword named Valpuris' Justifier"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:0,80,16,16": {
+  "names": [
+   "halberd",
+   "unholy halberd named Mjolak"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:0,96,16,16": {
+  "names": [
+   "pick-axe"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:110,32,16,16": {
+  "names": [
+   "gas grenade"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:112,0,16,16": {
+  "names": [
+   "thaumic bomb"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:112,192,16,16": {
+  "names": [
+   "katana",
+   "noble katana named E-numa sa-am",
+   "wicked katana named Asa'marum"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:112,240,16,16": {
+  "names": [
+   "blasphemous great axe named Eptyron"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:112,288,16,16": {
+  "names": [
+   "puppy skull"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:112,304,16,16": {
+  "names": [
+   "filthy tunic of martyr Bessica"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:112,320,16,16": {
+  "names": [
+   "grandfather clock"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:112,336,16,16": {
+  "names": [
+   "potted plant"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:112,352,16,16": {
+  "names": [
+   "taiaha"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:112,400,16,16": {
+  "names": [
+   "map",
+   "map of black market"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:128,0,16,16": {
+  "names": [
+   "vial"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:128,16,16,16": {
+  "names": [
+   "ingot"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:16,0,16,16": {
+  "names": [
+   "heart of Malgorath"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:16,112,16,16": {
+  "names": [
+   "Shirt of the Golden Eagle"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:16,128,16,16": {
+  "names": [
+   "plate mail"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:16,144,16,16": {
+  "names": [
+   "runed spear named Vermis",
+   "spear"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:16,16,16,16": {
+  "names": [
+   "mango"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:16,160,16,16": {
+  "names": [
+   "broken bottle",
+   "broken vial"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:16,176,16,16": {
+  "names": [
+   "scroll"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:16,208,16,16": {
+  "names": [
+   "nut"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:16,240,16,16": {
+  "names": [
+   "bone",
+   "bone of Ullr"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:16,256,16,16": {
+  "names": [
+   "axe",
+   "axe of sharpness",
+   "chilling axe",
+   "dark axe"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:16,336,16,16": {
+  "names": [
+   "flaming sword",
+   "long sword",
+   "lost ruby flaming sword of Khaz-Zadm",
+   "rune sword"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:16,384,16,16": {
+  "names": [
+   "helmet",
+   "helmet of brilliance",
+   "helmet of piercing perception",
+   "helmet of telepathy",
+   "helmet of understanding"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:16,400,16,16": {
+  "names": [
+   "mutated symbiotic worm-ring",
+   "ring",
+   "ring of acid resistance",
+   "ring of bravery",
+   "ring of detection",
+   "ring of electricity resistance",
+   "ring of fire resistance",
+   "ring of infravision",
+   "ring of invisibility",
+   "ring of light",
+   "ring of ludicrous speed",
+   "ring of magic resistance",
+   "ring of poison resistance",
+   "ring of polymorph",
+   "ring of polymorph control",
+   "ring of searching",
+   "ring of teleport control",
+   "ring of teleportation",
+   "ring of unchanging"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:16,416,16,16": {
+  "names": [
+   "heart-shaped key",
+   "hexagonal key",
+   "key",
+   "octagonal key",
+   "round key",
+   "square key",
+   "triangular key"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:16,48,16,16": {
+  "names": [
+   "lump"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:16,96,16,16": {
+  "names": [
+   "chain mail"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:32,0,16,16": {
+  "names": [
+   "runed whip",
+   "whip"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:32,112,16,16": {
+  "names": [
+   "mace named Turox"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:32,144,16,16": {
+  "names": [
+   "unholy halberd named Mjolak"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:32,16,16,16": {
+  "names": [
+   "backpack"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:32,160,16,16": {
+  "names": [
+   "pick-axe"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:32,176,16,16": {
+  "names": [
+   "axe of sharpness",
+   "chilling axe",
+   "dark axe"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:32,208,16,16": {
+  "names": [
+   "flaming sword"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:32,224,16,16": {
+  "names": [
+   "runed spear named Vermis"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:32,256,16,16": {
+  "names": [
+   "chameleon whip",
+   "whip",
+   "whip of thievery"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:32,272,16,16": {
+  "names": [
+   "mango"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:32,288,16,16": {
+  "names": [
+   "dwarven gas trap",
+   "land mine"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:32,32,16,16": {
+  "names": [
+   "holy book",
+   "large and mysterious saga of the pantheon"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:32,336,16,16": {
+  "names": [
+   "acid shield",
+   "blessed shield of the Phoenix",
+   "sacred shield named Aegis",
+   "shield",
+   "shield of electricity resistance",
+   "shield of fire resistance",
+   "shield of magic resistance"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:32,352,16,16": {
+  "names": [
+   "cloak",
+   "cloak of acid resistance",
+   "cloak of electricity resistance",
+   "cloak of fire resistance",
+   "cloak of flying",
+   "cloak of invisibility",
+   "cloak of protection",
+   "cloak of quickness",
+   "mantle of Al-Khan",
+   "shadow veil",
+   "vampire's cowl",
+   "werewolf fur cloak"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:32,368,16,16": {
+  "names": [
+   "gauntlet",
+   "gauntlet of dexterity",
+   "gauntlet of strength"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:32,384,16,16": {
+  "names": [
+   "girdle",
+   "girdle of carrying",
+   "girdle of giant strength",
+   "girdle of levitation",
+   "girdle of protection",
+   "girdle of regeneration",
+   "thief's girdle"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:32,400,16,16": {
+  "names": [
+   "amulet",
+   "amulet of ESP",
+   "amulet of dimensional protection",
+   "amulet of disease immunity",
+   "amulet of elemental protection",
+   "amulet of fasting",
+   "amulet of life saving",
+   "amulet of magic breath",
+   "amulet of phasing",
+   "amulet of speed"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:32,48,16,16": {
+  "names": [
+   "oil lamp"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:48,112,16,16": {
+  "names": [
+   "skull",
+   "skull of Khaz-Zadm the Lich-King"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:48,144,16,16": {
+  "names": [
+   "Gorovits family sickle",
+   "banshee sickle",
+   "sickle"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:48,160,16,16": {
+  "names": [
+   "Gorovits family hammer",
+   "hammer",
+   "thunder hammer"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:48,176,16,16": {
+  "names": [
+   "banshee sickle"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:48,192,16,16": {
+  "names": [
+   "thunder hammer"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:48,224,16,16": {
+  "names": [
+   "acid shield",
+   "shield"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:48,240,16,16": {
+  "names": [
+   "short sword",
+   "short sword named Saal'thul",
+   "weeping blade"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:48,256,16,16": {
+  "names": [
+   "dagger",
+   "dagger of venom",
+   "notched throwing knife named Pica"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:48,272,16,16": {
+  "names": [
+   "short sword named Saal'thul",
+   "weeping blade"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:48,288,16,16": {
+  "names": [
+   "dagger of venom",
+   "notched throwing knife named Pica"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:48,304,16,16": {
+  "names": [
+   "horn",
+   "horn of bravery",
+   "horn of confusion",
+   "horn of fear",
+   "horn of healing",
+   "horn of plenty"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:48,32,16,16": {
+  "names": [
+   "full helmet",
+   "helmet of attractivity",
+   "helmet of essence plethora",
+   "helmet of indomitable will",
+   "helmet of teleportation",
+   "radiant helmet of Macula"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:48,48,16,16": {
+  "names": [
+   "bear trap"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:48,64,16,16": {
+  "names": [
+   "large chest"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:48,80,16,16": {
+  "names": [
+   "chest"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:48,96,16,16": {
+  "names": [
+   "stethoscope"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:64,112,16,16": {
+  "names": [
+   "scythe",
+   "scythe of oxidation",
+   "scythe of terror"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:64,128,16,16": {
+  "names": [
+   "scythe of oxidation",
+   "scythe of terror"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:64,144,16,16": {
+  "names": [
+   "cleaver"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:64,160,16,16": {
+  "names": [
+   "bastard sword"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:64,208,16,16": {
+  "names": [
+   "armor of great health"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:64,240,16,16": {
+  "names": [
+   "quarterstaff",
+   "royal staff named Y'yter Durr",
+   "staff",
+   "staff of wondrous smells"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:64,256,16,16": {
+  "names": [
+   "staff",
+   "staff of wondrous smells"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:64,272,16,16": {
+  "names": [
+   "carrot"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:64,304,16,16": {
+  "names": [
+   "cloak"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:64,32,16,16": {
+  "names": [
+   "helmet"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:64,320,16,16": {
+  "names": [
+   "potted cactus"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:64,352,16,16": {
+  "names": [
+   "beast claw"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:64,368,16,16": {
+  "names": [
+   "lyre of charm"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:64,400,16,16": {
+  "names": [
+   "Gorovits family gas mask"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:64,48,16,16": {
+  "names": [
+   "small chest"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:64,64,16,16": {
+  "names": [
+   "helmet"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:64,80,16,16": {
+  "names": [
+   "battle axe"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:79,255,16,16": {
+  "names": [
+   "seedling of the Holy Mango World-tree"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:80,112,16,16": {
+  "names": [
+   "rolling pin"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:80,128,16,16": {
+  "names": [
+   "sausage"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:80,144,16,16": {
+  "names": [
+   "first-born",
+   "first-born daughter",
+   "first-born son"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:80,16,16,16": {
+  "names": [
+   "war hammer"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:80,176,16,16": {
+  "names": [
+   "ommel bristler armor"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:80,208,16,16": {
+  "names": [
+   "mask",
+   "war mask"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:80,224,16,16": {
+  "names": [
+   "helmet"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:80,240,16,16": {
+  "names": [
+   "stick"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:80,272,16,16": {
+  "names": [
+   "carrot"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:80,304,16,16": {
+  "names": [
+   "cauldron"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:80,320,16,16": {
+  "names": [
+   "celestial monograph of Solicitus"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:80,336,16,16": {
+  "names": [
+   "dead fish"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:80,368,16,16": {
+  "names": [
+   "boot"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:80,384,16,16": {
+  "names": [
+   "girdle"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:80,400,16,16": {
+  "names": [
+   "gauntlet"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:80,48,16,16": {
+  "names": [
+   "Gorovits family life-size copy of Lenin's mummy"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:80,64,16,16": {
+  "names": [
+   "shirt with a Decimus Harvest Co. ad"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:80,80,16,16": {
+  "names": [
+   "chastity belt"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:80,96,16,16": {
+  "names": [
+   "frying pan"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:96,240,16,16": {
+  "names": [
+   "blasphemous great axe named Eptyron"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:96,304,16,16": {
+  "names": [
+   "filthy tunic of martyr Bessica"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:96,320,16,16": {
+  "names": [
+   "timepiece"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:96,336,16,16": {
+  "names": [
+   "fish skeleton"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "Item:96,352,16,16": {
+  "names": [
+   "taiaha"
+  ],
+  "uses": [
+   "item"
+  ]
+ },
+ "OLTerra:0,0,16,16": {
+  "names": [
+   "pedestal"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:0,112,16,16": {
+  "names": [
+   "curtain"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:0,160,16,16": {
+  "names": [
+   "broken"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:0,176,16,16": {
+  "names": [
+   "door"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:0,192,16,16": {
+  "names": [
+   "stairway upwards"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:0,208,16,16": {
+  "names": [
+   "stairway downwards"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:0,224,16,16": {
+  "names": [
+   "chest of drawers"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:0,272,16,16": {
+  "names": [
+   "carpet"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:0,32,16,16": {
+  "names": [
+   "wall"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:0,336,16,16": {
+  "names": [
+   "bed",
+   "luxurious bed"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:0,352,16,16": {
+  "names": [
+   "cheap bed"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:0,368,16,16": {
+  "names": [
+   "altar"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:0,400,16,16": {
+  "names": [
+   "couch"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:0,416,16,16": {
+  "names": [
+   "armchair",
+   "throne"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:0,432,16,16": {
+  "names": [
+   "tent wall"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:0,96,16,16": {
+  "names": [
+   "torn curtain"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:112,288,16,16": {
+  "names": [
+   "shackles"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:16,112,16,16": {
+  "names": [
+   "bars"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:16,128,16,16": {
+  "names": [
+   "shelf"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:16,144,16,16": {
+  "names": [
+   "very secret door"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:16,16,16,16": {
+  "names": [
+   "forge"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:16,160,16,16": {
+  "names": [
+   "broken very secret door"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:16,256,16,16": {
+  "names": [
+   "old wall"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:16,272,16,16": {
+  "names": [
+   "bookcase"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:16,320,16,16": {
+  "names": [
+   "pine covered with snow"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:16,336,16,16": {
+  "names": [
+   "sign"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:16,352,16,16": {
+  "names": [
+   "fir",
+   "fir covered with snow"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:16,368,16,16": {
+  "names": [
+   "palm"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:16,416,16,16": {
+  "names": [
+   "shard"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:16,432,16,16": {
+  "names": [
+   "anvil"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:16,48,16,16": {
+  "names": [
+   "wooden horse"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:16,96,16,16": {
+  "names": [
+   "door"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:32,112,16,16": {
+  "names": [
+   "broken bars"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:32,144,16,16": {
+  "names": [
+   "coffin"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:32,16,16,16": {
+  "names": [
+   "furnace"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:32,224,16,16": {
+  "names": [
+   "workbench"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:32,320,16,16": {
+  "names": [
+   "pool border"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:32,336,16,16": {
+  "names": [
+   "holy tree",
+   "oak tree",
+   "teak tree"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:32,368,16,16": {
+  "names": [
+   "dwarf birch"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:32,96,16,16": {
+  "names": [
+   "broken"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:48,224,16,16": {
+  "names": [
+   "bench"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:48,240,16,16": {
+  "names": [
+   "table"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:48,272,16,16": {
+  "names": [
+   "primitive wall"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:48,288,16,16": {
+  "names": [
+   "broken wall"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:48,304,16,16": {
+  "names": [
+   "luxurious double bed"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:48,320,16,16": {
+  "names": [
+   "pool corner"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:48,352,16,16": {
+  "names": [
+   "cactus"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:48,48,16,16": {
+  "names": [
+   "writing desk"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:64,240,16,16": {
+  "names": [
+   "well"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:64,272,16,16": {
+  "names": [
+   "wall"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:64,304,16,16": {
+  "names": [
+   "boulder",
+   "large boulder"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:64,336,16,16": {
+  "names": [
+   "dead tree"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:80,224,16,16": {
+  "names": [
+   "tailoring bench"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:80,272,16,16": {
+  "names": [
+   "wall and a poster with a picture of Archpriest Cordatus, the ruler of the Valpurian Empire"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:80,288,16,16": {
+  "names": [
+   "chair"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:80,306,16,16": {
+  "names": [
+   "snow-covered boulder"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:80,32,16,16": {
+  "names": [
+   "oven"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:80,352,16,16": {
+  "names": [
+   "strange tree"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:80,368,16,16": {
+  "names": [
+   "birch tree"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:80,64,16,16": {
+  "names": [
+   "torture rack"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:96,272,16,16": {
+  "names": [
+   "primitive wall and a poster with a picture of Archpriest Cordatus, the ruler of the Valpurian Empire"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "OLTerra:96,416,16,16": {
+  "names": [
+   "earth"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "WTerra:0,48,16,16": {
+  "names": [
+   "attnam"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "WTerra:0,64,16,16": {
+  "names": [
+   "locationa",
+   "locationb",
+   "locationc",
+   "locationd",
+   "locatione",
+   "locationf",
+   "locationg",
+   "locationh",
+   "xinrochtomb"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "WTerra:112,16,16,16": {
+  "names": [
+   "snow"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "WTerra:112,96,16,16": {
+  "names": [
+   "aslonacastle"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "WTerra:16,16,16,16": {
+  "names": [
+   "glacier"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "WTerra:16,48,16,16": {
+  "names": [
+   "malgorathcave"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "WTerra:16,64,16,16": {
+  "names": [
+   "newattnam",
+   "rebelcamp"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "WTerra:160,16,16,16": {
+  "names": [
+   "steppe"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "WTerra:208,16,16,16": {
+  "names": [
+   "jungle"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "WTerra:304,16,16,16": {
+  "names": [
+   "leafyforest"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "WTerra:32,64,16,16": {
+  "names": [
+   "fungalcave",
+   "underwatertunnel",
+   "underwatertunnelexit"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "WTerra:352,16,16,16": {
+  "names": [
+   "evergreenforest"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "WTerra:64,16,16,16": {
+  "names": [
+   "desert"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "WTerra:80,80,16,16": {
+  "names": [
+   "blackmarket"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "WTerra:80,96,16,16": {
+  "names": [
+   "goblinfort"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ },
+ "WTerra:96,128,16,16": {
+  "names": [
+   "pyramid"
+  ],
+  "uses": [
+   "terrain"
+  ]
+ }
+}

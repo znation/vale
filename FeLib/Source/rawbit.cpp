@@ -11,7 +11,9 @@
  */
 
 #include <cstdarg>
+#include <map>
 #include <memory>
+#include <vector>
 
 #include "png.h"
 
@@ -89,8 +91,11 @@ rawbitmap::rawbitmap(cfestring& RequestedName) : Density(graphics::GetDensity())
     Rescale(FileDensity);
 }
 
-/* Convert PaletteBuffer from FromDensity to Density. Upscaling repeats each pixel; downscaling
-   keeps the most common index of each block. Indices are rescaled, never colours, so material
+/* Convert PaletteBuffer from FromDensity to Density. Upscaling repeats each pixel. Downscaling
+   (e.g. 64-pixel master art shown at 32 pixels) resamples each block by class: a mostly
+   transparent block stays transparent; otherwise the block takes its most common class, material
+   pixels average their brightness within their channel and fixed colours average in RGB and snap
+   to the nearest palette entry. Indices are rescaled, never flattened to colours, so material
    pixels keep their channel and brightness. */
 void rawbitmap::Rescale(int FromDensity)
 {
@@ -113,27 +118,91 @@ void rawbitmap::Rescale(int FromDensity)
   else
   {
     cint Factor = FromDensity / Density;
+    cint Samples = Factor * Factor;
+    auto IsTransparentIndex = [this](int Index)
+    {
+      cuchar* RGB = &Palette[Index * 3];
+      return ((RGB[0] & 0xF8) << 8 | (RGB[1] & 0xFC) << 3 | RGB[2] >> 3) == TRANSPARENT_COLOR;
+    };
+    std::vector<int> FixedIndices;
+
+    for(int c = 0; c < 192; ++c)
+      if(!IsTransparentIndex(c))
+        FixedIndices.push_back(c);
+
+    std::map<long, int> NearestCache;
+    auto NearestFixed = [&](int R, int G, int B)
+    {
+      long Key = long(R) << 16 | G << 8 | B;
+      std::map<long, int>::iterator Cached = NearestCache.find(Key);
+
+      if(Cached != NearestCache.end())
+        return Cached->second;
+
+      int Best = FixedIndices.front();
+      long BestDistance = 0x7FFFFFFF;
+
+      for(int Index : FixedIndices)
+      {
+        cuchar* RGB = &Palette[Index * 3];
+        long Distance = (RGB[0] - R) * (RGB[0] - R) + (RGB[1] - G) * (RGB[1] - G) + (RGB[2] - B) * (RGB[2] - B);
+
+        if(Distance < BestDistance)
+        {
+          Best = Index;
+          BestDistance = Distance;
+        }
+      }
+
+      return NearestCache[Key] = Best;
+    };
 
     for(int y = 0; y < NewSize.Y; ++y)
       for(int x = 0; x < NewSize.X; ++x)
       {
-        int Best = PaletteBuffer[y * Factor][x * Factor], BestCount = 0;
+        /* Classes 0-3 are material channels, 4 is fixed colours, 5 is transparent. */
+        int Count[6] = { 0, 0, 0, 0, 0, 0 }, Brightness[4] = { 0, 0, 0, 0 };
+        int Red = 0, Green = 0, Blue = 0, Transparent = TRANSPARENT_PALETTE_INDEX;
 
-        for(int c1 = 0; c1 < Factor * Factor; ++c1)
+        for(int c = 0; c < Samples; ++c)
         {
-          int Candidate = PaletteBuffer[y * Factor + c1 / Factor][x * Factor + c1 % Factor], Count = 0;
+          int Index = PaletteBuffer[y * Factor + c / Factor][x * Factor + c % Factor];
 
-          for(int c2 = 0; c2 < Factor * Factor; ++c2)
-            Count += PaletteBuffer[y * Factor + c2 / Factor][x * Factor + c2 % Factor] == Candidate;
-
-          if(Count > BestCount)
+          if(IsMaterialColor(Index))
           {
-            Best = Candidate;
-            BestCount = Count;
+            ++Count[GetMaterialColorIndex(Index)];
+            Brightness[GetMaterialColorIndex(Index)] += Index & 15;
+          }
+          else if(IsTransparentIndex(Index))
+          {
+            ++Count[5];
+            Transparent = Index;
+          }
+          else
+          {
+            ++Count[4];
+            Red += Palette[Index * 3];
+            Green += Palette[Index * 3 + 1];
+            Blue += Palette[Index * 3 + 2];
           }
         }
 
-        NewBuffer[y][x] = Best;
+        if(Count[5] * 2 > Samples)
+        {
+          NewBuffer[y][x] = Transparent;
+          continue;
+        }
+
+        int Class = 0;
+
+        for(int c = 1; c < 5; ++c)
+          if(Count[c] > Count[Class])
+            Class = c;
+
+        if(Class < 4)
+          NewBuffer[y][x] = 192 + (Class << 4) + (Brightness[Class] + Count[Class] / 2) / Count[Class];
+        else
+          NewBuffer[y][x] = NearestFixed(Red / Count[4], Green / Count[4], Blue / Count[4]);
       }
   }
 
