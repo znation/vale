@@ -53,6 +53,15 @@ from pathlib import Path
 
 MODEL_ID = "Qwen/Qwen-Image-2.1"
 
+# The allocator cap below leaves little slack, so keep big cached blocks whole instead of
+# splitting them into fragments a later, larger request can't use (gfx900 has no
+# expandable_segments). Must be set before torch initializes the GPU.
+os.environ.setdefault("PYTORCH_ALLOC_CONF", "max_split_size_mb:128,garbage_collection_threshold:0.7")
+
+# Condition images are resized to at most this side: the sprites they show are 16-32 pixels,
+# and a full 1024x1024 reference quadruples the encoder's and the DiT's work for nothing.
+MAX_REF_RESOLUTION = 512
+
 # Whole-card ceiling, display included. The card has 8 GiB; the rest is headroom for the desktop.
 DEVICE_VRAM_LIMIT_GIB = 6.0
 # This process, as the kernel accounts it (tensors + HIP context + kernels).
@@ -95,7 +104,19 @@ def device_vram_used_bytes():
 
 
 class VramGuard:
-    """Takes the single-GPU-job lock, caps the allocator, and kills the process on any limit breach."""
+    """Takes the single-GPU-job lock, caps the allocator, and kills the process on any limit breach.
+
+    Use VramGuard.get(): the lock is held for the life of the process, so creating a second guard
+    in the same process would fail on its own lock.
+    """
+
+    _instance = None
+
+    @classmethod
+    def get(cls):
+        if cls._instance is None:
+            cls._instance = cls()
+        return cls._instance
 
     def __init__(self, interval=0.1):
         LOCK_PATH.parent.mkdir(parents=True, exist_ok=True)
@@ -155,8 +176,8 @@ class Job:
     transparent: bool = True
 
     def ref_resolution(self):
-        # Condition images are resized to the output's area (the pipeline's `output_resolution`).
-        return int((self.width * self.height) ** 0.5) // 32 * 32
+        # Side of the square area condition images are resized to (the pipeline's `output_resolution`).
+        return min(int((self.width * self.height) ** 0.5), MAX_REF_RESOLUTION) // 32 * 32
 
     def full_prompt(self):
         if self.transparent:
@@ -253,6 +274,8 @@ def _encode_all(jobs, dtype, log):
         with torch.no_grad():
             emb, mask, pad = pipe.encode_prompt(prompt=job.full_prompt(), image=refs, device=torch.device("cuda"))
         encoded.append(tuple(None if t is None else t.cpu() for t in (emb, mask, pad)))
+        del emb, mask, pad
+        _free()
         log(f"  [{i + 1}/{len(jobs)}] encoded in {time.time() - t0:.1f}s: {job.output.name}")
 
     del pipe, text_encoder
@@ -311,7 +334,7 @@ def run_jobs(jobs, steps=30, log=_log, precision="bf16"):
     from diffusers import AutoencoderKLQwenImage21, QwenImage21Pipeline, QwenImage21Transformer2DModel
     from diffusers.models.transformers.transformer_qwenimage21 import QwenImage21AttnProcessor
 
-    guard = VramGuard()
+    guard = VramGuard.get()
     _install_chunked_attention()
     dtype = torch.bfloat16
     compute_dtype = {"bf16": torch.bfloat16, "fp16": torch.float16}[precision]
