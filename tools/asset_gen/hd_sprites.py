@@ -18,9 +18,16 @@ when it exists; lower densities (32-pixel tiles) are derived from it on load, ma
             and re-encoded into the sheet's palette with material pixels kept on their channels.
             Writes Graphics/4x/<Sheet>.png and, where the game has one, the -outlined variant.
 
+  retry     About a quarter of first redraws barely change the 16x16 original. detail_score()
+            measures how much of a master's 64-pixel detail is more than the old 16-pixel blocks;
+            masters under RETRY_BELOW are drawn again with new seeds, keeping the best-scoring
+            version (attempts are recorded in masters/hd/retries.json). It cannot tell a wrong
+            subject from a right one, so review the assembled sheets too.
+
 Usage:
     ~/venv-qwenimage/bin/python tools/asset_gen/hd_sprites.py generate --sheet Item          # whole sheet
     ~/venv-qwenimage/bin/python tools/asset_gen/hd_sprites.py generate --sheet Item --once   # one chunk
+    ~/venv-qwenimage/bin/python tools/asset_gen/hd_sprites.py retry --sheet Item
     ~/venv-qwenimage/bin/python tools/asset_gen/hd_sprites.py assemble --sheet Item
     ~/venv-qwenimage/bin/python tools/asset_gen/hd_sprites.py list --sheet Char
 """
@@ -48,6 +55,9 @@ CATALOG = Path(__file__).parent / "sprite_catalog.json"
 
 SCALE = 4  # physical pixels per layout pixel in Graphics/4x
 GEN_PX = 512  # generation size for a 16x16 sprite (8 image pixels per 64-grid pixel)
+# Larger sprites (32x32 creatures) would need 1024x1024, which does not fit the VRAM budget of
+# qwen_image.py; 768 still gives 6 image pixels per pixel of the 128x128 result.
+MAX_GEN_SIDE = 768
 SHEETS = ["GLTerra", "OLTerra", "Item", "Char", "Humanoid", "WTerra"]
 OUTLINED = {"Item", "Char", "Humanoid"}
 OUTLINE_INDEX = 68  # the black the -outlined sheets use (file index)
@@ -151,6 +161,10 @@ def sprites(sheet_name):
     return sorted(found, key=lambda s: (s.y, s.x))
 
 
+def gen_size(s):
+    return (min(GEN_PX * s.w // 16, MAX_GEN_SIDE), min(GEN_PX * s.h // 16, MAX_GEN_SIDE))
+
+
 def generate(sheet_name, limit, steps, seed):
     from qwen_image import Job, run_jobs
 
@@ -169,7 +183,7 @@ def generate(sheet_name, limit, steps, seed):
         return False
     jobs = []
     for s in todo:
-        size = (GEN_PX * s.w // 16, GEN_PX * s.h // 16)
+        size = gen_size(s)
         refs = [upscale_reference(sheet, s.rect, size)]
         fmt = dict(w=s.w, h=s.h, W=s.w * SCALE, H=s.h * SCALE, what=s.what, kind=KIND[sheet_name])
         if s.base is not None:
@@ -186,6 +200,63 @@ def generate(sheet_name, limit, steps, seed):
     return True
 
 
+RETRY_BELOW = 0.12
+RETRY_SEEDS = (11, 29)
+RETRIES = MASTERS / "retries.json"
+
+
+def detail_score(master_path, w, h):
+    """Share of a master's variation (at 4x the sprite's size) that is finer than the original
+    16-pixel grid: near 0 when the redraw just re-shaded the old blocks."""
+    small = np.asarray(Image.open(master_path).convert("RGBA").resize((w * SCALE, h * SCALE), Image.BOX), float)
+    rgb, opaque = small[..., :3], small[..., 3] >= 128
+    if not opaque.any():
+        return 0.0
+    blocks = rgb.reshape(h, SCALE, w, SCALE, 3).mean(axis=(1, 3)).repeat(SCALE, 0).repeat(SCALE, 1)
+    fine = ((rgb - blocks) ** 2).sum(-1)[opaque].mean()
+    total = ((rgb - rgb[opaque].mean(0)) ** 2).sum(-1)[opaque].mean()
+    return float(fine / total) if total else 0.0
+
+
+def retry(sheet_name, steps):
+    from qwen_image import Job, run_jobs
+
+    tried = json.loads(RETRIES.read_text()) if RETRIES.exists() else {}
+    sheet = Sheet.load(GRAPHICS / f"{sheet_name}.png")
+    candidates = []
+    for s in sprites(sheet_name):
+        key = str(s.master.relative_to(MASTERS))
+        if not s.master.exists() or detail_score(s.master, s.w, s.h) >= RETRY_BELOW:
+            continue
+        seeds = [seed for seed in RETRY_SEEDS if seed not in tried.get(key, [])]
+        if seeds:
+            candidates.append((s, key, seeds[0]))
+    if not candidates:
+        print(f"{sheet_name}: no blocky masters left to retry")
+        return
+    jobs = []
+    for s, key, seed in candidates:
+        size = gen_size(s)
+        fmt = dict(w=s.w, h=s.h, W=s.w * SCALE, H=s.h * SCALE, what=s.what, kind=KIND[sheet_name])
+        refs = [upscale_reference(sheet, s.rect, size)]
+        if s.base is not None and s.base.master.exists():
+            refs.append(Image.open(s.base.master))
+            prompt = FRAME_PROMPT.format(**fmt)
+        else:
+            prompt = (FIXED_OUTLINE_PROMPT if sheet_name in SILHOUETTE_SLACK else PROMPT).format(**fmt)
+        jobs.append(Job(prompt, s.master.with_suffix(f".seed{seed}.png"), size[0], size[1], seed, refs))
+    print(f"{sheet_name}: retrying {len(jobs)} blocky masters", flush=True)
+    run_jobs(jobs, steps=steps, precision="fp16")
+    for (s, key, seed), job in zip(candidates, jobs):
+        tried.setdefault(key, []).append(seed)
+        if job.output.exists():
+            old, new = detail_score(s.master, s.w, s.h), detail_score(job.output, s.w, s.h)
+            if new > old:
+                job.output.replace(s.master)
+            else:
+                job.output.unlink()
+            print(f"  {key}: {old:.3f} -> {max(old, new):.3f}")
+    RETRIES.write_text(json.dumps(tried, indent=1))
 
 
 def confine(small, original_opaque, slack):
@@ -229,7 +300,7 @@ def assemble(sheet_name):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
-    parser.add_argument("command", choices=["generate", "assemble", "list"])
+    parser.add_argument("command", choices=["generate", "retry", "assemble", "list"])
     parser.add_argument("--sheet", required=True, choices=SHEETS)
     parser.add_argument("--chunk", type=int, default=40, help="Sprites per model load (generate)")
     parser.add_argument("--once", action="store_true", help="Generate a single chunk instead of the whole sheet")
@@ -241,6 +312,8 @@ def main():
         # sprite they follow has been drawn in an earlier chunk.
         while generate(args.sheet, args.chunk, args.steps, args.seed) and not args.once:
             pass
+    elif args.command == "retry":
+        retry(args.sheet, args.steps)
     elif args.command == "assemble":
         assemble(args.sheet)
     else:
