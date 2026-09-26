@@ -198,4 +198,6 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    from qwen_image import run_then_exit
+
+    run_then_exit(main)

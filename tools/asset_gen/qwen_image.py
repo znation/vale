@@ -60,6 +60,9 @@ os.environ.setdefault("PYTORCH_ALLOC_CONF", "max_split_size_mb:128,garbage_colle
 
 # Condition images are resized to at most this side: the sprites they show are 16-32 pixels,
 # and a full 1024x1024 reference quadruples the encoder's and the DiT's work for nothing.
+# It is a budget for all of a job's condition images together: the DiT keeps their keys and
+# values for every layer on the GPU through the whole run (0.5 MiB per token, 1024 tokens for
+# a 512x512 image), and two full-size references overflowed the allocator cap.
 MAX_REF_RESOLUTION = 512
 
 # Whole-card ceiling, display included. The card has 8 GiB; the rest is headroom for the desktop.
@@ -176,8 +179,10 @@ class Job:
     transparent: bool = True
 
     def ref_resolution(self):
-        # Side of the square area condition images are resized to (the pipeline's `output_resolution`).
-        return min(int((self.width * self.height) ** 0.5), MAX_REF_RESOLUTION) // 32 * 32
+        # Side of the square area each condition image is resized to (the pipeline's
+        # `output_resolution`); several references share MAX_REF_RESOLUTION's area.
+        budget = MAX_REF_RESOLUTION / max(1, len(self.refs)) ** 0.5
+        return int(min((self.width * self.height) ** 0.5, budget)) // 32 * 32
 
     def full_prompt(self):
         if self.transparent:
@@ -401,6 +406,29 @@ def run_jobs(jobs, steps=30, log=_log, precision="bf16"):
     return guard.peak / 2**30
 
 
+def run_then_exit(main):
+    """
+    Run a script's `main` and exit without the libraries' exit-time cleanup. After an
+    out-of-memory error, ROCm's HIP runtime has hung in its exit destructor, keeping this
+    process's VRAM until it was killed.
+    """
+    import traceback
+
+    try:
+        main()
+        code = 0
+    except SystemExit as e:
+        if isinstance(e.code, str):
+            sys.stderr.write(e.code + "\n")
+        code = e.code if isinstance(e.code, int) else int(e.code is not None)
+    except BaseException:
+        traceback.print_exc()
+        code = 1
+    sys.stdout.flush()
+    sys.stderr.flush()
+    os._exit(code)
+
+
 def main():
     parser = argparse.ArgumentParser(description="Generate an image with Qwen-Image-2.1 within strict VRAM limits.")
     parser.add_argument("--prompt", required=True)
@@ -429,4 +457,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    run_then_exit(main)
