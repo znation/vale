@@ -218,7 +218,9 @@ def detail_score(master_path, w, h):
     return float(fine / total) if total else 0.0
 
 
-def retry(sheet_name, steps):
+def retry(sheet_name, steps, limit):
+    """Draw each blocky master again with its next unused seed. Works in chunks, recording each
+    one, so an interrupted pass resumes where it stopped."""
     from qwen_image import Job, run_jobs
 
     tried = json.loads(RETRIES.read_text()) if RETRIES.exists() else {}
@@ -234,29 +236,34 @@ def retry(sheet_name, steps):
     if not candidates:
         print(f"{sheet_name}: no blocky masters left to retry")
         return
-    jobs = []
-    for s, key, seed in candidates:
-        size = gen_size(s)
-        fmt = dict(w=s.w, h=s.h, W=s.w * SCALE, H=s.h * SCALE, what=s.what, kind=KIND[sheet_name])
-        refs = [upscale_reference(sheet, s.rect, size)]
-        if s.base is not None and s.base.master.exists():
-            refs.append(Image.open(s.base.master))
-            prompt = FRAME_PROMPT.format(**fmt)
-        else:
-            prompt = (FIXED_OUTLINE_PROMPT if sheet_name in SILHOUETTE_SLACK else PROMPT).format(**fmt)
-        jobs.append(Job(prompt, s.master.with_suffix(f".seed{seed}.png"), size[0], size[1], seed, refs))
-    print(f"{sheet_name}: retrying {len(jobs)} blocky masters", flush=True)
-    run_jobs(jobs, steps=steps, precision="fp16")
-    for (s, key, seed), job in zip(candidates, jobs):
-        tried.setdefault(key, []).append(seed)
-        if job.output.exists():
-            old, new = detail_score(s.master, s.w, s.h), detail_score(job.output, s.w, s.h)
-            if new > old:
-                job.output.replace(s.master)
+    print(f"{sheet_name}: retrying {len(candidates)} blocky masters", flush=True)
+    for start in range(0, len(candidates), limit):
+        chunk = candidates[start : start + limit]
+        jobs = []
+        for s, key, seed in chunk:
+            size = gen_size(s)
+            fmt = dict(w=s.w, h=s.h, W=s.w * SCALE, H=s.h * SCALE, what=s.what, kind=KIND[sheet_name])
+            refs = [upscale_reference(sheet, s.rect, size)]
+            if s.base is not None and s.base.master.exists():
+                refs.append(Image.open(s.base.master))
+                prompt = FRAME_PROMPT.format(**fmt)
             else:
-                job.output.unlink()
-            print(f"  {key}: {old:.3f} -> {max(old, new):.3f}")
-    RETRIES.write_text(json.dumps(tried, indent=1))
+                prompt = (FIXED_OUTLINE_PROMPT if sheet_name in SILHOUETTE_SLACK else PROMPT).format(**fmt)
+            jobs.append(Job(prompt, s.master.with_suffix(f".seed{seed}.png"), size[0], size[1], seed, refs))
+        # A redraw an interrupted run left behind is compared, not drawn again.
+        pending = [job for job in jobs if not job.output.exists()]
+        if pending:
+            run_jobs(pending, steps=steps, precision="fp16")
+        for (s, key, seed), job in zip(chunk, jobs):
+            tried.setdefault(key, []).append(seed)
+            if job.output.exists():
+                old, new = detail_score(s.master, s.w, s.h), detail_score(job.output, s.w, s.h)
+                if new > old:
+                    job.output.replace(s.master)
+                else:
+                    job.output.unlink()
+                print(f"  {key}: {old:.3f} -> {max(old, new):.3f}", flush=True)
+        RETRIES.write_text(json.dumps(tried, indent=1))
 
 
 def confine(small, original_opaque, slack):
@@ -302,7 +309,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     parser.add_argument("command", choices=["generate", "retry", "assemble", "list"])
     parser.add_argument("--sheet", required=True, choices=SHEETS)
-    parser.add_argument("--chunk", type=int, default=40, help="Sprites per model load (generate)")
+    parser.add_argument("--chunk", type=int, default=40, help="Sprites per model load (generate, retry)")
     parser.add_argument("--once", action="store_true", help="Generate a single chunk instead of the whole sheet")
     parser.add_argument("--steps", type=int, default=20)
     parser.add_argument("--seed", type=int, default=3)
@@ -313,7 +320,7 @@ def main():
         while generate(args.sheet, args.chunk, args.steps, args.seed) and not args.once:
             pass
     elif args.command == "retry":
-        retry(args.sheet, args.steps)
+        retry(args.sheet, args.steps, args.chunk)
     elif args.command == "assemble":
         assemble(args.sheet)
     else:
