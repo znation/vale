@@ -64,6 +64,10 @@ class worldmap : public area
   void InitializeShapeDescription();
   std::vector<v2> GetWasPlaced();
  protected:
+  truth IsValleySite(v2, int) const;
+  void CarveValley(v2, v2);
+  void RevealValley(v2);
+  truth IsReachableOnFoot(v2, v2) const;
   wsquare*** Map;
   std::vector<continent*> Continent;
   uchar** TypeBuffer;

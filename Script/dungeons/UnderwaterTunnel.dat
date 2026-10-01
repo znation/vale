@@ -22,8 +22,8 @@
 Dungeon UNDER_WATER_TUNNEL;
 {
   Levels = 5;
-  Description = "Underwater Tunnel";
-  ShortDescription = "UT";
+  Description = "Sunken Passage";
+  ShortDescription = "SP";
 
   LevelDefault
   {

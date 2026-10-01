@@ -88,3 +88,10 @@ steppe
   NameStem = "steppe";
   Priority = 30;
 }
+
+mountain
+{
+  BitmapPos = 256, 16;
+  NameStem = "mountain range";
+  Priority = 100; /* above everything: the mountains' edges draw over their neighbours */
+}

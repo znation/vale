@@ -742,7 +742,7 @@ truth mangodroparea::DropItem(character* Dropper, item* Item, int)
         game::TextScreen(CONST_S("You plant the seedling of the Holy Mango World-tree and the people\n"
                                  "of your home village gather around, cheering. Within moments,\n"
                                  "the seedling sprouts and grows, nourished by the returning\n"
-                                 "favour of Silva. You feel Her glory permeating the whole island,\n"
+                                 "favour of Silva. You feel Her glory permeating the whole valley,\n"
                                  "hiding it from the forces of Valpuris, should they attempt\n"
                                  "to return. Oakhaven can be free again!\n\nYou are victorious!"));
 

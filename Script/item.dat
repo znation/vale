@@ -2254,6 +2254,24 @@ bodyarmor /* armor-> */
     LegArmorBitmapPos = 16, 416;
     DescriptiveInfo = "You know how dromedaries have one hump and camels have two? Ommels have eight, in a circular pattern. They are gargantuan yet docile herbivores that are remarkable in that their physiology seems reversed from almost all other animals. Their diet consists mostly of plants that to other animals (including humans) are poisonous at best, or even outright deadly on contact. While their meat is unsurprisingly vile and toxic, most of their waste products are extremely beneficial to other animals (still including humans). Ommels live in large herds headed by a single white-haired ommel, informally referred to as \"bristler\" due to the sharp spine-like quality their hair takes on as it turns white. Ommels have significantly larger lifespans than all humanoid races and a given herd will only have one bristler at a time, another male becoming a bristler only if the previous dies. Combined with the fact that bristlers do not shed their hair during the summer like normal ommels do, this renders armor made of their distinctive barbed hair incredibly rare.";
   }
+
+  Config TUNIC;
+  {
+    Possibility = 50;
+    StrengthModifier = 400; /* AV 1: its cloths all have StrengthValue 5 */
+    DefaultSize = 70;
+    DefaultMainVolume = 800;
+    BitmapPos = 192, 32;
+    NameSingular = "tunic";
+    MainMaterialConfig = { 5, LINEN_CLOTH, HEMP_CLOTH, WOOL_CLOTH, FELT, FABRIC; }
+    MaterialConfigChances = { 5, 500, 300, 150, 25, 25; }
+    InElasticityPenaltyModifier = 5;
+    TorsoArmorBitmapPos = 128, 96;
+    ArmArmorBitmapPos = 144, 112;
+    AthleteArmArmorBitmapPos = 144, 128;
+    LegArmorBitmapPos = 128, 112;
+    DescriptiveInfo = "A plain tunic of the kind Oakhaven's farmhands wear in the fields. It will not turn a blade, but it is better than bare skin, and warmer.";
+  }
 }
 
 goldeneagleshirt /* armor->bodyarmor-> */

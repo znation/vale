@@ -671,7 +671,7 @@ void petrus::BeTalkedTo()
       game::GetCurrentArea()->SendNewDrawRequest();
       game::DrawEverything();
       PLAYER->ShowAdventureInfo();
-      festring Msg = CONST_S("became an officer of the Oakhavenses army");
+      festring Msg = CONST_S("became an officer of the Valpurian army");
       AddScoreEntry(Msg, 3, false);
       game::End(Msg);
       return;
@@ -782,7 +782,7 @@ void petrus::BeTalkedTo()
   else if(game::GetStoryState() == 1)
   {
     game::TextScreen(CONST_S("\"Ah, here thou art, my brave warrior savage! Our agents hast informed Us that they\n"
-                             "witnessed thou leaving the dreaded underwater tunnel. This means thou most likely hast\n"
+                             "witnessed thou leaving the dreaded Sunken Passage. This means thou most likely hast\n"
                              "defeated The Carnivorous Matriarch Vespera and art a talented monster slayer. We happen to have a task\n"
                              "perfect for such a person.\"\n\n"
                              "\"An evil dark frog named Malgorath the Blight-Beast who hates Valpuris and Valpuris more than anything hath\n"
@@ -7066,12 +7066,12 @@ void elder::BeTalkedTo()
   {
     game::TextScreen(CONST_S("\"My boy, my wonderful boy! From the very day I found you,\n"
                              "I knew there was something special in you, something even\n"
-                             "the accursed hippos couldn't spoil. And now you have saved us\n"
+                             "the accursed bears couldn't spoil. And now you have saved us\n"
                              "from valpurian clutches and given us a chance at freedom!\n"
                              "Thank you so very, very much.\"\n\n"
                              "\"Alas, I'm afraid Oakhaven is not yet out of the proverbial woods.\n"
-                             "We are few and the Oakhavenses army is massive. Their battleships\n"
-                             "will be ready once the winter ends and the ice thaws, and they will\n"
+                             "We are few and the Valpurian army is massive. Their soldiers will\n"
+                             "march through the pass once the winter ends and the snow melts, and they will\n"
                              "not hesitate to bring their tyranny back. I still don't get why they\n"
                              "love those mangoes so much.\"\n\n"
                              "\"We have no hope to defeat them in a fight, so fight them we shan't.\""));
@@ -7084,7 +7084,7 @@ void elder::BeTalkedTo()
                              "\"The thing is, I know for a fact that Mondedr exists, and that\n"
                              "their cloaking spell can be replicated. Valpuris tried to take our\n"
                              "goddess away, but she is still strong in our hearts. I have faith\n"
-                             "she will protect this island from valpurians, just as Cleptia did\n"
+                             "she will protect this valley from valpurians, just as Cleptia did\n"
                              "for Mondedr.\""));
 
     game::TextScreen(CONST_S("\"The prayers are simple, but no god can affect the world uninvited,\n"
@@ -7094,10 +7094,10 @@ void elder::BeTalkedTo()
                              "\"You have done so much for your village, yet I must ask for another\n"
                              "favour. You know that the late viceroy destroyed the altar of Silva\n"
                              "in our shrine, but you might not know that there is another shrine of Silva\n"
-                             "on this island, or rather below it. I would implore you to go down into\n"
-                             "the underwater tunnel and find a strange formation of rock where our people\n"
+                             "in this valley, or rather below it. I would implore you to go down into\n"
+                             "the Sunken Passage and find a strange formation of rock where our people\n"
                              "buried the stairs to the crystal cave of Silva under a cave-in,\n"
-                             "once it was obvious that we will be conquered. We couldn't let the Oakhavenses\n"
+                             "once it was obvious that we will be conquered. We couldn't let the Valpurians\n"
                              "desecrate that most holy place. There, in an ancient temple of Silva,\n"
                              "grows a tree of wondrous power, a tiny sapling of the World-tree.\""));
 
@@ -7129,7 +7129,7 @@ void terra::BeTalkedTo()
     game::TextScreen(CONST_S("\"Oakhaven has been freed?! What wonderful news you bring me!\"\n\n"
                              "\"I have volunteered all those years ago to be buried here in this cave\n"
                              "along with the shrine, to tend it and to protect the rites and traditions\n"
-                             "that the Oakhavenses would rather see burnt and forgotten. Yet I have hoped\n"
+                             "that the Valpurians would rather see burnt and forgotten. Yet I have hoped\n"
                              "every day that a word would come about an end to the tyranny, that\n"
                              "I would be free to return home. I guess my hope dwindled over the years,\n"
                              "but you are here now and my wishes came true. Thank you.\"\n\n"

@@ -57,6 +57,13 @@ GWTERRAIN(steppe, gwterrain)
 {
 };
 
+/* Impassable except in flight; only the valley around Oakhaven is ringed with it (see worldmap::CarveValley). */
+GWTERRAIN(mountain, gwterrain)
+{
+ public:
+  virtual int GetWalkability() const;
+};
+
 OWTERRAIN(attnam, owterrain)
 {
 };

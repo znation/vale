@@ -31,6 +31,7 @@ cint LForestType = leafyforest::ProtoType.GetIndex();
 cint SteppeType = steppe::ProtoType.GetIndex();
 cint DesertType = desert::ProtoType.GetIndex();
 cint JungleType = jungle::ProtoType.GetIndex();
+cint MountainType = mountain::ProtoType.GetIndex();
 
 #include <algorithm>
 

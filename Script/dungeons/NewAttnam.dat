@@ -233,7 +233,7 @@ Dungeon OAKHAVEN;
       Size = 3, 3;
       Pos = 44, 44;
       AltarPossible = false;
-      WallSquare = solidterrain(GRASS_TERRAIN), decoration(PALM);
+      WallSquare = solidterrain(GRASS_TERRAIN), decoration(MANGO_TREE);
       FloorSquare = solidterrain(LANDING_SITE), 0;
       GenerateDoor = false;
       GenerateTunnel = false;
@@ -455,10 +455,23 @@ Dungeon OAKHAVEN;
       Times = 10;
     }
 
+    /* Oakhaven's valley is broadleaf forest, with mango trees gone wild from the orchards */
     Square, Random NOT_IN_ROOM|HAS_NO_OTERRAIN;
     {
-      OTerrain = decoration(PALM);
-      Times = 100;
+      OTerrain = decoration(OAK);
+      Times = 40;
+    }
+
+    Square, Random NOT_IN_ROOM|HAS_NO_OTERRAIN;
+    {
+      OTerrain = decoration(BIRCH);
+      Times = 25;
+    }
+
+    Square, Random NOT_IN_ROOM|HAS_NO_OTERRAIN;
+    {
+      OTerrain = decoration(MANGO_TREE);
+      Times = 35;
     }
 
     Square, Random NOT_IN_ROOM|HAS_NO_OTERRAIN;
@@ -544,7 +557,7 @@ Dungeon OAKHAVEN;
 
     Square, Pos 11, 40;
     {
-      OTerrain = sign { Text = "Zulko's wholesale mango market. We offer quality mangos straight from the jungle at a bargain price and even some other exotic fruits for most demanding customers."; }
+      OTerrain = sign { Text = "Zulko's wholesale mango market. We offer quality mangos straight from the orchards at a bargain price and even some other exotic fruits for most demanding customers."; }
     }
 
     Square, Pos 25, 39;

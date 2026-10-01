@@ -69,34 +69,34 @@ malgorathcave
 newattnam
 {
   BitmapPos = 16, 64;
-  NameStem = "primitive village";
+  NameStem = "hidden village";
   UsesLongArticle = false;
   AttachedDungeon = OAKHAVEN;
   CanBeGenerated = false; /* Overridden by the world map generator */
-  NativeGTerrainTypes = { 1, JUNGLE; }
+  NativeGTerrainTypes = { 1, LEAFY_FOREST; }
   /*IsCoreLocation = true;*/
 }
 
 underwatertunnel
 {
   BitmapPos = 32, 64;
-  NameStem = "entrance to an underwater tunnel";
+  NameStem = "entrance to the Sunken Passage";
   UsesLongArticle = true;
   AttachedDungeon = UNDER_WATER_TUNNEL;
   CanBeGenerated = false; /* Overridden by the world map generator */
-  NativeGTerrainTypes = { 1, JUNGLE; }
+  NativeGTerrainTypes = { 1, LEAFY_FOREST; }
   /*IsCoreLocation = true;*/
 }
 
 underwatertunnelexit
 {
   BitmapPos = 32, 64;
-  NameStem = "exit from an underwater tunnel";
+  NameStem = "exit from the Sunken Passage";
   UsesLongArticle = true;
   AttachedDungeon = UNDER_WATER_TUNNEL;
-  AttachedArea = 2; /*underwater tunnel level 3*/
+  AttachedArea = 2; /*Sunken Passage level 3*/
   CanBeGenerated = false; /* Overridden by the world map generator */
-  NativeGTerrainTypes = { 1, JUNGLE; }
+  NativeGTerrainTypes = { 1, LEAFY_FOREST; }
   /*IsCoreLocation = true;*/
 }
 

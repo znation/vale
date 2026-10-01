@@ -23,6 +23,13 @@
 #define WARM              17
 #define HOT               19
 
+// Oakhaven's round valley, as squared distances from its passage: forest, then a ring of mountains, then
+// scattered peaks. Every neighbour of a forest square lies within the ring, so walkers can't slip out diagonally.
+#define VALLEY_FOREST_R2  5
+#define VALLEY_RING_R2    13
+#define VALLEY_PEAKS_R2   20
+#define VALLEY_REACH      5             // squares from the passage to the farthest peak, plus one
+
 int DirX[8] = { -1, -1, -1, 0, 0, 1, 1, 1 };
 int DirY[8] = { -1, 0, 1, -1, 1, -1, 0, 1 };
 
@@ -298,140 +305,25 @@ void worldmap::Generate()
       for(int y = 0; y < YSize; ++y)
         NoIslandAltitudeBuffer[x][y] = AltitudeBuffer[x][y];
 
+    // Oakhaven lies in a small forest valley walled in by mountains. The only way out is the passage
+    // under them (UNDER_WATER_TUNNEL), which comes out a few squares away on Valpuris's continent.
     for(int c1 = 0; c1 < 25; ++c1)
     {
       game::BusyAnimation();
       ArchpriestsLikes = PerfectForValpuris[RAND() % PerfectForValpuris.size()];
-      
-      int EGForestAmount = ArchpriestsLikes->GetGTerrainAmount(EGForestType);
-      int SnowAmount = ArchpriestsLikes->GetGTerrainAmount(SnowType);
-      //ADD_MESSAGE("ArchpriestsLikes has %d EGForest and %d Snow tiles.", EGForestAmount, SnowAmount);
 
       for(int c2 = 1; c2 < 50; ++c2)
       {
         TunnelExit = ArchpriestsLikes->GetMember(RAND() % ArchpriestsLikes->GetSize());
+        TunnelEntry = TunnelExit + game::GetMoveVector(RAND() & 7) * int(VALLEY_REACH + (RAND() & 3));
 
-        for(int d1 = 0; d1 < 8; ++d1)
-        {
-          v2 Pos = TunnelExit + game::GetMoveVector(d1);
+        if(!IsValleySite(TunnelEntry, ArchpriestsLikes->GetIndex()))
+          continue;
 
-          if(IsValidPos(Pos) && AltitudeBuffer[Pos.X][Pos.Y] <= 0)
-          {
-            int Distance = 3 + (RAND() & 3);
-            truth Error = false;
-            TunnelEntry = Pos;
-
-            for(int c2 = 0; c2 < Distance; ++c2)
-            {
-              TunnelEntry += game::GetMoveVector(d1);
-
-              if(!IsValidPos(TunnelEntry)
-                 || AltitudeBuffer[TunnelEntry.X][TunnelEntry.Y] > 0)
-              {
-                Error = true;
-                break;
-              }
-            }
-
-            if(Error)
-              continue;
-
-            int x, y;
-            int Counter = 0;
-
-            for(x = TunnelEntry.X - 3; x <= TunnelEntry.X + 3; ++x)
-            {
-              for(y = TunnelEntry.Y - 3; y <= TunnelEntry.Y + 3;
-                  ++y, ++Counter)
-                if(Counter != 0 && Counter != 6
-                   && Counter != 42 && Counter != 48
-                   && (!IsValidPos(x, y)
-                       || AltitudeBuffer[x][y] > 0
-                       || AltitudeBuffer[x][y] < -350))
-                {
-                  Error = true;
-                  break;
-                }
-
-              if(Error)
-                break;
-            }
-
-            if(Error)
-              continue;
-
-            Error = true;
-
-            for(x = 0; x < XSize; ++x)
-              if(TypeBuffer[x][TunnelEntry.Y] == JungleType)
-              {
-                Error = false;
-                break;
-              }
-
-            if(Error)
-              continue;
-
-            Counter = 0;
-
-            for(x = TunnelEntry.X - 2; x <= TunnelEntry.X + 2; ++x)
-              for(y = TunnelEntry.Y - 2; y <= TunnelEntry.Y + 2;
-                  ++y, ++Counter)
-                if(Counter != 0 && Counter != 4
-                   && Counter != 20 && Counter != 24)
-                  AltitudeBuffer[x][y] /= 2;
-
-            AltitudeBuffer[TunnelEntry.X][TunnelEntry.Y] = 1 + RAND() % 50;
-            TypeBuffer[TunnelEntry.X][TunnelEntry.Y] = JungleType;
-            GetWSquare(TunnelEntry)->ChangeGWTerrain(jungle::Spawn());
-            int NewAttnamIndex;
-
-            for(NewAttnamIndex = RAND() & 7;
-                NewAttnamIndex == 7 - d1;
-                NewAttnamIndex = RAND() & 7);
-
-            OakhavenPos = TunnelEntry
-                           + game::GetMoveVector(NewAttnamIndex);
-            static int DiagonalDir[4] = { 0, 2, 5, 7 };
-            static int NotDiagonalDir[4] = { 1, 3, 4, 6 };
-            static int AdjacentDir[4][2] = { { 0, 1 }, { 0, 2 },
-                                             { 1, 3 }, { 2, 3 } };
-            truth Raised[] = { false, false, false, false };
-            int d2;
-
-            for(d2 = 0; d2 < 4; ++d2)
-              if(NotDiagonalDir[d2] != 7 - d1
-                 && (NotDiagonalDir[d2] == NewAttnamIndex
-                     || !(RAND() & 2)))
-              {
-                v2 Pos = TunnelEntry
-                         + game::GetMoveVector(NotDiagonalDir[d2]);
-                AltitudeBuffer[Pos.X][Pos.Y] = 1 + RAND() % 50;
-                TypeBuffer[Pos.X][Pos.Y] = JungleType;
-                GetWSquare(Pos)->ChangeGWTerrain(jungle::Spawn());
-                Raised[d2] = true;
-              }
-
-            for(d2 = 0; d2 < 4; ++d2)
-              if(DiagonalDir[d2] != 7 - d1
-                 && (DiagonalDir[d2] == NewAttnamIndex
-                     || (Raised[AdjacentDir[d2][0]]
-                         && Raised[AdjacentDir[d2][1]] && !(RAND() & 2))))
-              {
-                v2 Pos = TunnelEntry
-                         + game::GetMoveVector(DiagonalDir[d2]);
-                AltitudeBuffer[Pos.X][Pos.Y] = 1 + RAND() % 50;
-                TypeBuffer[Pos.X][Pos.Y] = JungleType;
-                GetWSquare(Pos)->ChangeGWTerrain(jungle::Spawn());
-              }
-
-            Correct = true;
-            break;
-          }
-        }
-
-        if(Correct)
-          break;
+        CarveValley(TunnelEntry, TunnelExit);
+        OakhavenPos = TunnelEntry + game::GetMoveVector(RAND() & 7);
+        Correct = true;
+        break;
       }
 
       if(Correct)
@@ -677,6 +569,19 @@ void worldmap::Generate()
       continue;
     }
 
+    // The valley's mountains must not have cut the passage's far end off from the core locations.
+    truth CoreReachable = true;
+
+    for(uint j = 0; j < ShallBePlaced.size() && j < AtTheseCoordinates.size(); j++)
+      if(ShallBePlaced[j].IsCoreLocation && !IsReachableOnFoot(TunnelExit, AtTheseCoordinates[j]))
+        CoreReachable = false;
+
+    if(!CoreReachable)
+    {
+      ForcedWorldReGens++;
+      continue;
+    }
+
     if(ShallBePlaced.size() != AtTheseCoordinates.size())
     {
       ABORT("Mismatched location placement!"); // In theory should never get to here
@@ -705,6 +610,7 @@ void worldmap::Generate()
     GetWSquare(TunnelExit)->ChangeOWTerrain(underwatertunnelexit::Spawn());
     SetEntryPos(UNDER_WATER_TUNNEL_EXIT, TunnelExit);
     PLAYER->PutTo(OakhavenPos);
+    RevealValley(TunnelEntry);
     CalculateLuminances();
     CalculateNeighbourBitmapPoses();
     break;
@@ -721,6 +627,87 @@ void worldmap::Generate()
   // Add a message to indicate that dungeons may show up on weird terrains
   if(ForcePlacementOnAnyTerrain == true)
     ADD_MESSAGE("\"It's the world %s, but not as we know it...\"", ivanconfig::GetDefaultPetName().CStr());
+}
+
+/* Whether Oakhaven's valley fits around Center: everything out to its farthest peaks, and one square
+   beyond, is land of the given continent. */
+truth worldmap::IsValleySite(v2 Center, int ContinentIndex) const
+{
+  for(int x = Center.X - VALLEY_REACH; x <= Center.X + VALLEY_REACH; ++x)
+    for(int y = Center.Y - VALLEY_REACH; y <= Center.Y + VALLEY_REACH; ++y)
+      if(!IsValidPos(x, y) || AltitudeBuffer[x][y] <= 0 || ContinentBuffer[x][y] != ContinentIndex)
+        return false;
+
+  return true;
+}
+
+/* A round forest valley around Center, a ring of mountains around it, and a few more peaks outside
+   the ring so its edge looks natural (never next to Keep, the passage's far end). None of it is offered
+   to other locations. */
+void worldmap::CarveValley(v2 Center, v2 Keep)
+{
+  for(int x = Center.X - VALLEY_REACH; x <= Center.X + VALLEY_REACH; ++x)
+    for(int y = Center.Y - VALLEY_REACH; y <= Center.Y + VALLEY_REACH; ++y)
+    {
+      v2 Pos(x, y);
+      long Distance2 = (Pos - Center).GetLengthSquare();
+
+      if(Distance2 <= VALLEY_FOREST_R2)
+      {
+        TypeBuffer[x][y] = LForestType;
+        GetWSquare(Pos)->ChangeGWTerrain(leafyforest::Spawn());
+      }
+      else if(Distance2 <= VALLEY_RING_R2
+              || (Distance2 <= VALLEY_PEAKS_R2 && !(RAND() % 3) && (Pos - Keep).GetLengthSquare() > 2))
+      {
+        TypeBuffer[x][y] = MountainType;
+        GetWSquare(Pos)->ChangeGWTerrain(mountain::Spawn());
+      }
+      else
+        continue;
+
+      NoIslandAltitudeBuffer[x][y] = 0;
+    }
+}
+
+/* Shows the player the whole valley and the ring of mountains around it. */
+void worldmap::RevealValley(v2 Center)
+{
+  for(int x = Center.X - VALLEY_REACH; x <= Center.X + VALLEY_REACH; ++x)
+    for(int y = Center.Y - VALLEY_REACH; y <= Center.Y + VALLEY_REACH; ++y)
+      if((v2(x, y) - Center).GetLengthSquare() <= VALLEY_RING_R2)
+        Map[x][y]->SignalSeen();
+}
+
+/* Whether a walker can get from From to To over land, around ocean and mountains. */
+truth worldmap::IsReachableOnFoot(v2 From, v2 To) const
+{
+  std::vector<uchar> Seen(XSize * YSize, 0);
+  std::vector<v2> Todo(1, From);
+  Seen[From.X * YSize + From.Y] = 1;
+
+  while(!Todo.empty())
+  {
+    v2 Pos = Todo.back();
+    Todo.pop_back();
+
+    if(Pos == To)
+      return true;
+
+    for(int d = 0; d < 8; ++d)
+    {
+      v2 Next = Pos + game::GetMoveVector(d);
+
+      if(IsValidPos(Next) && !Seen[Next.X * YSize + Next.Y]
+         && TypeBuffer[Next.X][Next.Y] != OceanType && TypeBuffer[Next.X][Next.Y] != MountainType)
+      {
+        Seen[Next.X * YSize + Next.Y] = 1;
+        Todo.push_back(Next);
+      }
+    }
+  }
+
+  return false;
 }
 
 void worldmap::RandomizeAltitude()

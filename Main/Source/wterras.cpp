@@ -23,3 +23,5 @@ cchar* ocean::MonsterDeathVerb() const { return "drowns"; }
 cchar* ocean::ScoreEntry() const { return "drowned"; }
 
 int ocean::GetWalkability() const { return ANY_MOVE&~WALK; }
+
+int mountain::GetWalkability() const { return ANY_MOVE&~(WALK|SWIM); }

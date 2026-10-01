@@ -16,8 +16,8 @@ Aethelgard is a vast, ancient continent shaped by the Divine War — a cataclysm
 | **Perttuera** (Isle/World) | **Aethelgard** | The continent — a flat cylinder of land, ~4242 miles wide and 256 miles high, resting on Valpurus's back above the Sea of Eternity. Home to multiple kingdoms, ancient ruins, and sacred sites. | World map / entire game world |
 | **Pertturia** (Forest) | **The Sylvan Weald** | An ancient, enchanted forest surrounding the Holy City. Trees are said to be saplings from the Divine Tree Puu. The canopy is so thick that sunlight barely reaches the forest floor. Home to hidden shops and mysterious ruins. | evergreenforest terrain type; Black Market location |
 | **Attnam** (Holy City) | **Valpuris** | The Holy City of Valpuri, capital of the Aethelgard Empire. Built around the Cathedral of Valpurus — a massive cathedral with no windows, its interior lit by enchanted crystals. Snow-covered fell surrounded by frozen lakes. Home to the Four Cardinals and the Bureau of Investigation. | ATTNAM dungeon; Cathedral of Valpurus (61x67); City levels 0-4 |
-| **New Attnam / Tweraif** (Village) | **Oakhaven** | A coastal farming village on the southern jungles, ruled by Viceroy Richel Decos. Once a thriving settlement, now oppressed under Decos's monopoly on the miracle crop. The mansion was formerly a temple of Silva. | NEW_ATTNAM dungeon; Jungle terrain |
-| **Underwater Tunnel** | **The Sunken Passage** | An ancient underwater tunnel connecting Oakhaven to Valpuris. Built during the Pax Aethelgardica era. Contains boss rooms with Genetrix Vesana (carnivorous plant), Terra's Crystal Shrine, and Lobh-se's Spider Lair. | UNDER_WATER_TUNNEL dungeon; 5 levels |
+| **New Attnam / Tweraif** (Village) | **Oakhaven** | A farming village in a hidden forest valley walled in by mountains (changed from a coastal jungle island on 2026-09-30, for a classic-fantasy feel), ruled by Viceroy Richel Decos. Once a thriving settlement, now oppressed under Decos's monopoly on the miracle crop. The mansion was formerly a temple of Silva. | NEW_ATTNAM dungeon; leafy forest valley ringed by `mountain` world terrain |
+| **Underwater Tunnel** | **The Sunken Passage** | An ancient road beneath the mountains around Oakhaven's valley, its only way out, leading toward Valpuris. Built during the Pax Aethelgardica era. Contains boss rooms with Genetrix Vesana (carnivorous plant), Terra's Crystal Shrine, and Lobh-se's Spider Lair. | UNDER_WATER_TUNNEL dungeon; 5 levels |
 | **Tomb of Xinroch** | **The Crypt of Khaz-Zadm** | An 11-level necromancy dungeon in the northern glacier mountains. Guarded by fanatical Dark Knights who followed Lord Xinroch into undeath. Contains artifacts from the Divine War and gas chambers with kamikaze dwarves. | XINROCH_TOMB dungeon; Glacier/Tundra terrain |
 | **Aslona Castle** | **Castle Aethelred** | A seaside castle in the leafy forest region, seat of the Aslona kingdom. Currently under siege during a civil war between crown forces and rebels. Contains sapphire altars, wine cellars, and a cistern with angelic guardians. | ASLONA_CASTLE dungeon; Leafy Forest terrain |
 | **Rebel Camp** | **The Blackwood Encampment** | A hidden rebel camp in the steppe grasslands. Led by Harvan Black-cloak. Contains kamikaze dwarves loyal to Legifer, a quartermaster shop, and the rebel leader's private quarters. | REBEL_CAMP dungeon; Steppe terrain (hidden) |
@@ -32,8 +32,8 @@ Aethelgard is a vast, ancient continent shaped by the Divine War — a cataclysm
 
 ### 1.3 World Map Layout
 - **Valpuris** placed on a continent with evergreen forest + snow tiles (PetrusLikes)
-- **Oakhaven** in the southern jungle region
-- **Sunken Passage** connects Oakhaven to Valpuris via underwater tunnel
+- **Oakhaven** in a small forest valley ringed by impassable mountains, carved out of Valpuris's continent (worldmap::CarveValley)
+- **Sunken Passage** runs under the mountains from the valley to the continent outside
 - **Crypt of Khaz-Zadm** hidden in northern glacier/tundra
 - **Castle Aethelred** hidden in leafy forest (Aslona region)
 - **Blackwood Encampment** hidden in steppe grasslands
@@ -280,7 +280,7 @@ The player can infiltrate either side. The Pyramid quest involves obtaining a th
 
 ### 6.3 The Miracle Crop Replacement (Banana → Sacred Mango)
 
-The banana is replaced with the **Sacred Mango** — a golden fruit that grows in Oakhaven's jungle climate. It serves as:
+The banana is replaced with the **Sacred Mango** — a golden fruit that grows in the sheltered orchards of Oakhaven's valley. It serves as:
 - **Economic driver:** Decimus's monopoly on mangoes funds his oppressive rule
 - **Food source:** Mango flesh provides nutrition; mango pits are slippery hazards
 - **Religious significance:** Imbued by Seges with sacred properties (Sacred Mango variant)
