@@ -4,11 +4,13 @@ qwen_image.py — Low-VRAM Qwen-Image-2.1 runner for VALE asset generation.
 
 The GPU (Radeon Pro Vega 48, 8 GiB, gfx900) also drives the display. Running
 this with a 4.5 GiB allocator cap *plus* a second GPU process once pushed the
-card to ~7 GiB and corrupted the display, so the limits are deliberately tight
-and apply to the whole card, not just this process:
+card to ~7 GiB and corrupted the display, and a later crash made the user set a
+5 GB ceiling for the whole card, so the limits are deliberately tight and apply
+to the whole card, not just this process:
 
-  * Only one generation process may use the GPU at a time (a lock file).
-  * It refuses to start if the card already has more than
+  * Only one generation process may use the GPU at a time (a lock file, shared
+    with other projects that vendor this file); a job waits for its turn.
+  * It waits to start while the card has more than
     DEVICE_VRAM_LIMIT_GIB - PROCESS_VRAM_LIMIT_GIB in use (display, browser, ...).
   * PyTorch's caching allocator is capped at ALLOCATOR_GIB, so an oversized
     tensor raises OOM instead of growing.
@@ -65,16 +67,19 @@ os.environ.setdefault("PYTORCH_ALLOC_CONF", "max_split_size_mb:128,garbage_colle
 # a 512x512 image), and two full-size references overflowed the allocator cap.
 MAX_REF_RESOLUTION = 512
 
-# Whole-card ceiling, display included. The card has 8 GiB; the rest is headroom for the desktop.
-DEVICE_VRAM_LIMIT_GIB = 6.0
-# This process, as the kernel accounts it (tensors + HIP context + kernels).
-PROCESS_VRAM_LIMIT_GIB = 3.5
+# Whole-card ceiling, display included: under the user's 5 GB (4.66 GiB) limit, with a margin for the
+# 0.1 s between the watchdog's polls. The card has 8 GiB; the rest is headroom for the desktop.
+DEVICE_VRAM_LIMIT_GIB = 4.5
+# This process, as the kernel accounts it (tensors + HIP context + kernels). Drawings peak at
+# 2.5 GiB, or 2.8 GiB with reference images.
+PROCESS_VRAM_LIMIT_GIB = 3.0
 # PyTorch allocator cap; the HIP context and fragmentation sit on top of it.
 ALLOCATOR_GIB = 2.5
 # GPU-mapped system memory (pinned buffers). Nothing is pinned on purpose; this catches regressions.
 PROCESS_GTT_LIMIT_GIB = 1.0
 
 LOCK_PATH = Path.home() / ".cache" / "vale-qwen-image.gpu.lock"
+LOCK_POLL_SECONDS = 15
 
 TRANSPARENT_PREFIX = "This is an RGBA image with transparency. "
 TRANSPARENT_SUFFIX = " The image has alpha channel and the background is transparent."
@@ -109,8 +114,9 @@ def device_vram_used_bytes():
 class VramGuard:
     """Takes the single-GPU-job lock, caps the allocator, and kills the process on any limit breach.
 
-    Use VramGuard.get(): the lock is held for the life of the process, so creating a second guard
-    in the same process would fail on its own lock.
+    Use VramGuard.get(): the lock is held for the life of the process, so a second guard in the
+    same process would wait forever on its own lock. Long runs should be split into several
+    processes so other jobs get a turn in between.
     """
 
     _instance = None
@@ -122,20 +128,37 @@ class VramGuard:
         return cls._instance
 
     def __init__(self, interval=0.1):
+        # Other projects share this GPU and lock (they vendor this file), so wait for our turn, and
+        # then for the card to have room for this process within DEVICE_VRAM_LIMIT_GIB (the previous
+        # holder's VRAM takes a moment to be released, and the desktop's use varies). The lock is
+        # let go while waiting for room, so a smaller job can run meanwhile.
         LOCK_PATH.parent.mkdir(parents=True, exist_ok=True)
         self._lock = open(LOCK_PATH, "w")
-        try:
-            fcntl.flock(self._lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
-        except BlockingIOError:
-            sys.exit(f"Another Qwen-Image job holds {LOCK_PATH}; only one may use the GPU at a time.")
-
-        already = device_vram_used_bytes()
         room = (DEVICE_VRAM_LIMIT_GIB - PROCESS_VRAM_LIMIT_GIB) * 2**30
-        if already > room:
-            sys.exit(
-                f"The GPU already has {already / 2**30:.2f} GiB of VRAM in use; starting would risk passing "
-                f"{DEVICE_VRAM_LIMIT_GIB} GiB for the card. Close other GPU programs first."
-            )
+        said = set()
+        while True:
+            try:
+                fcntl.flock(self._lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            except BlockingIOError:
+                if "lock" not in said:
+                    print(f"Another Qwen-Image job holds {LOCK_PATH}; waiting for the GPU.", flush=True)
+                    said.add("lock")
+                time.sleep(LOCK_POLL_SECONDS)
+                continue
+            deadline = time.time() + 30
+            while (already := device_vram_used_bytes()) > room and time.time() < deadline:
+                time.sleep(2)
+            if already <= room:
+                break
+            fcntl.flock(self._lock, fcntl.LOCK_UN)
+            if "room" not in said:
+                print(
+                    f"The GPU already has {already / 2**30:.2f} GiB of VRAM in use; starting could pass "
+                    f"{DEVICE_VRAM_LIMIT_GIB} GiB for the card, so waiting for it to free up.",
+                    flush=True,
+                )
+                said.add("room")
+            time.sleep(LOCK_POLL_SECONDS)
 
         import torch
 

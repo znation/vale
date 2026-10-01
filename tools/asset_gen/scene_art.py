@@ -13,7 +13,7 @@ Every image is rendered at 800x608 (the nearest size the model accepts), cropped
 resized for each pixel density the engine supports (Graphics/, Graphics/2x/, Graphics/4x/) and
 quantized to the 256-colour indexed PNG the engine requires. Renders are fp16 (see
 qwen_image.run_jobs). Masters (the raw renders) are
-kept under tools/asset_gen/masters/ (git-ignored) so post-processing can be redone without
+kept under tools/asset_gen/masters/ (in Git LFS) so post-processing can be redone without
 regenerating; an existing Logo master is reused unless Logo is named with --only.
 
 Usage:

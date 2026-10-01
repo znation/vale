@@ -57,5 +57,9 @@ Thumbs.db
 ~$*.ppt*
 /build/
 
-# Full-resolution AI renders (tools/asset_gen); the installed Graphics/*.png are what ships
-tools/asset_gen/masters/
+# Full-resolution AI renders (tools/asset_gen/masters) are tracked with Git LFS (.gitattributes): the installed
+# Graphics/*.png are converted from them. Rejected drawings and the superseded image-conditioned renders (hd/)
+# stay local, as do generation logs and review state (work/).
+tools/asset_gen/masters/hd/
+tools/asset_gen/masters/**/rejected/
+tools/asset_gen/work/

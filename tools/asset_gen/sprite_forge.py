@@ -30,15 +30,15 @@ def downsample(img, width, height):
     """Collapse a pixel-art-style RGBA render to width x height, finding the grid phase it was drawn on."""
     a = np.asarray(img.convert("RGBA"), dtype=float)
     cell_x, cell_y = a.shape[1] / width, a.shape[0] / height
+    sums = _integral(a)
     best = None
     for phase_y in np.linspace(-cell_y / 2, cell_y / 2, 9)[:-1]:
         for phase_x in np.linspace(-cell_x / 2, cell_x / 2, 9)[:-1]:
-            cells = _cells(a, width, height, phase_x, phase_y)
-            score = sum(_cell_spread(c) for c in cells)
+            score = _grid_spread(sums, width, height, phase_x, phase_y)
             if best is None or score < best[0]:
-                best = (score, cells)
+                best = (score, phase_x, phase_y)
     out = np.zeros((height, width, 4), dtype=np.uint8)
-    for i, c in enumerate(best[1]):
+    for i, c in enumerate(_cells(a, width, height, best[1], best[2])):
         y, x = divmod(i, width)
         opaque = c[..., 3] >= OPAQUE_ALPHA
         if opaque.mean() < 0.5:
@@ -51,16 +51,22 @@ def downsample(img, width, height):
     return out
 
 
+def _bounds(count, size, cell, phase):
+    """Start and end of each grid cell along one axis, clipped to the image."""
+    start = np.array([int(round(i * cell + phase)) for i in range(count)])
+    end = np.array([int(round(s + cell)) for s in start])
+    lo = np.clip(start, 0, size)
+    return lo, np.maximum(np.clip(end, 0, size), lo)
+
+
 def _cells(a, width, height, phase_x, phase_y):
     h, w = a.shape[:2]
-    cx, cy = w / width, h / height
+    x0, x1 = _bounds(width, w, w / width, phase_x)
+    y0, y1 = _bounds(height, h, h / height, phase_y)
     cells = []
     for y in range(height):
         for x in range(width):
-            x0 = int(round(x * cx + phase_x))
-            y0 = int(round(y * cy + phase_y))
-            x1, y1 = int(round(x0 + cx)), int(round(y0 + cy))
-            c = a[max(y0, 0) : max(min(y1, h), 0), max(x0, 0) : max(min(x1, w), 0)]
+            c = a[y0[y] : y1[y], x0[x] : x1[x]]
             cells.append(c if c.size else np.zeros((1, 1, 4)))
     return cells
 
@@ -70,9 +76,30 @@ def _core(c):
     return c[h // 4 : h - h // 4 or h, w // 4 : w - w // 4 or w]
 
 
-def _cell_spread(c):
-    flat = c.reshape(-1, 4)
-    return float(flat[:, :3].std(axis=0).sum() * (flat[:, 3] >= OPAQUE_ALPHA).mean() + flat[:, 3].std() * 0.5)
+def _integral(a):
+    """Summed-area tables of each channel, its square and opacity, in exact integers."""
+    v = a.astype(np.int64)
+    planes = np.concatenate([v, v * v, (v[..., 3:] >= OPAQUE_ALPHA).astype(np.int64)], axis=-1)
+    sums = np.zeros((v.shape[0] + 1, v.shape[1] + 1, planes.shape[-1]), np.int64)
+    sums[1:, 1:] = planes.cumsum(0).cumsum(1)
+    return sums
+
+
+def _grid_spread(sums, width, height, phase_x, phase_y):
+    """
+    How far the image is from flat colour cells on this grid: over all cells, the RGB standard
+    deviation weighted by opaque share, plus half the alpha standard deviation.
+    """
+    h, w = sums.shape[0] - 1, sums.shape[1] - 1
+    x0, x1 = _bounds(width, w, w / width, phase_x)
+    y0, y1 = _bounds(height, h, h / height, phase_y)
+    s = sums[y1][:, x1] - sums[y0][:, x1] - sums[y1][:, x0] + sums[y0][:, x0]
+    n = ((y1 - y0)[:, None] * (x1 - x0)[None, :])[..., None]
+    total, square, opaque = s[..., :4], s[..., 4:8], s[..., 8]
+    # n^2 * variance, exact; empty cells score 0.
+    std = np.sqrt(n * square - total * total) / np.maximum(n, 1)
+    spread = std[..., :3].sum(-1) * opaque / np.maximum(n[..., 0], 1) + std[..., 3] * 0.5
+    return float(spread.sum())
 
 
 def encode(sheet, region, small, keep_silhouette=False, materials=PREVIEW_MATERIALS):

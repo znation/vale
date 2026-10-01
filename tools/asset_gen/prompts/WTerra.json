@@ -1,0 +1,20 @@
+{
+  "16,16,16,16": {"role": "patch", "subject": "cracked, pale blue glacier ice with deep crevasses", "blocks": ["16,16"]},
+  "64,16,16,16": {"role": "patch", "subject": "golden desert sand dunes with soft wind ripples", "blocks": ["64,16"]},
+  "112,16,16,16": {"role": "patch", "subject": "soft white snowdrifts with faint blue shadows", "blocks": ["112,16"]},
+  "160,16,16,16": {"role": "patch", "subject": "dry steppe grassland in greens and ochres, with scattered little shrubs", "blocks": ["160,16"]},
+  "208,16,16,16": {"role": "patch", "subject": "a dense tropical jungle canopy of big bright green leaves, as seen from high above", "blocks": ["208,16"]},
+  "304,16,16,16": {"role": "patch", "subject": "a leafy forest of round, fluffy green treetops, as seen from high above", "blocks": ["304,16"]},
+  "352,16,16,16": {"role": "patch", "subject": "a dark evergreen forest of pointed fir treetops, as seen from high above", "blocks": ["352,16"]},
+  "48,48,16,16": {"role": "strip", "subject": "a deep blue ocean with gentle rolling waves and white wave crests, as seen from high above", "frames": 16, "step": 16, "scroll": [4, 0]},
+  "0,48,16,16": {"subject": "a world map icon of Valpuris, the holy city: a little white city with a great domed cathedral, on a snowy hill"},
+  "16,48,16,16": {"subject": "a world map icon of the Gloomy Caves: a dark cave mouth in a brown rocky hill"},
+  "0,64,16,16": {"subject": "a world map icon of an ominous ruined stone gateway leading underground"},
+  "16,64,16,16": {"subject": "a little landmark picture of Oakhaven, a small farming village in a hidden forest valley: three thatched cottages among leafy fruit trees in a green glade", "seed": 12},
+  "32,64,16,16": {"subject": "a world map icon of a dark cave mouth in a rocky grey mountainside"},
+  "80,80,16,16": {"subject": "a world map icon of the Shadow Bazaar: a small hut hidden among dark trees, its doorway lit by a lantern"},
+  "80,96,16,16": {"subject": "a world map icon of the Ruins of Quetzaltia: a crooked, ruined stone tower overgrown with vines"},
+  "112,96,16,16": {"subject": "a world map icon of Castle Aethelred: a grey stone castle with two towers and little banners, by the sea"},
+  "96,128,16,16": {"subject": "a world map icon of the Bunker of Otoul'iv: an ancient crumbling stepped pyramid half swallowed by jungle"},
+  "256,16,16,16": {"role": "patch", "subject": "a rugged range of grey rocky mountains with snowy peaks and deep shadowed valleys, as seen from high above", "blocks": ["256,16"], "new": true}
+}

@@ -8,9 +8,9 @@ when it exists; lower densities (32-pixel tiles) are derived from it on load, ma
 
   generate  Redraw sprites with Qwen-Image-2.1 (512x512 per 16x16 sprite, 20 steps, fp16: about
             two minutes each on the Vega 48). Each sprite, as the engine draws it, is the condition
-            image for a prompt naming what it is (from sprite_catalog.py). Animation frames and
-            variants are drawn after the sprite they belong to, with its finished redraw as a second
-            condition image so the frames match. One RGBA master per sprite is kept under
+            image for a prompt naming what it is (from sprite_catalog.py). Tiles the game data does
+            not name (animation frames, variants the code positions, unused art) are drawn unnamed,
+            from their own image only. One RGBA master per sprite is kept under
             tools/asset_gen/masters/hd/<Sheet>/, so runs are resumable and never redo a sprite.
   assemble  Start from the classic sheet upscaled 4x with Scale2x (see hd_upscale.py), so sprites
             without a redraw still look right, then paste in each master: collapsed onto the 64-pixel grid
@@ -101,12 +101,6 @@ FIXED_OUTLINE_PROMPT = (
     "shading lit from the top left. Keep exactly the same outline, pose, colour regions and position in the "
     "frame, and leave the empty areas empty."
 )
-FRAME_PROMPT = (
-    "Image 1 is a crude, low-resolution {w}x{h} placeholder sprite; image 2 is the finished high-quality "
-    "{W}x{H} pixel art version of the same subject, {what}. Draw image 1 as a finished {W}x{H} pixel art "
-    "sprite in exactly the style, colours, level of detail and design of image 2, with image 1's pose, "
-    "outline and position in the frame. Empty areas stay empty."
-)
 
 
 @dataclass
@@ -117,7 +111,6 @@ class Sprite:
     w: int
     h: int
     what: str
-    base: "Sprite" = None  # the sprite this one is an animation frame or variant of
 
     @property
     def rect(self):
@@ -129,14 +122,20 @@ class Sprite:
 
 
 def sprites(sheet_name):
-    """Every non-empty sprite on a sheet: catalogued rectangles first, then leftover 16x16 tiles
-    named after the nearest catalogued sprite to their left (usually animation frames)."""
+    """
+    Every non-empty sprite on a sheet: the catalogued rectangles, then each other 16x16 tile with a
+    picture of its own, unnamed. Naming those after their neighbour misled the model: many are
+    different items, and given the neighbour's redraw as a reference it drew the neighbour again.
+    Tiles whose shape runs on into another tile are pieces of a larger picture (an uncatalogued big
+    creature, a body diagram, a photo); redrawn tile by tile they fall apart, so they keep the
+    Scale2x base.
+    """
     catalog = json.loads(CATALOG.read_text()) if CATALOG.exists() else {}
     sheet = Sheet.load(GRAPHICS / f"{sheet_name}.png")
     kind = sheet.decode()[0]
     H, W = kind.shape
     covered = np.zeros((H // 16, W // 16), bool)
-    found, named = [], {}
+    found = []
 
     for key, entry in catalog.items():
         name, rect = key.split(":")
@@ -148,54 +147,60 @@ def sprites(sheet_name):
         sprite = Sprite(sheet_name, x, y, w, h, " / ".join(entry["names"][:3]))
         found.append(sprite)
         covered[y // 16 : (y + h) // 16, x // 16 : (x + w) // 16] = True
-        if w == 16 and h == 16:
-            named[(x // 16, y // 16)] = sprite
 
+    joined = joined_tiles(kind)
     for ty in range(H // 16):
         for tx in range(W // 16):
-            if covered[ty, tx] or not (kind[ty * 16 : ty * 16 + 16, tx * 16 : tx * 16 + 16] != TRANSPARENT).any():
+            if covered[ty, tx] or joined[ty, tx]:
                 continue
-            left = next((named[(lx, ty)] for lx in range(tx - 1, max(tx - 5, -1), -1) if (lx, ty) in named), None)
-            what = left.what if left else UNNAMED[sheet_name]
-            found.append(Sprite(sheet_name, tx * 16, ty * 16, 16, 16, what, base=left))
+            if (kind[ty * 16 : ty * 16 + 16, tx * 16 : tx * 16 + 16] != TRANSPARENT).any():
+                found.append(Sprite(sheet_name, tx * 16, ty * 16, 16, 16, UNNAMED[sheet_name]))
     return sorted(found, key=lambda s: (s.y, s.x))
+
+
+def joined_tiles(kind):
+    """(rows, cols) mask of the 16x16 tiles holding part of a shape (8-connected opaque pixels)
+    that continues into another tile."""
+    H, W = kind.shape
+    rows, cols = -(-H // 16), -(-W // 16)
+    labels, _ = ndimage.label(kind != TRANSPARENT, structure=np.ones((3, 3)))
+    tiles = (np.arange(H)[:, None] // 16) * cols + np.arange(W)[None, :] // 16
+    pairs = np.unique(np.stack([labels.ravel(), tiles.ravel()]), axis=1)
+    pairs = pairs[:, pairs[0] > 0]
+    shapes, tile_counts = np.unique(pairs[0], return_counts=True)
+    joined = np.zeros(rows * cols, bool)
+    joined[pairs[1, np.isin(pairs[0], shapes[tile_counts > 1])]] = True
+    return joined.reshape(rows, cols)[: H // 16, : W // 16]
 
 
 def gen_size(s):
     return (min(GEN_PX * s.w // 16, MAX_GEN_SIDE), min(GEN_PX * s.h // 16, MAX_GEN_SIDE))
 
 
+def job_for(sheet, s, seed, output):
+    """The Qwen-Image job that redraws sprite `s` of `sheet` into `output`."""
+    from qwen_image import Job
+
+    size = gen_size(s)
+    fmt = dict(w=s.w, h=s.h, W=s.w * SCALE, H=s.h * SCALE, what=s.what, kind=KIND[s.sheet])
+    prompt = (FIXED_OUTLINE_PROMPT if s.sheet in SILHOUETTE_SLACK else PROMPT).format(**fmt)
+    return Job(prompt, output, size[0], size[1], seed, [upscale_reference(sheet, s.rect, size)])
+
+
 def generate(sheet_name, limit, steps, seed):
-    from qwen_image import Job, run_jobs
+    from qwen_image import run_jobs
 
     sheet = Sheet.load(GRAPHICS / f"{sheet_name}.png")
     missing = [s for s in sprites(sheet_name) if not s.master.exists()]
-    # Frames wait for their base sprite's master, which becomes their style reference; every
-    # prompt (condition images included) is encoded before any image is drawn, so they can
-    # only go in a later run.
-    ready = [s for s in missing if s.base is None or s.base.master.exists()]
     # Named sprites first: they are the ones the game is known to use.
-    ready.sort(key=lambda s: (s.base is not None, s.what == UNNAMED[sheet_name], s.y, s.x))
-    todo = ready[:limit]
-    waiting = len(missing) - len(ready)
+    missing.sort(key=lambda s: (s.what == UNNAMED[sheet_name], s.y, s.x))
+    todo = missing[:limit]
     if not todo:
-        print(f"{sheet_name}: nothing to generate ({waiting} frames wait for their base sprite)")
+        print(f"{sheet_name}: nothing to generate")
         return False
-    jobs = []
-    for s in todo:
-        size = gen_size(s)
-        refs = [upscale_reference(sheet, s.rect, size)]
-        fmt = dict(w=s.w, h=s.h, W=s.w * SCALE, H=s.h * SCALE, what=s.what, kind=KIND[sheet_name])
-        if s.base is not None:
-            refs.append(Image.open(s.base.master))
-            prompt = FRAME_PROMPT.format(**fmt)
-        elif sheet_name in SILHOUETTE_SLACK:
-            prompt = FIXED_OUTLINE_PROMPT.format(**fmt)
-        else:
-            prompt = PROMPT.format(**fmt)
-        s.master.parent.mkdir(parents=True, exist_ok=True)
-        jobs.append(Job(prompt, s.master, size[0], size[1], seed, refs))
-    print(f"{sheet_name}: generating {len(jobs)} of {len(missing)} missing masters ({waiting} frames wait)", flush=True)
+    (MASTERS / sheet_name).mkdir(parents=True, exist_ok=True)
+    jobs = [job_for(sheet, s, seed, s.master) for s in todo]
+    print(f"{sheet_name}: generating {len(jobs)} of {len(missing)} missing masters", flush=True)
     run_jobs(jobs, steps=steps, precision="fp16")
     return True
 
@@ -221,7 +226,7 @@ def detail_score(master_path, w, h):
 def retry(sheet_name, steps, limit):
     """Draw each blocky master again with its next unused seed. Works in chunks, recording each
     one, so an interrupted pass resumes where it stopped."""
-    from qwen_image import Job, run_jobs
+    from qwen_image import run_jobs
 
     tried = json.loads(RETRIES.read_text()) if RETRIES.exists() else {}
     sheet = Sheet.load(GRAPHICS / f"{sheet_name}.png")
@@ -239,17 +244,7 @@ def retry(sheet_name, steps, limit):
     print(f"{sheet_name}: retrying {len(candidates)} blocky masters", flush=True)
     for start in range(0, len(candidates), limit):
         chunk = candidates[start : start + limit]
-        jobs = []
-        for s, key, seed in chunk:
-            size = gen_size(s)
-            fmt = dict(w=s.w, h=s.h, W=s.w * SCALE, H=s.h * SCALE, what=s.what, kind=KIND[sheet_name])
-            refs = [upscale_reference(sheet, s.rect, size)]
-            if s.base is not None and s.base.master.exists():
-                refs.append(Image.open(s.base.master))
-                prompt = FRAME_PROMPT.format(**fmt)
-            else:
-                prompt = (FIXED_OUTLINE_PROMPT if sheet_name in SILHOUETTE_SLACK else PROMPT).format(**fmt)
-            jobs.append(Job(prompt, s.master.with_suffix(f".seed{seed}.png"), size[0], size[1], seed, refs))
+        jobs = [job_for(sheet, s, seed, s.master.with_suffix(f".seed{seed}.png")) for s, key, seed in chunk]
         # A redraw an interrupted run left behind is compared, not drawn again.
         pending = [job for job in jobs if not job.output.exists()]
         if pending:

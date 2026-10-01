@@ -9,6 +9,9 @@ installed on your system:
 - SDL (https://www.libsdl.org) version 2.0 or newer
 - libpng (http://www.libpng.org/pub/png/libpng.html)
 - pcre, not pcre2 (ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/)
+- Git LFS (https://git-lfs.com) to get the source: the game's graphics, sounds and
+  music are stored with it. Install it before cloning, or run
+  "git lfs install && git lfs pull" in an existing clone.
 
 --------------------------------------
 

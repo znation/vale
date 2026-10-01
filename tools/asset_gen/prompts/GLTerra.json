@@ -1,0 +1,8 @@
+{
+  "0,0,16,16": {"role": "texture", "subject": "rough packed earth with a few small pebbles and faint cracks"},
+  "16,16,16,16": {"role": "texture", "subject": "short, soft grass with little tufts and blades"},
+  "32,0,16,16": {"role": "texture", "subject": "a wooden parquet floor of neat planks", "zoom": 3},
+  "32,16,16,16": {"role": "texture", "subject": "a wooden landing pad for giant messenger birds, marked with a big painted cross inside a circle", "parts": {"A": "the wooden boards", "B": "the painted cross and circle"}, "seamless": false},
+  "32,32,16,16": {"role": "texture", "subject": "fine sand with gentle wind ripples"},
+  "64,32,16,16": {"role": "patch", "subject": "cartoon water: a smooth surface crossed by a few big, bold, simple curved ripple lines and a couple of small sparkles, like water in a children's picture book", "blocks": ["64,32", "112,32", "160,32", "208,32", "64,80", "112,80", "160,80", "208,80", "64,128", "112,128", "160,128", "208,128", "64,176", "112,176", "160,176", "208,176"], "scroll": [4, 4], "seed": 11}
+}
